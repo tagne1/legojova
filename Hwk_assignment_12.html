@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+<meta name="author" content="Pascal Tagne" />
+
+<meta name="date" content="2016-11-22" />
+
+<title>Hwk assignment 12</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cerulean.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<link href="site_libs/font-awesome-4.5.0/css/font-awesome.min.css" rel="stylesheet" />
+
+<style type="text/css">code{white-space: pre;}</style>
+<link rel="stylesheet"
+      href="site_libs/highlight/textmate.css"
+      type="text/css" />
+<script src="site_libs/highlight/highlight.js"></script>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs && document.readyState && document.readyState === "complete") {
+   window.setTimeout(function() {
+      hljs.initHighlighting();
+   }, 0);
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+<link rel="stylesheet" href="styles.css" type="text/css" />
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+
+
+<div class="navbar navbar-inverse  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Pascal Tagne</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">
+    <span class="fa fa-home"></span>
+     
+    Home
+  </a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-info"></span>
+     
+    Works
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li class="dropdown-header">Data Science with R</li>
+    <li>
+      <a href="about.html">Table of contents</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Machine Learning with R</li>
+    <li>
+      <a href="TOC_Final_Project.html">Table of contents</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-gear"></span>
+     
+    Projects
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="Problem_3_Final.html">Python Programming</a>
+    </li>
+    <li>
+      <a href="Problem_4_Final.html">Hadoop Cloudera</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Computer Networks</li>
+    <li class="dropdown-header">Computer Network Security</li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Hwk assignment 12</h1>
+<h4 class="author"><em>Pascal Tagne</em></h4>
+<h4 class="date"><em>November 22, 2016</em></h4>
+
+</div>
+
+
+<p><strong>Machine specifications for this assignment:</strong></p>
+<pre class="r"><code>library(foreach)
+library(doParallel)</code></pre>
+<pre><code>## Loading required package: iterators</code></pre>
+<pre><code>## Loading required package: parallel</code></pre>
+<pre class="r"><code>library(MASS)
+library(igraph)
+library(iterators)
+# Let&#39;s detect the number of core on my laptop.
+nb_of_core &lt;- detectCores()
+nb_of_core </code></pre>
+<pre><code>## [1] 4</code></pre>
+<pre class="r"><code># Let&#39;s find the ram limit on my laptop.
+ram_size &lt;- memory.limit()/1000
+ram_size</code></pre>
+<pre><code>## [1] 8</code></pre>
+<div class="figure">
+<img src="/C:/Users/Pasco/1st%20HP%20Laptop/WebsitePT/PascoSite/Computer%20spec.PNG" />
+
+</div>
+<div id="create-four-random-undirected-barabasi-albert-graphs-with-5000-nodes-each-with-p1-m3." class="section level3">
+<h3>1.Create four random undirected Barabasi-Albert graphs with 5000 nodes each with p=1, m=3.</h3>
+<p><strong>Creation of 4 random graphs:</strong></p>
+<pre class="r"><code>g &lt;- lapply(rep(5000,4), function(node) {
+  barabasi.game(node, p=1, m=3, directed=FALSE)
+})</code></pre>
+<div id="a.calculate-the-average-path-lengths-for-each-of-the-graphs.-display-the-results-and-the-execution-times." class="section level5">
+<h5>a.Calculate the average path lengths for each of the graphs. Display the results and the execution times.</h5>
+<pre class="r"><code>start_time &lt;- Sys.time()
+results &lt;- foreach(iter(1:4), .combine=&#39;cbind&#39;) %do% average.path.length(barabasi.game(5000, p=1, m=3, directed=FALSE))
+results</code></pre>
+<pre><code>##      result.1 result.2 result.3 result.4
+## [1,]        4        4        4        4</code></pre>
+<pre class="r"><code>sequential.apl &lt;- Sys.time() - start_time
+sequential.apl</code></pre>
+<pre><code>## Time difference of 11 secs</code></pre>
+</div>
+<div id="b.implement-a-in-parallel." class="section level5">
+<h5>b.Implement (a) in parallel.</h5>
+<pre class="r"><code># Let&#39;s find the number of cores in my laptop
+numParCores &lt;- max(1, detectCores()-1)
+# Let&#39;s make clusters
+cl &lt;- makeCluster(numParCores)
+# Let&#39;s register clusters
+registerDoParallel(cl)
+start_time &lt;- Sys.time()
+results &lt;- foreach(icount(4), .combine=&quot;cbind&quot;, .packages=&quot;igraph&quot;) %dopar% { average.path.length(barabasi.game(5000, p=1, m=3, directed=FALSE))
+}
+stopCluster(cl)
+results</code></pre>
+<pre><code>##      result.1 result.2 result.3 result.4
+## [1,]        4        4        4        4</code></pre>
+<pre class="r"><code>parallel.apl &lt;- Sys.time() - start_time
+parallel.apl</code></pre>
+<pre><code>## Time difference of 6 secs</code></pre>
+</div>
+</div>
+<div id="create-four-random-undirected-erdos-renyi-graphs-with-the-number-of-nodes-2000-4000-6000-and-8000-and-the-average-node-degree-of-5." class="section level3">
+<h3>2.Create four random undirected Erdos-renyi graphs with the number of nodes 2000, 4000, 6000, and 8000 and the average node degree of 5.</h3>
+<pre class="r"><code>g2 &lt;- lapply(seq(2000, 8000, 2000), function(node) {
+  erdos.renyi.game(node, p=0.16)
+})</code></pre>
+<div id="a.calculate-the-average-path-lengths-for-each-of-the-graphs.-display-the-results-and-the-execution-times.-1" class="section level5">
+<h5>a.Calculate the average path lengths for each of the graphs. Display the results and the execution times.</h5>
+<pre class="r"><code>start_time &lt;- Sys.time()
+results &lt;- foreach(i = c(2000, 4000, 6000, 8000), .combine=&#39;cbind&#39;) %do% average.path.length(erdos.renyi.game(i, p =0.16))
+results</code></pre>
+<pre><code>##      result.1 result.2 result.3 result.4
+## [1,]        2        2        2        2</code></pre>
+<pre class="r"><code>sequential.apl &lt;- Sys.time() - start_time
+sequential.apl</code></pre>
+<pre><code>## Time difference of 6 mins</code></pre>
+</div>
+<div id="b.implement-a-in-parallel.-1" class="section level5">
+<h5>b.Implement (a) in parallel.</h5>
+<pre class="r"><code># Let&#39;s find the number of cores in my laptop
+numParCores &lt;- max(1, detectCores()-1)
+# Let&#39;s make clusters
+cl &lt;- makeCluster(numParCores)
+# Let&#39;s register clusters
+registerDoParallel(cl)
+start_time &lt;- Sys.time()
+results &lt;- foreach(i = c(2000, 4000, 6000, 8000), .combine=&quot;cbind&quot;, .packages=&quot;igraph&quot;) %dopar% { average.path.length(barabasi.game(i, p=1, m=3, directed=FALSE))
+}
+stopCluster(cl)
+results</code></pre>
+<pre><code>##      result.1 result.2 result.3 result.4
+## [1,]        4        4        4        4</code></pre>
+<pre class="r"><code>parallel.apl &lt;- Sys.time() - start_time
+parallel.apl</code></pre>
+<pre><code>## Time difference of 8 secs</code></pre>
+</div>
+</div>
+<div id="create-four-random-undirected-barabasi-albert-graphs-with-5000-nodes-each-with-p1-m3.-1" class="section level3">
+<h3>2.Create four random undirected Barabasi-Albert graphs with 5000 nodes each with p=1, m=3.</h3>
+<pre class="r"><code>g3 &lt;- lapply(rep(5000,4), function(node) {
+  barabasi.game(node, p=1, m=3, directed=FALSE)
+})</code></pre>
+<div id="a.calculate-the-average-betweenness-centralities-for-each-of-the-graphs.-display-the-results-and-the-time-of-execution.-hint-betweenness-centrality-was-covered-in-the-first-lecture-on-graphs." class="section level5">
+<h5>a.Calculate the average betweenness centralities for each of the graphs. Display the results and the time of execution. Hint: betweenness centrality was covered in the first lecture on graphs.</h5>
+<pre class="r"><code>start_time &lt;- Sys.time()
+results &lt;- foreach(j = rep(5000,4), .combine=&#39;cbind&#39;) %do% edge.betweenness(barabasi.game(j, p=1, m=3, directed=FALSE))
+# Let&#39;s look at the first 6 rows of the results
+head(results)</code></pre>
+<pre><code>##      result.1 result.2 result.3 result.4
+## [1,]    47120    41492    49030    54946
+## [2,]    50148    21397    52465    68520
+## [3,]    45722    35579    68469    62600
+## [4,]    70586    27117    23741    64177
+## [5,]    77678    42331    37250    57327
+## [6,]    68564    23704    37463    77905</code></pre>
+<pre class="r"><code># Let&#39;s look at the last 6 rows of the results
+tail(results)</code></pre>
+<pre><code>##          result.1 result.2 result.3 result.4
+## [14989,]     1865     1140      945     4324
+## [14990,]     2071     2411     1362     1143
+## [14991,]     2763     1824     3612     1340
+## [14992,]     1315     1292      521     1219
+## [14993,]     2519     5213     1179     4093
+## [14994,]     1880      940     3687      819</code></pre>
+<pre class="r"><code>sequential.betweenness &lt;- Sys.time() - start_time
+sequential.betweenness</code></pre>
+<pre><code>## Time difference of 48 secs</code></pre>
+</div>
+<div id="b.implement-a-in-parallel.-2" class="section level5">
+<h5>b.Implement (a) in parallel.</h5>
+<pre class="r"><code># Let&#39;s find the number of cores in my laptop
+numParCores &lt;- max(1, detectCores()-1)
+# Let&#39;s make clusters
+cl &lt;- makeCluster(numParCores)
+# Let&#39;s register clusters
+registerDoParallel(cl)
+start_time &lt;- Sys.time()
+results &lt;- foreach(j = rep(5000, 4), .combine=&quot;cbind&quot;, .packages=&quot;igraph&quot;) %dopar% { edge.betweenness(barabasi.game(j, p=1, m=3, directed=FALSE))
+}
+stopCluster(cl) 
+head(results)</code></pre>
+<pre><code>##      result.1 result.2 result.3 result.4
+## [1,]    56475    29650    45814    90475
+## [2,]    70125    72907    52630    75991
+## [3,]    59596    37934    93932    63416
+## [4,]    59369    67781    23017    64873
+## [5,]    55321    34030    39481    43601
+## [6,]    67500    69565    45401    34908</code></pre>
+<pre class="r"><code>tail(results)</code></pre>
+<pre><code>##          result.1 result.2 result.3 result.4
+## [14989,]      686      912     1807     5856
+## [14990,]     5527     5225     2035     1204
+## [14991,]      539     1129     1850     1209
+## [14992,]     5240     1460     1526      855
+## [14993,]     1382     1502     2746     4171
+## [14994,]      957     6484     1407      852</code></pre>
+<pre class="r"><code>parallel.betweenness &lt;- Sys.time() - start_time
+parallel.betweenness</code></pre>
+<pre><code>## Time difference of 31 secs</code></pre>
+</div>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+$(document).ready(function () {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

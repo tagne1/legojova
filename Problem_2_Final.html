@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+<meta name="author" content="Pascal Tagne" />
+
+<meta name="date" content="2016-11-18" />
+
+<title>Problem 2: Comparison of Bayes and Neural Net on iris data set</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cerulean.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<link href="site_libs/font-awesome-4.5.0/css/font-awesome.min.css" rel="stylesheet" />
+
+<style type="text/css">code{white-space: pre;}</style>
+<link rel="stylesheet"
+      href="site_libs/highlight/textmate.css"
+      type="text/css" />
+<script src="site_libs/highlight/highlight.js"></script>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs && document.readyState && document.readyState === "complete") {
+   window.setTimeout(function() {
+      hljs.initHighlighting();
+   }, 0);
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+<link rel="stylesheet" href="styles.css" type="text/css" />
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+
+
+<div class="navbar navbar-inverse  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Pascal Tagne</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">
+    <span class="fa fa-home"></span>
+     
+    Home
+  </a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-info"></span>
+     
+    Works
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li class="dropdown-header">Data Science with R</li>
+    <li>
+      <a href="about.html">Table of contents</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Machine Learning with R</li>
+    <li>
+      <a href="TOC_Final_Project.html">Table of contents</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-gear"></span>
+     
+    Projects
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="Problem_3_Final.html">Python Programming</a>
+    </li>
+    <li>
+      <a href="Problem_4_Final.html">Hadoop Cloudera</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Computer Networks</li>
+    <li class="dropdown-header">Computer Network Security</li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Problem 2: Comparison of Bayes and Neural Net on iris data set</h1>
+<h4 class="author"><em>Pascal Tagne</em></h4>
+<h4 class="date"><em>November 18, 2016</em></h4>
+
+</div>
+
+
+<div id="introduction" class="section level4">
+<h4>1.Introduction</h4>
+<p>This report describes a case study of Iris plants using <strong>Naive Bayes</strong> and <strong>Neural Network</strong> algorithms. It uses machine learning and respectively <strong>naiveBayes()</strong> function in the <em>e1071</em> package and <strong>neuralnet()</strong> function in the <em>neuralnet</em> package to build two iris models. This report will compare both naive Bayes and neuralnet predictive results on the iris data set and will select the model that can best predict the class of iris plant.</p>
+</div>
+<div id="data-collection" class="section level4">
+<h4>2.Data collection</h4>
+<p>This case study uses Iris data Set. It is the original dataset, in the form provided by Mr. R.A. Fisher and contains 5 attributs. The original data set had 150 instances (50 in each of three classes) and 5 features (1 categorical and 4 numeric features) and can be found at: <a href="http://archive.ics.uci.edu/ml/datasets/Iris" class="uri">http://archive.ics.uci.edu/ml/datasets/Iris</a>.</p>
+<p>The data used in this report has been modified from the original data set in one way. A header with features names was added to assist with identification using data definition provided in <a href="http://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.names" class="uri">http://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.names</a>.</p>
+</div>
+<div id="exploring-and-preparing-the-data" class="section level4">
+<h4>3.Exploring and preparing the data</h4>
+<pre class="r"><code># Import credit data. Since majority of features is nominal, we will use defaut option to import data.
+iris1 &lt;- read.csv(&quot;iris1.csv&quot;, header = FALSE)
+# iris &lt;- read.csv(&quot;iris1.csv&quot;, header = FALSE)
+#Let&#39;s verify if the data is read properly.
+str(iris1)</code></pre>
+<pre><code>## &#39;data.frame&#39;:    150 obs. of  5 variables:
+##  $ V1: num  5.1 4.9 4.7 4.6 5 5.4 4.6 5 4.4 4.9 ...
+##  $ V2: num  3.5 3 3.2 3.1 3.6 3.9 3.4 3.4 2.9 3.1 ...
+##  $ V3: num  1.4 1.4 1.3 1.5 1.4 1.7 1.4 1.5 1.4 1.5 ...
+##  $ V4: num  0.2 0.2 0.2 0.2 0.2 0.4 0.3 0.2 0.2 0.1 ...
+##  $ V5: Factor w/ 3 levels &quot;Iris-setosa&quot;,..: 1 1 1 1 1 1 1 1 1 1 ...</code></pre>
+<pre class="r"><code># Let set the column names of our data frame.
+colnames(iris1) &lt;- c(&quot;sepal.length&quot;, &quot;sepal.width&quot;, &quot;petal.length&quot;, &quot;petal.width&quot;, &quot;class&quot;)
+# Let&#39;s check the data.
+head(iris1)</code></pre>
+<pre><code>##   sepal.length sepal.width petal.length petal.width       class
+## 1            5           4            1           0 Iris-setosa
+## 2            5           3            1           0 Iris-setosa
+## 3            5           3            1           0 Iris-setosa
+## 4            5           3            2           0 Iris-setosa
+## 5            5           4            1           0 Iris-setosa
+## 6            5           4            2           0 Iris-setosa</code></pre>
+<pre class="r"><code># It worked.</code></pre>
+<p>The preceding shows that we have 5 features: 1 categorical and 4 numeric features. All the variables have names for identification.</p>
+<p><strong>Let’s look at the summary statistics of our data.</strong></p>
+<pre class="r"><code>summary(iris1)</code></pre>
+<pre><code>##   sepal.length  sepal.width  petal.length  petal.width
+##  Min.   :4     Min.   :2    Min.   :1     Min.   :0   
+##  1st Qu.:5     1st Qu.:3    1st Qu.:2     1st Qu.:0   
+##  Median :6     Median :3    Median :4     Median :1   
+##  Mean   :6     Mean   :3    Mean   :4     Mean   :1   
+##  3rd Qu.:6     3rd Qu.:3    3rd Qu.:5     3rd Qu.:2   
+##  Max.   :8     Max.   :4    Max.   :7     Max.   :2   
+##              class   
+##  Iris-setosa    :50  
+##  Iris-versicolor:50  
+##  Iris-virginica :50  
+##                      
+##                      
+## </code></pre>
+<pre class="r"><code>range(iris1$sepal.length)</code></pre>
+<pre><code>## [1] 4 8</code></pre>
+<pre class="r"><code>range(iris1$petal.length)</code></pre>
+<pre><code>## [1] 1 7</code></pre>
+<p>The preceding shows that there is no missing value. We also noticed that sepal.length has a narrow range compared to petal.length.</p>
+<p><strong>Let’s visualize our data.</strong></p>
+<pre class="r"><code>pairs(iris1[1:4],main=&quot;Iris Data (red=setosa,green=versicolor,blue=virginica)&quot;, pch=21,  bg=c(&quot;red&quot;,&quot;green3&quot;,&quot;blue&quot;)[unclass(iris1$class)])</code></pre>
+<p><img src="Problem_2_Final_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<p>The preceding shows that Setosa irises have shorter petals than the other two species.</p>
+</div>
+<div id="naive-bayes-algorithm." class="section level2">
+<h2>Naive Bayes algorithm.</h2>
+<p>Loading library.</p>
+<pre class="r"><code>library(arules)
+library(adabag)
+library(gmodels)
+library(caret)
+library(lpSolve)
+library(ipred)
+library(neuralnet)
+library(irr)
+library(kernlab)
+library(e1071)
+library(klaR)
+library(neuralnet)</code></pre>
+<p><strong>Function to check accuracy measures</strong></p>
+<pre class="r"><code>##############################################################################  
+###############** Function to check accuracy measures ** #####################  
+############################################################################## 
+
+accuracyMeasures &lt;- function(pred, truth, name=&quot;model&quot;) {   
+  #dev.norm &lt;- -2*loglikelihood(as.numeric(truth), pred)/length(pred)  
+  ctable &lt;- table(truth=truth,
+                 pred = pred)                                       
+  accuracy &lt;- sum(diag(ctable))/sum(ctable)
+  kappa &lt;- kappa2(data.frame(truth, pred))$value
+ # R_squared &lt;- 1 - sum((pred -truth)^2)/sum((mean(truth) - truth)^2)
+  data.frame(model=name, accuracy=accuracy, kappa=kappa)
+}</code></pre>
+<p>Naive Bayes uses frequency tables to learn the data. Naive Bayes can work with few numeric features. But, it works better with categorical features. Iris1 data has 4 numerical features. Therefore, we will discretize numeric features.</p>
+<p><strong>Discretization of numeric features:</strong></p>
+<pre class="r"><code># Let&#39;s backup iris1 data
+iris_dis &lt;- iris1
+# Discretization of numeric features using discretize() function.
+num.vars &lt;- sapply(iris_dis, is.numeric)
+iris_dis[num.vars] &lt;- lapply(iris_dis[num.vars], discretize)
+# Let&#39;s check the data.
+str(iris_dis)</code></pre>
+<pre><code>## &#39;data.frame&#39;:    150 obs. of  5 variables:
+##  $ sepal.length: Factor w/ 3 levels &quot;[4.3,5.5)&quot;,&quot;[5.5,6.7)&quot;,..: 1 1 1 1 1 1 1 1 1 1 ...
+##  $ sepal.width : Factor w/ 3 levels &quot;[2.0,2.8)&quot;,&quot;[2.8,3.6)&quot;,..: 2 2 2 2 2 3 2 2 2 2 ...
+##  $ petal.length: Factor w/ 3 levels &quot;[1.00,2.97)&quot;,..: 1 1 1 1 1 1 1 1 1 1 ...
+##  $ petal.width : Factor w/ 3 levels &quot;[0.1,0.9)&quot;,&quot;[0.9,1.7)&quot;,..: 1 1 1 1 1 1 1 1 1 1 ...
+##  $ class       : Factor w/ 3 levels &quot;Iris-setosa&quot;,..: 1 1 1 1 1 1 1 1 1 1 ...</code></pre>
+<pre class="r"><code>#Let&#39;s look at the class feature.
+head(iris_dis)</code></pre>
+<pre><code>##   sepal.length sepal.width petal.length petal.width       class
+## 1    [4.3,5.5)   [2.8,3.6)  [1.00,2.97)   [0.1,0.9) Iris-setosa
+## 2    [4.3,5.5)   [2.8,3.6)  [1.00,2.97)   [0.1,0.9) Iris-setosa
+## 3    [4.3,5.5)   [2.8,3.6)  [1.00,2.97)   [0.1,0.9) Iris-setosa
+## 4    [4.3,5.5)   [2.8,3.6)  [1.00,2.97)   [0.1,0.9) Iris-setosa
+## 5    [4.3,5.5)   [2.8,3.6)  [1.00,2.97)   [0.1,0.9) Iris-setosa
+## 6    [4.3,5.5)   [3.6,4.4]  [1.00,2.97)   [0.1,0.9) Iris-setosa</code></pre>
+<pre class="r"><code>table(iris_dis$class)</code></pre>
+<pre><code>## 
+##     Iris-setosa Iris-versicolor  Iris-virginica 
+##              50              50              50</code></pre>
+<p>The preceeding shows that each class in the target variable has 50 observations.</p>
+<div id="creating-random-training-and-test-data-set." class="section level4">
+<h4>4.Creating random training and test data set.</h4>
+<pre class="r"><code>iris_dis.bkup &lt;- iris_dis
+# Let&#39;s remove the target feature (class)
+iris_dis &lt;- iris_dis[-5]
+# Let&#39;s set the seed first
+set.seed(9) 
+# Get random vector sample
+random_ids &lt;- sample(nrow(iris_dis), 0.8*nrow(iris_dis))
+# We can use random_ids to split iris data into 80 percent (train) and 20 percent (test dataset).
+iris_dis_train &lt;- iris_dis[random_ids, ]
+iris_dis_test  &lt;- iris_dis[-random_ids, ]
+# let&#39;s create train and test labels.
+iris_dis_train_labels &lt;- iris_dis.bkup[random_ids, 5]
+iris_dis_test_labels &lt;- iris_dis.bkup[-random_ids, 5]
+# Let&#39;s check the subset data we created.
+round(prop.table(table(iris_dis_train_labels))*100, digits = 2)</code></pre>
+<pre><code>## iris_dis_train_labels
+##     Iris-setosa Iris-versicolor  Iris-virginica 
+##              33              33              33</code></pre>
+<pre class="r"><code>table(iris_dis.bkup[random_ids, 5])</code></pre>
+<pre><code>## 
+##     Iris-setosa Iris-versicolor  Iris-virginica 
+##              40              40              40</code></pre>
+<pre class="r"><code>prop.table(table(iris_dis_test_labels))*100</code></pre>
+<pre><code>## iris_dis_test_labels
+##     Iris-setosa Iris-versicolor  Iris-virginica 
+##              33              33              33</code></pre>
+<pre class="r"><code>table(iris_dis.bkup[-random_ids,5])</code></pre>
+<pre><code>## 
+##     Iris-setosa Iris-versicolor  Iris-virginica 
+##              10              10              10</code></pre>
+<p>The preceding shows that we split the classes evenly.</p>
+</div>
+<div id="training-a-model-on-the-data." class="section level4">
+<h4>5.Training a model on the data.</h4>
+<p>We will use <strong>naiveBayes()</strong> function within e1071 package.</p>
+<pre class="r"><code>set.seed(9) 
+# Let&#39;s build the naive Bayes classifier with laplace = 0.
+iris_dis_nb &lt;- naiveBayes(iris_dis_train, iris_dis_train_labels)</code></pre>
+</div>
+<div id="model-validation-on-unseen-data." class="section level4">
+<h4>6.Model validation on unseen data.</h4>
+<p>We will test our predictions on unseen data in the test data set. Let’s use the <strong>predict()</strong> function.</p>
+<pre class="r"><code>set.seed(9)
+# We will use table() function to compare the predictions to true values.
+iris_dis_test_pred &lt;- predict(iris_dis_nb, iris_dis_test)
+# We will use table() function to compare the predictions to train labels
+iris_dis_train_pred &lt;- predict(iris_dis_nb, iris_dis_train)
+# Let&#39;s check the performance of our classifier.
+table(iris_dis_train_pred, iris_dis_train_labels, dnn=list(&#39;predicted&#39;,&#39;train actual&#39;))</code></pre>
+<pre><code>##                  train actual
+## predicted         Iris-setosa Iris-versicolor Iris-virginica
+##   Iris-setosa              40               0              0
+##   Iris-versicolor           0              39              3
+##   Iris-virginica            0               1             37</code></pre>
+<pre class="r"><code>table(iris_dis_test_pred, iris_dis_test_labels, dnn=list(&#39;predicted&#39;,&#39;test actual&#39;))</code></pre>
+<pre><code>##                  test actual
+## predicted         Iris-setosa Iris-versicolor Iris-virginica
+##   Iris-setosa              10               0              0
+##   Iris-versicolor           0               9              1
+##   Iris-virginica            0               1              9</code></pre>
+<pre class="r"><code>accuracyMeasures(iris_dis_train_pred,iris_dis_train_labels,name=&quot;Naive Bayes, train&quot;)</code></pre>
+<pre><code>##                model accuracy kappa
+## 1 Naive Bayes, train        1     1</code></pre>
+<pre class="r"><code>accuracyMeasures(iris_dis_test_pred,iris_dis_test_labels,name=&quot;Naive Bayes, test&quot;)</code></pre>
+<pre><code>##               model accuracy kappa
+## 1 Naive Bayes, test        1     1</code></pre>
+<p>The preceding shows that the model performance on the test data is less than that of the performance on the train data. Not surprising. Let’s see if we can tune our classifier.</p>
+</div>
+<div id="model-tunning-using-laplace-1." class="section level4">
+<h4>7.Model tunning (using Laplace = 1).</h4>
+<pre class="r"><code>set.seed(9) 
+# Let&#39;s build the naive Bayes classifier with laplace = 1.
+iris_dis_nb1 &lt;- naiveBayes(iris_dis_train, iris_dis_train_labels, laplace = 1)
+# Let&#39;s make predictions.
+iris_dis_test_pred1 &lt;- predict(iris_dis_nb1, iris_dis_test)
+iris_dis_train_pred1 &lt;- predict(iris_dis_nb1, iris_dis_train)
+# Let&#39;s see confusion matrix
+table(iris_dis_test_pred1, iris_dis_test_labels, dnn=list(&#39;laplace = 1, predicted&#39;,&#39;test actual&#39;))</code></pre>
+<pre><code>##                       test actual
+## laplace = 1, predicted Iris-setosa Iris-versicolor Iris-virginica
+##        Iris-setosa              10               0              0
+##        Iris-versicolor           0               9              1
+##        Iris-virginica            0               1              9</code></pre>
+<pre class="r"><code>table(iris_dis_train_pred1, iris_dis_train_labels, dnn=list(&#39;laplace = 1, predicted&#39;,&#39;train&#39;))</code></pre>
+<pre><code>##                       train
+## laplace = 1, predicted Iris-setosa Iris-versicolor Iris-virginica
+##        Iris-setosa              40               0              0
+##        Iris-versicolor           0              39              3
+##        Iris-virginica            0               1             37</code></pre>
+<pre class="r"><code>accuracyMeasures(iris_dis_train_pred1,iris_dis_train_labels,name=&quot;Naive Bayes, train, laplace = 1&quot;)</code></pre>
+<pre><code>##                             model accuracy kappa
+## 1 Naive Bayes, train, laplace = 1        1     1</code></pre>
+<pre class="r"><code>accuracyMeasures(iris_dis_test_pred1,iris_dis_test_labels,name=&quot;Naive Bayes, test, laplace = 1&quot;)</code></pre>
+<pre><code>##                            model accuracy kappa
+## 1 Naive Bayes, test, laplace = 1        1     1</code></pre>
+<p>The preceding results (laplace = 1) shows no improvement on our classifier. Let’s measure other performances.</p>
+</div>
+<div id="estimating-future-performance." class="section level4">
+<h4>8. Estimating future performance.</h4>
+<p>Let’s use technique known as k-fold cross validation. We will use the function createFolds() within caret package.</p>
+<pre class="r"><code>library(irr)
+library(lpSolve)
+set.seed(9)
+folds &lt;- createFolds(iris_dis.bkup[,5], k = 10)
+cv_results &lt;- lapply(folds, function(x) {
+   iris_dis_model2  &lt;- naiveBayes(iris_dis.bkup[-x, 1:4], iris_dis.bkup[-x,5], laplace = 1)  
+   iris_dis_pred2    &lt;- predict(iris_dis_model2, iris_dis.bkup[x,])
+   iris_dis_actual2 &lt;- iris_dis_test_labels
+  kappa &lt;- kappa2(data.frame(iris_dis.bkup[x,5], iris_dis_pred2))$value
+  return(kappa)
+})
+# Let&#39;s examine the results.
+str(cv_results)</code></pre>
+<pre><code>## List of 10
+##  $ Fold01: num 1
+##  $ Fold02: num 1
+##  $ Fold03: num 0.9
+##  $ Fold04: num 0.9
+##  $ Fold05: num 0.8
+##  $ Fold06: num 0.9
+##  $ Fold07: num 1
+##  $ Fold08: num 1
+##  $ Fold09: num 0.9
+##  $ Fold10: num 0.9</code></pre>
+<pre class="r"><code># Let&#39;s use unlist() function.
+mean(unlist(cv_results))</code></pre>
+<pre><code>## [1] 1</code></pre>
+<p>The preceding shows that kappa statistic obtained after performing k-fold cross validation is a little bit higher than of laplace estimator = 1.</p>
+<p><strong>Bagging with nb</strong>.</p>
+<pre class="r"><code>control &lt;- trainControl(method=&quot;repeatedcv&quot;, number=10, repeats = 10 )
+metric &lt;- &quot;Accuracy&quot;
+# Bagged naive Bayes
+set.seed(9)
+fit.nb &lt;- train(class ~., data=iris_dis.bkup, method=&quot;nb&quot;, metric=metric, trControl=control) 
+iris_dis_pred.fit.nb    &lt;- predict(fit.nb, iris_dis.bkup)
+accuracyMeasures(iris_dis_pred.fit.nb, iris_dis.bkup$class, name=&quot;Naive Bayes, bagging&quot;)</code></pre>
+<pre><code>##                  model accuracy kappa
+## 1 Naive Bayes, bagging        1     1</code></pre>
+<pre class="r"><code># summarize results
+bagging_results.nb &lt;- resamples(list(nb=fit.nb, nb=fit.nb))
+summary(bagging_results.nb)</code></pre>
+<pre><code>## 
+## Call:
+## summary.resamples(object = bagging_results.nb)
+## 
+## Models: nb, nb 
+## Number of resamples: 100 
+## 
+## Accuracy 
+##    Min. 1st Qu. Median Mean 3rd Qu. Max. NA&#39;s
+## nb    1       1      1    1       1    1    0
+## 
+## Kappa 
+##    Min. 1st Qu. Median Mean 3rd Qu. Max. NA&#39;s
+## nb    0       1      1    1       1    1    0</code></pre>
+<pre class="r"><code>dotplot(bagging_results.nb)</code></pre>
+<p><img src="Problem_2_Final_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
+<p>The preceding shows that the accuracy and kappa statistic obtained with bagging techniques are less than that of k-fold cross validation.</p>
+</div>
+</div>
+<div id="neural-network-algorithm." class="section level2">
+<h2>Neural Network algorithm.</h2>
+<p>Let’s check the structure of bour data.</p>
+<pre class="r"><code>str(iris1)</code></pre>
+<pre><code>## &#39;data.frame&#39;:    150 obs. of  5 variables:
+##  $ sepal.length: num  5.1 4.9 4.7 4.6 5 5.4 4.6 5 4.4 4.9 ...
+##  $ sepal.width : num  3.5 3 3.2 3.1 3.6 3.9 3.4 3.4 2.9 3.1 ...
+##  $ petal.length: num  1.4 1.4 1.3 1.5 1.4 1.7 1.4 1.5 1.4 1.5 ...
+##  $ petal.width : num  0.2 0.2 0.2 0.2 0.2 0.4 0.3 0.2 0.2 0.1 ...
+##  $ class       : Factor w/ 3 levels &quot;Iris-setosa&quot;,..: 1 1 1 1 1 1 1 1 1 1 ...</code></pre>
+<p>The preceding shows data not ranged between 0 and 1. Neural network works best when the input data are scaled to narrow range around zero. Let’s normalize numeric features.</p>
+<div id="preparing-the-data." class="section level4">
+<h4>9. Preparing the data.</h4>
+<p>We will define a <strong>normalize()</strong> function to apply on our data.</p>
+<pre class="r"><code>normalize &lt;- function(x) {
+  return((x - min(x)) / (max(x) - min(x)))
+}
+# Let&#39;s convert categorical feature (class) in numeric
+iris1$class &lt;- as.numeric(as.factor(iris1$class))
+# Let&#39;s normalize numeric features using our normalize() function.
+iris_norm &lt;- as.data.frame(lapply(iris1, normalize))
+# Let&#39;s check the data.
+str(iris_norm)</code></pre>
+<pre><code>## &#39;data.frame&#39;:    150 obs. of  5 variables:
+##  $ sepal.length: num  0.2222 0.1667 0.1111 0.0833 0.1944 ...
+##  $ sepal.width : num  0.625 0.417 0.5 0.458 0.667 ...
+##  $ petal.length: num  0.0678 0.0678 0.0508 0.0847 0.0678 ...
+##  $ petal.width : num  0.0417 0.0417 0.0417 0.0417 0.0417 ...
+##  $ class       : num  0 0 0 0 0 0 0 0 0 0 ...</code></pre>
+<pre class="r"><code>summary(iris_norm)</code></pre>
+<pre><code>##   sepal.length  sepal.width  petal.length  petal.width     class  
+##  Min.   :0     Min.   :0    Min.   :0     Min.   :0    Min.   :0  
+##  1st Qu.:0     1st Qu.:0    1st Qu.:0     1st Qu.:0    1st Qu.:0  
+##  Median :0     Median :0    Median :1     Median :0    Median :0  
+##  Mean   :0     Mean   :0    Mean   :0     Mean   :0    Mean   :0  
+##  3rd Qu.:1     3rd Qu.:1    3rd Qu.:1     3rd Qu.:1    3rd Qu.:1  
+##  Max.   :1     Max.   :1    Max.   :1     Max.   :1    Max.   :1</code></pre>
+<p>The preceding shows that we normalized numeric features.</p>
+</div>
+<div id="train-a-model-on-the-data." class="section level4">
+<h4>10. Train a model on the data.</h4>
+<p><strong>Neuralnet()</strong> function is not include in the base R. We will install it.</p>
+<pre class="r"><code># Let&#39;s build our model.
+iris_train_nn &lt;- iris_norm[random_ids, ]
+iris_test_nn &lt;- iris_norm[-random_ids, ]
+fit.nn_iris &lt;- neuralnet(class ~ sepal.length + sepal.width + petal.length + petal.width, data = iris_train_nn)</code></pre>
+<p>Let’s visualize the network topology using <strong>plot()</strong> function.</p>
+<pre class="r"><code>plot(fit.nn_iris)</code></pre>
+<div class="figure">
+<img src="/C:/Users/Pasco/1st%20HP%20Laptop/WebsitePT/PascoSite/Plot1.png" />
+
+</div>
+<p>The preceding shows that the sum of squared errors <strong>(SSE)</strong> is lower. That implies a better predictive performance.</p>
+</div>
+<div id="model-evaluation." class="section level4">
+<h4>11.Model evaluation.</h4>
+<p>We will test our predictions on unseen data (test data). Let’s use the <strong>compute()</strong> function.</p>
+<pre class="r"><code># Let&#39;s generate some predictions.
+model_results &lt;- compute(fit.nn_iris, iris_test_nn[ ,1:4] )
+predicted_class &lt;- model_results$net.result
+# Let&#39;s check the correlation between predicted class and actual classes.
+cor(predicted_class, iris_norm[-random_ids, 5])</code></pre>
+<pre><code>##              [,1]
+## [1,] 0.9750293362</code></pre>
+<p>The preceding shows a correlation of **0.974 which is close to 1. That indicates a strong correlation and our model is performing very well with only a single hidden node. Let’s see if we can make the model better.</p>
+</div>
+<div id="model-tunning-using-hidden-5." class="section level4">
+<h4>12. Model tunning (using hidden = 5).</h4>
+<p>Let’s see build a new model with hidden = 5.</p>
+<pre class="r"><code>set.seed(922)
+fit.nn_iris_h5 &lt;- neuralnet(class ~ sepal.length + sepal.width + petal.length + petal.width, data = iris_train_nn, hidden = 5)</code></pre>
+<p>Let’s visualize the new network topology using <strong>plot()</strong> function.</p>
+<pre class="r"><code>plot(fit.nn_iris_h5)</code></pre>
+<div class="figure">
+<img src="/C:/Users/Pasco/1st%20HP%20Laptop/WebsitePT/PascoSite/Plot2.png" />
+
+</div>
+<p>The preceding shows that the sum of squared errors <strong>(SSE)</strong> has been reduced to 0.22 from 0.494.<br />
+Let’s comapre the predictions:</p>
+<pre class="r"><code>model_results2 &lt;- compute(fit.nn_iris_h5, iris_test_nn[ ,1:4])
+predicted_class2 &lt;- model_results2$net.result
+# Let&#39;s check the correlation between predicted class and actual classes.
+cor(predicted_class2, iris_norm[-random_ids, 5])</code></pre>
+<pre><code>##              [,1]
+## [1,] 0.9862829291</code></pre>
+<p>The preceding shows a correlation of **0.986, which is close to 1. That indicates a strong correlation and the model tuning has improved our model.</p>
+</div>
+<div id="estimating-future-performance.-1" class="section level4">
+<h4>13. Estimating future performance.</h4>
+<p><strong>Bagging with nnet</strong>.</p>
+<pre class="r"><code>control &lt;- trainControl(method=&quot;repeatedcv&quot;, number=10, repeats = 10)
+metric &lt;- &quot;RMSE&quot;
+set.seed(9) 
+# Bagged neural net
+fit.nnet &lt;- train(class ~., data=iris_norm, method=&quot;nnet&quot;, metric=metric, trControl=control)
+# summarize results
+bagging_results &lt;- resamples(list(nnet=fit.nnet, nnet=fit.nnet))</code></pre>
+<pre class="r"><code>summary(bagging_results)</code></pre>
+<pre><code>## 
+## Call:
+## summary.resamples(object = bagging_results)
+## 
+## Models: nnet, nnet 
+## Number of resamples: 100 
+## 
+## RMSE 
+##             Min.    1st Qu.     Median       Mean    3rd Qu.      Max.
+## nnet 0.005966547 0.02890958 0.05647385 0.06290055 0.09250518 0.1577714
+##      NA&#39;s
+## nnet    0
+## 
+## Rsquared 
+##           Min.   1st Qu.    Median      Mean   3rd Qu.      Max. NA&#39;s
+## nnet 0.8126595 0.9481692 0.9850522 0.9673881 0.9958143 0.9999389    0</code></pre>
+<pre class="r"><code>dotplot(bagging_results)</code></pre>
+<p><img src="Problem_2_Final_files/figure-html/unnamed-chunk-23-1.png" width="672" /></p>
+<p>The preceding shows that bagging technique improved our model. R-squared is <strong>0.98</strong> which is close to 1. In addition, RMSE is very small (0.05). RSME is the square root of the average square of the difference between our prediction and actual values. It means that our model prediction is not that off compared to actual data.</p>
+</div>
+</div>
+<div id="final-machine-learning-selection." class="section level2">
+<h2>Final machine learning selection.</h2>
+<pre class="r"><code># Summary of Naive Bayes.
+summary(bagging_results.nb)</code></pre>
+<pre><code>## 
+## Call:
+## summary.resamples(object = bagging_results.nb)
+## 
+## Models: nb, nb 
+## Number of resamples: 100 
+## 
+## Accuracy 
+##    Min.   1st Qu.    Median      Mean   3rd Qu. Max. NA&#39;s
+## nb  0.6 0.8666667 0.9333333 0.8953333 0.9333333    1    0
+## 
+## Kappa 
+##    Min. 1st Qu. Median  Mean 3rd Qu. Max. NA&#39;s
+## nb  0.4     0.8    0.9 0.843     0.9    1    0</code></pre>
+<pre class="r"><code>dotplot(bagging_results.nb)</code></pre>
+<p><img src="Problem_2_Final_files/figure-html/unnamed-chunk-24-1.png" width="672" /></p>
+<pre class="r"><code># Summary of Neural Net
+summary(bagging_results)</code></pre>
+<pre><code>## 
+## Call:
+## summary.resamples(object = bagging_results)
+## 
+## Models: nnet, nnet 
+## Number of resamples: 100 
+## 
+## RMSE 
+##             Min.    1st Qu.     Median       Mean    3rd Qu.      Max.
+## nnet 0.005966547 0.02890958 0.05647385 0.06290055 0.09250518 0.1577714
+##      NA&#39;s
+## nnet    0
+## 
+## Rsquared 
+##           Min.   1st Qu.    Median      Mean   3rd Qu.      Max. NA&#39;s
+## nnet 0.8126595 0.9481692 0.9850522 0.9673881 0.9958143 0.9999389    0</code></pre>
+<pre class="r"><code>dotplot(bagging_results)</code></pre>
+<p><img src="Problem_2_Final_files/figure-html/unnamed-chunk-24-2.png" width="672" /></p>
+<p>The preceding performance measures shows that neural net algorithm performed better (R-squared almost = 1) than naive Bayes on the iris data.</p>
+<div id="conclusion" class="section level4">
+<h4>14. Conclusion:</h4>
+<ul>
+<li>Neural net accuracy is higher than that of naive Bayes.<br />
+</li>
+<li>Bagging with naive Bayes did not improve performance measures above that of k-fold cross validation.<br />
+</li>
+<li>Bagging with neural net performed well above that of naive Bayes.</li>
+<li>This analysis shows that one could use neural net for classification tasks.</li>
+</ul>
+</div>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+$(document).ready(function () {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

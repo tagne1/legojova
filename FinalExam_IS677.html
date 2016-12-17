@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+<meta name="author" content="Pascal Tagne" />
+
+<meta name="date" content="2016-12-10" />
+
+<title>IS 677 - Final Exam</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cerulean.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<link href="site_libs/font-awesome-4.5.0/css/font-awesome.min.css" rel="stylesheet" />
+
+<style type="text/css">code{white-space: pre;}</style>
+<link rel="stylesheet"
+      href="site_libs/highlight/textmate.css"
+      type="text/css" />
+<script src="site_libs/highlight/highlight.js"></script>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs && document.readyState && document.readyState === "complete") {
+   window.setTimeout(function() {
+      hljs.initHighlighting();
+   }, 0);
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+<link rel="stylesheet" href="styles.css" type="text/css" />
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+
+
+<div class="navbar navbar-inverse  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Pascal Tagne</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">
+    <span class="fa fa-home"></span>
+     
+    Home
+  </a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-info"></span>
+     
+    Works
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li class="dropdown-header">Data Science with R</li>
+    <li>
+      <a href="about.html">Table of contents</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Machine Learning with R</li>
+    <li>
+      <a href="TOC_Final_Project.html">Table of contents</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-gear"></span>
+     
+    Projects
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="Problem_3_Final.html">Python Programming</a>
+    </li>
+    <li>
+      <a href="Problem_4_Final.html">Hadoop Cloudera</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Computer Networks</li>
+    <li class="dropdown-header">Computer Network Security</li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">IS 677 - Final Exam</h1>
+<h4 class="author"><em>Pascal Tagne</em></h4>
+<h4 class="date"><em>December 10, 2016</em></h4>
+
+</div>
+
+
+<div id="write-r-codes-for-the-following-questions." class="section level2">
+<h2>1.Write R codes for the following questions.</h2>
+<div id="a.create-two-variables-for-measuring-age-and-maxhr-maximum-heart-rate." class="section level3">
+<h3>a.Create two variables for measuring Age and MaxHR (maximum heart rate).</h3>
+<pre class="r"><code># Create independent variable vector.
+Age &lt;- c(19,23,25,37,65,51,33,51,70,18,23,42,18,39,37)
+# Create dependent variable vector
+MaxHR &lt;- c(200,182,180,180,156,169,174,172,153, 199, 193, 174, 198, 183,178)</code></pre>
+</div>
+<div id="b.plot-the-dependent-variable-against-the-independent-variable." class="section level3">
+<h3>b.Plot the dependent variable against the independent variable.</h3>
+<pre class="r"><code>plot(Age, MaxHR, main=&quot;Scatter plot for MaxHR as a function of Age&quot;)</code></pre>
+<p><img src="FinalExam_IS677_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+</div>
+<div id="c.create-a-linear-regression-model-for-predicting-the-dependent-variable-from-the-independent-variable." class="section level3">
+<h3>c.Create a linear regression model for predicting the dependent variable from the independent variable.</h3>
+<pre class="r"><code># Let&#39;s create our data frame from MaxHR and Age vectors.
+heartrate &lt;- cbind(MaxHR, Age, deparse.level = 1)
+heartrate &lt;- as.data.frame(heartrate)
+# Let&#39;s check our data
+str(heartrate)</code></pre>
+<pre><code>## &#39;data.frame&#39;:    15 obs. of  2 variables:
+##  $ MaxHR: num  200 182 180 180 156 169 174 172 153 199 ...
+##  $ Age  : num  19 23 25 37 65 51 33 51 70 18 ...</code></pre>
+<pre class="r"><code>head(heartrate)</code></pre>
+<pre><code>##   MaxHR Age
+## 1   200  19
+## 2   182  23
+## 3   180  25
+## 4   180  37
+## 5   156  65
+## 6   169  51</code></pre>
+<pre class="r"><code># It worked!
+# Let&#39;s Create a linear regression model for predicting the dependent variable.
+fithr &lt;- lm(MaxHR ~ Age, data=heartrate)</code></pre>
+</div>
+<div id="d.plot-the-regression-line." class="section level3">
+<h3>d.Plot the regression line.</h3>
+<pre class="r"><code>plot(heartrate$Age, heartrate$MaxHR, xlab=&quot;Age&quot;, ylab=&quot;MaxHR&quot;, main=&quot;Scatter plot with regression line for MaxHR predicted from Age&quot;)
+abline(fithr)</code></pre>
+<p><img src="FinalExam_IS677_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+</div>
+<div id="e.test-the-validity-of-the-model-graphically." class="section level3">
+<h3>e.Test the validity of the model graphically.</h3>
+<pre class="r"><code>par(mfrow=c(2,2))
+plot(fithr)</code></pre>
+<p><img src="FinalExam_IS677_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<p><strong>Let’s explain the results</strong>.</p>
+<ul>
+<li><p>Normality: The upper right corner is the Q-Q plot of the standardized residuals against values expected under normality. If you have met the normality assumption, the points on this graph should fall on the straight 45-degree line. Because they don’t, you have clearly violated the normality assumption.</p></li>
+<li><p>Linearity: In linear regression, the independent variable is assumed to be linearly related to the dependent variable. Under this assumption the residuals should have no relationship with the fitted values. In other words the model should capture all systematic patterns and only leave random noise. In the Residuals vs Fitted graph (upper left), you see clear evidence of a curved relationship, which suggest that you may want to add a quadratic term to the regression.</p></li>
+<li><p>Homoscedasticity: the variance of the dependent variable should not change with the levels of the independent variables. Under this assumption the scale-location plot on the bottom left should have a random band along a horizontal line. We seem to have met this assumption.</p></li>
+</ul>
+</div>
+<div id="f.how-good-are-the-estimated-model-coefficients" class="section level3">
+<h3>f.How good are the estimated model coefficients?</h3>
+<pre class="r"><code>summary(fithr)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = MaxHR ~ Age, data = heartrate)
+## 
+## Residuals:
+##        Min         1Q     Median         3Q        Max 
+## -8.7614968 -1.1926016  0.8127613  3.8181242  6.4513741 
+## 
+## Coefficients:
+##                 Estimate   Std. Error  t value               Pr(&gt;|t|)    
+## (Intercept) 208.70786786   3.33991761 62.48893 &lt; 0.000000000000000222 ***
+## Age          -0.79785484   0.08327099 -9.58143          0.00000029481 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 5.194223 on 13 degrees of freedom
+## Multiple R-squared:  0.8759586,  Adjusted R-squared:  0.866417 
+## F-statistic: 91.80373 on 1 and 13 DF,  p-value: 0.0000002948128</code></pre>
+<p>The preceding shows that from the Pr(&gt;|t|) column, the regression coefficient (-0.79785) is significantly different from zero (p&lt;0.001).</p>
+</div>
+<div id="g.briefly-explain-the-residual-standard-error-r-squared-and-adjusted-rsquared" class="section level3">
+<h3>g.Briefly explain the residual standard error, R-Squared and Adjusted Rsquared</h3>
+<p>values.</p>
+<ul>
+<li><p>The residual standard error is the sum of squares of the residuals (actual-predicted) divided by DF (degrees of freedom).</p></li>
+<li><p>R-squared is the sum of squares of residuals divided by the sum of squares of the difference between actuals and mean. In order word, it is the amount of variance explained by the model.</p></li>
+<li><p>Adjusted R-squared is R-squared divided by the ratio of the DF (degrees of freedom) to the number of rows.</p></li>
+<li><p>Degrees of freedom (DF) is the number of training rows minus the number of coefficients to solve for.</p></li>
+</ul>
+</div>
+<div id="h.using-the-model-predict-the-maximum-heart-rates-for-a-50-and-60-year-old." class="section level3">
+<h3>h.Using the model predict the maximum heart rates for a 50 and 60 year old.</h3>
+<p>The model for predicting MaxHR is: <strong>MaxHR = 208.70787 - 0.79785 x Age</strong></p>
+<ul>
+<li><p>For a 50 year old, the MaxHR = 208.70787 - 0.79785 x 50 = 168.82</p></li>
+<li><p>For a 60 year old, the MaxHR = 208.70787 - 0.79785 x 60 = 160.84</p></li>
+</ul>
+</div>
+</div>
+<div id="load-the-package-igraphdata-and-use-the-data-usairports-that-comes-with-igraphdata.-note-that-usairports-is-an-igraph-object.-write-r-codes-to-answer-the-following-questions." class="section level2">
+<h2>2.Load the package igraphdata and use the data USairports that comes with igraphdata. Note that USairports is an igraph object. Write R codes to answer the following questions.</h2>
+<pre class="r"><code># Let&#39;s install and load the igraphdata package
+library(igraphdata)
+data(USairports)</code></pre>
+<div id="a.how-will-you-find-out-the-number-of-nodes-and-the-number-of-edges-in-the" class="section level3">
+<h3>a.How will you find out the number of nodes and the number of edges in the</h3>
+<p>graph and if the graph is directed or undirected?</p>
+<pre class="r"><code>library(igraph)</code></pre>
+<pre><code>## 
+## Attaching package: &#39;igraph&#39;</code></pre>
+<pre><code>## The following object is masked _by_ &#39;.GlobalEnv&#39;:
+## 
+##     normalize</code></pre>
+<pre><code>## The following object is masked from &#39;package:arules&#39;:
+## 
+##     union</code></pre>
+<pre><code>## The following objects are masked from &#39;package:stats&#39;:
+## 
+##     decompose, spectrum</code></pre>
+<pre><code>## The following object is masked from &#39;package:base&#39;:
+## 
+##     union</code></pre>
+<pre class="r"><code># Let&#39;s find the number of nodes and edges in USairports igragh.
+cat(&quot;In USairports igraph, the number of nodes is:&quot;, vcount(USairports), &quot;and the number of edges is:&quot;, ecount(USairports),&quot;\n&quot;)</code></pre>
+<pre><code>## In USairports igraph, the number of nodes is: 755 and the number of edges is: 23473</code></pre>
+<pre class="r"><code># Let&#39;s check if the graph is directed or undirected.
+cat(&quot;USairports igraph is directed because is_directed is:&quot;,is_directed(USairports))</code></pre>
+<pre><code>## USairports igraph is directed because is_directed is: TRUE</code></pre>
+</div>
+<div id="b.what-are-the-maximum-minimum-and-average-number-of-degrees-of-the-nodes-in-the-graph" class="section level3">
+<h3>b.What are the maximum, minimum, and average number of degrees of the nodes in the graph?</h3>
+<pre class="r"><code># maximum number of degrees in USairports
+max(degree(USairports))</code></pre>
+<pre><code>## [1] 1700</code></pre>
+<pre class="r"><code># minimum number of degrees in USairports
+min(degree(USairports))</code></pre>
+<pre><code>## [1] 1</code></pre>
+<pre class="r"><code># average number of degrees in USairports
+mean(degree(USairports))</code></pre>
+<pre><code>## [1] 62.18013245</code></pre>
+</div>
+<div id="c.-which-city-cities-is-are-the-busiest-in-terms-of-the-number-of-flights-which-city-cities-has-have-the-least-number-of-flights" class="section level3">
+<h3>c. Which city (cities) is (are) the busiest in terms of the number of flights? Which city (cities) has (have) the least number of flights?</h3>
+<pre class="r"><code># Let&#39;s Convert USairports graph to a long data frame
+df &lt;- as_long_data_frame(USairports)
+# Let&#39;s find the busiest city in terms of number of flights from
+city_busiest.from &lt;- subset(df, from==max(from), select = c(to_City))
+cat(&quot;The busiest city in terms of the number of flights from are:&quot;,city_busiest.from$to_City, &quot;\n&quot;)</code></pre>
+<pre><code>## The busiest city in terms of the number of flights from are: Culebra, PR Christiansted, VI Vieques, PR</code></pre>
+<pre class="r"><code># Let&#39;s find the busiest city in terms of number of flights to
+city_busiest.to &lt;- subset(df, to==max(to), select = c(to_City))
+cat(&quot;The busiest city in terms of the number of flights to is:&quot;,city_busiest.to$to_City)</code></pre>
+<pre><code>## The busiest city in terms of the number of flights to is: Fort Pierce, FL</code></pre>
+<p>Now let’s find city with least number of flights.</p>
+<pre class="r"><code># Let&#39;s find the city with the least number of flights to
+city_least.to &lt;- subset(df, to==min(to), select = c(to_City))
+cat(&quot;City with the least number of flights to are:&quot;,city_least.to$to_City, &quot;\n&quot;)</code></pre>
+<pre><code>## City with the least number of flights to are: Bangor, ME Bangor, ME Bangor, ME Bangor, ME Bangor, ME Bangor, ME Bangor, ME Bangor, ME Bangor, ME Bangor, ME Bangor, ME Bangor, ME Bangor, ME Bangor, ME Bangor, ME Bangor, ME Bangor, ME</code></pre>
+<pre class="r"><code># Let&#39;s find the city with the least number of flights from
+city_least.from &lt;- subset(df, from==min(from), select = c(to_City))
+cat(&quot;City with the least number of flights from are:&quot;,city_least.from$to_City, &quot;\n&quot;)</code></pre>
+<pre><code>## City with the least number of flights from are: New York, NY New York, NY New York, NY Boston, MA Newark, NJ Newark, NJ Newark, NJ New York, NY Detroit, MI New York, NY Philadelphia, PA Philadelphia, PA Washington, DC New York, NY Philadelphia, PA St. Petersburg, FL Orlando, FL Detroit, MI New York, NY Miami, FL</code></pre>
+</div>
+<div id="d.what-is-the-average-distance-covered-by-the-flights" class="section level3">
+<h3>d.What is the average distance covered by the flights?</h3>
+<pre class="r"><code># Compute average distance. Will use mean() function
+cat(&quot;The average distance is:&quot;, mean(df$Distance))</code></pre>
+<pre><code>## The average distance is: 638.9691561</code></pre>
+</div>
+<div id="e.how-many-flights-depart-from-and-arrive-at-jfk" class="section level3">
+<h3>e.How many flights depart from and arrive at JFK?</h3>
+<pre class="r"><code># Flights departing from JFK
+flights_from &lt;- subset(df, from_name==&quot;JFK&quot; , select=c(Carrier))
+nrow(flights_from)</code></pre>
+<pre><code>## [1] 294</code></pre>
+<pre class="r"><code># Flights arriving to JFK
+flights_to &lt;- subset(df, to_name==&quot;JFK&quot; , select=c(Carrier))
+nrow(flights_to)</code></pre>
+<pre><code>## [1] 313</code></pre>
+<pre class="r"><code># total flights
+cat(&quot;The number of flights depart from and arrive at JFK is:&quot;, sum(nrow(flights_from),nrow(flights_to)))</code></pre>
+<pre><code>## The number of flights depart from and arrive at JFK is: 607</code></pre>
+</div>
+</div>
+<div id="you-will-need-the-data-glaucomam-from-the-package-th.data-for-this-question.-write-r-codes-for-the-following" class="section level2">
+<h2>3.You will need the data GlaucomaM from the package TH.data for this question. Write R codes for the following:</h2>
+<pre class="r"><code># Let&#39;s install and load the TH package
+library(TH.data)</code></pre>
+<pre><code>## Loading required package: survival</code></pre>
+<pre><code>## 
+## Attaching package: &#39;survival&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:caret&#39;:
+## 
+##     cluster</code></pre>
+<pre><code>## 
+## Attaching package: &#39;TH.data&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:MASS&#39;:
+## 
+##     geyser</code></pre>
+<pre class="r"><code>data(GlaucomaM)</code></pre>
+<div id="a.create-a-decision-tree-using-class-as-the-response-variable-and-the-rest-as-predictor-variables.-what-is-the-complexity-of-this-tree-how-many-splits-does-it-have" class="section level3">
+<h3>a.Create a decision tree using Class as the response variable and the rest as predictor variables. What is the complexity of this tree? How many splits does it have?</h3>
+<pre class="r"><code># Let&#39;s create a decision tree using rpart() function from rpart package. We will first install rpart package and load it.
+library(rpart)
+library(rpart.plot)
+library(RColorBrewer)
+library(rattle)</code></pre>
+<pre><code>## Rattle: A free graphical interface for data mining with R.
+## Version 4.1.0 Copyright (c) 2006-2015 Togaware Pty Ltd.
+## Type &#39;rattle()&#39; to shake, rattle, and roll your data.</code></pre>
+<pre class="r"><code>set.seed(300)
+dtree &lt;- rpart(Class ~ ., data = GlaucomaM, method = &quot;class&quot;)
+# Let&#39;s plot out tree.
+fancyRpartPlot(dtree, uniform=TRUE, main=&quot;Regression Tree not pruned&quot;)</code></pre>
+<p><img src="FinalExam_IS677_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
+<pre class="r"><code># What is the complexity of this tree.
+cp= dtree$cptable[which.min(dtree$cptable[,&quot;xerror&quot;]),&quot;CP&quot;]
+cp</code></pre>
+<pre><code>## [1] 0.01360544218</code></pre>
+<p>The smallest tree whose cross-validation error is within one standard error of the minimum cross validation error value is a good choice for the final tree size.</p>
+<pre class="r"><code># How many splits does it have?
+plotcp(dtree)</code></pre>
+<p><img src="FinalExam_IS677_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
+<pre class="r"><code>dtree$cptable</code></pre>
+<pre><code>##              CP nsplit    rel error       xerror          xstd
+## 1 0.65306122449      0 1.0000000000 1.1938775510 0.07007326688
+## 2 0.07142857143      1 0.3469387755 0.4183673469 0.05810368358
+## 3 0.01360544218      2 0.2755102041 0.3775510204 0.05590431274
+## 4 0.01000000000      5 0.2346938776 0.3775510204 0.05590431274</code></pre>
+<p><strong>The number of split is 2.</strong> The preceding shows that the minimum cross-validated error is 0.377 with a standard error of 0.0559. In this case, the smallest tree with a cross-validated error within 0.377 +- 0.0559 (that is between 0.32 and 0.43) is selected. Looking at the cptable above, a tree with 1 splits (cross-validated error = 0.377) fits this requirements.</p>
+</div>
+<div id="b.does-the-tree-need-pruning-why-show-how-you-will-decide-this." class="section level3">
+<h3>b.Does the tree need pruning? Why? Show how you will decide this.</h3>
+<pre class="r"><code># Let&#39;s look at some information in our tree 
+dtree</code></pre>
+<pre><code>## n= 196 
+## 
+## node), split, n, loss, yval, (yprob)
+##       * denotes terminal node
+## 
+##  1) root 196 98 glaucoma (0.50000000000 0.50000000000)  
+##    2) varg&lt; 0.209 76  6 glaucoma (0.92105263158 0.07894736842) *
+##    3) varg&gt;=0.209 120 28 normal (0.23333333333 0.76666666667)  
+##      6) mhcg&gt;=0.1695 7  0 glaucoma (1.00000000000 0.00000000000) *
+##      7) mhcg&lt; 0.1695 113 21 normal (0.18584070796 0.81415929204)  
+##       14) vars&lt; 0.064 19  9 glaucoma (0.52631578947 0.47368421053) *
+##       15) vars&gt;=0.064 94 11 normal (0.11702127660 0.88297872340)  
+##         30) tms&gt;=-0.0655 32  8 normal (0.25000000000 0.75000000000)  
+##           60) eas&lt; 0.4455 7  2 glaucoma (0.71428571429 0.28571428571) *
+##           61) eas&gt;=0.4455 25  3 normal (0.12000000000 0.88000000000) *
+##         31) tms&lt; -0.0655 62  3 normal (0.04838709677 0.95161290323) *</code></pre>
+<pre class="r"><code>summary(dtree)</code></pre>
+<pre><code>## Call:
+## rpart(formula = Class ~ ., data = GlaucomaM, method = &quot;class&quot;)
+##   n= 196 
+## 
+##              CP nsplit    rel error       xerror          xstd
+## 1 0.65306122449      0 1.0000000000 1.1938775510 0.07007326688
+## 2 0.07142857143      1 0.3469387755 0.4183673469 0.05810368358
+## 3 0.01360544218      2 0.2755102041 0.3775510204 0.05590431274
+## 4 0.01000000000      5 0.2346938776 0.3775510204 0.05590431274
+## 
+## Variable importance
+## varg vars varn vari  rnf vbri mhcg mhcn  eas mhcs phcn abrs mhct phcg  hic 
+##   18   14   14   13   12   10    3    2    1    1    1    1    1    1    1 
+## vbss  tms   as  eag 
+##    1    1    1    1 
+## 
+## Node number 1: 196 observations,    complexity param=0.6530612245
+##   predicted class=glaucoma  expected loss=0.5  P(node) =1
+##     class counts:    98    98
+##    probabilities: 0.500 0.500 
+##   left son=2 (76 obs) right son=3 (120 obs)
+##   Primary splits:
+##       varg &lt; 0.209   to the left,  improve=44.01403509, (0 missing)
+##       vari &lt; 0.0615  to the left,  improve=41.01676685, (0 missing)
+##       vars &lt; 0.059   to the left,  improve=37.50000000, (0 missing)
+##       varn &lt; 0.0895  to the left,  improve=33.82973867, (0 missing)
+##       tmi  &lt; -0.0115 to the right, improve=31.82501342, (0 missing)
+##   Surrogate splits:
+##       varn &lt; 0.0895  to the left,  agree=0.934, adj=0.829, (0 split)
+##       vari &lt; 0.049   to the left,  agree=0.918, adj=0.789, (0 split)
+##       vars &lt; 0.059   to the left,  agree=0.888, adj=0.711, (0 split)
+##       rnf  &lt; 0.1525  to the left,  agree=0.878, adj=0.684, (0 split)
+##       vbri &lt; 0.109   to the right, agree=0.842, adj=0.592, (0 split)
+## 
+## Node number 2: 76 observations
+##   predicted class=glaucoma  expected loss=0.07894736842  P(node) =0.387755102
+##     class counts:    70     6
+##    probabilities: 0.921 0.079 
+## 
+## Node number 3: 120 observations,    complexity param=0.07142857143
+##   predicted class=normal    expected loss=0.2333333333  P(node) =0.612244898
+##     class counts:    28    92
+##    probabilities: 0.233 0.767 
+##   left son=6 (7 obs) right son=7 (113 obs)
+##   Primary splits:
+##       mhcg &lt; 0.1695  to the right, improve=8.738643068, (0 missing)
+##       mhci &lt; 0.099   to the right, improve=7.836770322, (0 missing)
+##       phci &lt; 0.0375  to the right, improve=7.006060606, (0 missing)
+##       phcg &lt; -0.1055 to the right, improve=6.607440476, (0 missing)
+##       hic  &lt; 0.412   to the right, improve=6.142535346, (0 missing)
+##   Surrogate splits:
+##       mhcn &lt; 0.176   to the right, agree=0.975, adj=0.571, (0 split)
+##       mhcs &lt; 0.207   to the right, agree=0.967, adj=0.429, (0 split)
+##       phcn &lt; 0.0415  to the right, agree=0.967, adj=0.429, (0 split)
+##       mhct &lt; 0.433   to the right, agree=0.958, adj=0.286, (0 split)
+##       phcg &lt; -0.001  to the right, agree=0.958, adj=0.286, (0 split)
+## 
+## Node number 6: 7 observations
+##   predicted class=glaucoma  expected loss=0  P(node) =0.03571428571
+##     class counts:     7     0
+##    probabilities: 1.000 0.000 
+## 
+## Node number 7: 113 observations,    complexity param=0.01360544218
+##   predicted class=normal    expected loss=0.185840708  P(node) =0.5765306122
+##     class counts:    21    92
+##    probabilities: 0.186 0.814 
+##   left son=14 (19 obs) right son=15 (94 obs)
+##   Primary splits:
+##       vars &lt; 0.064   to the left,  improve=5.295474140, (0 missing)
+##       tms  &lt; -0.068  to the right, improve=4.977411091, (0 missing)
+##       tmi  &lt; -0.009  to the right, improve=4.348934572, (0 missing)
+##       phci &lt; 0.0375  to the right, improve=4.167736088, (0 missing)
+##       vbrs &lt; 0.1155  to the right, improve=3.746497494, (0 missing)
+##   Surrogate splits:
+##       varg &lt; 0.231   to the left,  agree=0.876, adj=0.263, (0 split)
+##       hic  &lt; 0.445   to the right, agree=0.858, adj=0.158, (0 split)
+##       vass &lt; 0.0025  to the left,  agree=0.858, adj=0.158, (0 split)
+##       tmi  &lt; 0.0895  to the right, agree=0.858, adj=0.158, (0 split)
+##       ai   &lt; 0.3745  to the left,  agree=0.850, adj=0.105, (0 split)
+## 
+## Node number 14: 19 observations
+##   predicted class=glaucoma  expected loss=0.4736842105  P(node) =0.09693877551
+##     class counts:    10     9
+##    probabilities: 0.526 0.474 
+## 
+## Node number 15: 94 observations,    complexity param=0.01360544218
+##   predicted class=normal    expected loss=0.1170212766  P(node) =0.4795918367
+##     class counts:    11    83
+##    probabilities: 0.117 0.883 
+##   left son=30 (32 obs) right son=31 (62 obs)
+##   Primary splits:
+##       tms  &lt; -0.0655 to the right, improve=1.715854496, (0 missing)
+##       mhci &lt; 0.1005  to the right, improve=1.670257653, (0 missing)
+##       mdn  &lt; 0.7275  to the right, improve=1.665350919, (0 missing)
+##       phci &lt; 0.0285  to the right, improve=1.468224854, (0 missing)
+##       tmi  &lt; -0.2225 to the left,  improve=1.301773321, (0 missing)
+##   Surrogate splits:
+##       abrs &lt; 0.242   to the right, agree=0.872, adj=0.625, (0 split)
+##       tmg  &lt; -0.115  to the right, agree=0.851, adj=0.563, (0 split)
+##       abrg &lt; 0.9215  to the right, agree=0.840, adj=0.531, (0 split)
+##       vbsg &lt; 0.498   to the right, agree=0.830, adj=0.500, (0 split)
+##       vbrs &lt; 0.074   to the right, agree=0.830, adj=0.500, (0 split)
+## 
+## Node number 30: 32 observations,    complexity param=0.01360544218
+##   predicted class=normal    expected loss=0.25  P(node) =0.1632653061
+##     class counts:     8    24
+##    probabilities: 0.250 0.750 
+##   left son=60 (7 obs) right son=61 (25 obs)
+##   Primary splits:
+##       eas  &lt; 0.4455  to the left,  improve=3.862857143, (0 missing)
+##       eai  &lt; 0.5325  to the left,  improve=3.643724696, (0 missing)
+##       vbst &lt; 0.1375  to the left,  improve=3.643724696, (0 missing)
+##       tmg  &lt; -0.0805 to the left,  improve=3.643724696, (0 missing)
+##       abri &lt; 0.3285  to the left,  improve=3.111111111, (0 missing)
+##   Surrogate splits:
+##       vbss &lt; 0.1305  to the left,  agree=0.906, adj=0.571, (0 split)
+##       as   &lt; 0.666   to the left,  agree=0.875, adj=0.429, (0 split)
+##       eag  &lt; 1.909   to the left,  agree=0.875, adj=0.429, (0 split)
+##       abrs &lt; 0.3105  to the left,  agree=0.875, adj=0.429, (0 split)
+##       hic  &lt; 0.1585  to the left,  agree=0.875, adj=0.429, (0 split)
+## 
+## Node number 31: 62 observations
+##   predicted class=normal    expected loss=0.04838709677  P(node) =0.3163265306
+##     class counts:     3    59
+##    probabilities: 0.048 0.952 
+## 
+## Node number 60: 7 observations
+##   predicted class=glaucoma  expected loss=0.2857142857  P(node) =0.03571428571
+##     class counts:     5     2
+##    probabilities: 0.714 0.286 
+## 
+## Node number 61: 25 observations
+##   predicted class=normal    expected loss=0.12  P(node) =0.1275510204
+##     class counts:     3    22
+##    probabilities: 0.120 0.880</code></pre>
+<p>The preceding shows that we have a big tree (tree with 61 nodes down). Which indicates that the tree is 61 decisions deep. That is quite a large tree. If the tree grows overly large, many of the decisions it makes will be overly specific and the model will be <strong>overfitted</strong> to the training data. The process of pruning a decision tree involves reducing its size such that it can generalizes better to unseen data.</p>
+</div>
+<div id="c.prune-the-tree-as-appropriate-and-show-the-results." class="section level3">
+<h3>c.Prune the tree as appropriate and show the results.</h3>
+<pre class="r"><code># Let&#39;s prune the tree.
+dtree_pruned&lt;- prune(dtree, cp= dtree$cptable[which.min(dtree$cptable[,&quot;xerror&quot;]),&quot;CP&quot;])
+# Let&#39;s plot the pruned tree.
+fancyRpartPlot(dtree_pruned, uniform=TRUE, main=&quot;Pruned Regression Tree&quot;)</code></pre>
+<p><img src="FinalExam_IS677_files/figure-html/unnamed-chunk-19-1.png" width="672" /></p>
+</div>
+</div>
+<div id="create-10-barabasi-albert-random-graphs-with-node-sizes-100-200-300.1000" class="section level2">
+<h2>4.Create 10 Barabasi-Albert random graphs with node sizes 100, 200, 300,.,1000</h2>
+<p>with power=1, and m=8.</p>
+<pre class="r"><code># Creation of 10 random graphs:
+g1 &lt;- lapply(seq(100, 1000, 100), function(node) {
+  barabasi.game(node, p=1, m=8, directed=FALSE)
+})</code></pre>
+<div id="next-create-10-erdos-renyi-random-graphs-with-the-same-node-sizes-as-above-with-the-assumption-that-on-average-each-node-is-connected-to-10-other-nodes." class="section level3">
+<h3>4.1.Next, create 10 Erdos-Renyi random graphs with the same node sizes as above with the assumption that on average each node is connected to 10 other nodes.</h3>
+<pre class="r"><code># create 10 Erdos-Renyi random graphs.
+g2 &lt;- lapply(seq(100, 1000, 100), function(node) {
+  erdos.renyi.game(node, p=0.1)
+})</code></pre>
+</div>
+<div id="repeat-the-previous-steps-10-times-and-plot-the-mean-densities-by-graph-size-for-both-the-barabasi-albert-and-erdos-renyi-graphs." class="section level3">
+<h3>4.2.Repeat the previous steps 10 times and plot the mean densities by graph size for both the Barabasi-Albert and Erdos-Renyi graphs.</h3>
+<p><strong>Let’s start with Barabasi-Albert graphs.</strong></p>
+<pre class="r"><code>density &lt;- matrix(ncol=10, nrow=10)
+for (n in seq (100,1000,100)) {
+  for (i in 1:10) {
+    density[i, n/100]=graph.density(barabasi.game(n, p=1, m=8, directed=FALSE))
+  }
+}
+# Let&#39;s check our matrix
+head(density)</code></pre>
+<pre><code>##              [,1]          [,2]         [,3]          [,4]         [,5]
+## [1,] 0.1543434343 0.07859296482 0.0527090301 0.03964912281 0.0317755511
+## [2,] 0.1543434343 0.07859296482 0.0527090301 0.03964912281 0.0317755511
+## [3,] 0.1543434343 0.07859296482 0.0527090301 0.03964912281 0.0317755511
+## [4,] 0.1543434343 0.07859296482 0.0527090301 0.03964912281 0.0317755511
+## [5,] 0.1543434343 0.07859296482 0.0527090301 0.03964912281 0.0317755511
+## [6,] 0.1543434343 0.07859296482 0.0527090301 0.03964912281 0.0317755511
+##               [,6]          [,7]          [,8]          [,9]         [,10]
+## [1,] 0.02651085142 0.02274269364 0.01991239049 0.01770856507 0.01594394394
+## [2,] 0.02651085142 0.02274269364 0.01991239049 0.01770856507 0.01594394394
+## [3,] 0.02651085142 0.02274269364 0.01991239049 0.01770856507 0.01594394394
+## [4,] 0.02651085142 0.02274269364 0.01991239049 0.01770856507 0.01594394394
+## [5,] 0.02651085142 0.02274269364 0.01991239049 0.01770856507 0.01594394394
+## [6,] 0.02651085142 0.02274269364 0.01991239049 0.01770856507 0.01594394394</code></pre>
+<pre class="r"><code># Let&#39;s take the average for each column. Will use the apply() function 
+density.avg &lt;- apply(density, 2, mean)
+# Let&#39;s plot the average graph density for each graph size
+x &lt;- seq(100,1000,100)  # x axis values
+plot(x, density.avg, type =&quot;b&quot;, pch=20, xlab = &quot;Node Size&quot;, ylab=&quot;Average Graph Density&quot;, main=&quot;Plot of Average Barabasi-Albert graphs density for each graph size&quot;)</code></pre>
+<p><img src="FinalExam_IS677_files/figure-html/unnamed-chunk-22-1.png" width="672" /></p>
+<p><strong>Let’s work on Erdos-Renyi graphs.</strong></p>
+<pre class="r"><code>density1 &lt;- matrix(ncol=10, nrow=10)
+for (n in seq (100,1000,100)) {
+  for (i in 1:10) {
+    density1[i, n/100]=graph.density(erdos.renyi.game(n, p=0.1))
+  }
+}
+# Let&#39;s check our matrix
+head(density1)</code></pre>
+<pre><code>##               [,1]          [,2]          [,3]         [,4]          [,5]
+## [1,] 0.09414141414 0.10090452261 0.10169453735 0.1012406015 0.10021643287
+## [2,] 0.09777777778 0.09577889447 0.10198439242 0.1000000000 0.10149098196
+## [3,] 0.10080808081 0.09708542714 0.09806020067 0.1002882206 0.09981563126
+## [4,] 0.09636363636 0.10402010050 0.09841694537 0.1004761905 0.09962324649
+## [5,] 0.10444444444 0.09713567839 0.09982162765 0.1005388471 0.10027254509
+## [6,] 0.10404040404 0.09728643216 0.09888517280 0.1002380952 0.10018436874
+##              [,6]          [,7]          [,8]          [,9]         [,10]
+## [1,] 0.1009738453 0.09954220315 0.09930851064 0.10023482882 0.10064464464
+## [2,] 0.1007902059 0.09968117719 0.09999687109 0.09910765048 0.10045045045
+## [3,] 0.1000612131 0.09894543225 0.10087609512 0.09953775800 0.10004004004
+## [4,] 0.1002615470 0.10030656039 0.09995306633 0.09930540106 0.10017417417
+## [5,] 0.1003060657 0.09997138770 0.09951501877 0.09988629341 0.09981981982
+## [6,] 0.1008291597 0.10010627427 0.09951188986 0.10032876035 0.10002202202</code></pre>
+<pre class="r"><code># Let&#39;s take the average for each column. Will use the apply() function 
+density.avg1 &lt;- apply(density1, 2, mean)
+# Let&#39;s plot the average graph density for each graph size
+x &lt;- seq(100,1000,100)  # x axis values
+plot(x, density.avg1, type =&quot;b&quot;, pch=20, xlab = &quot;Node Size&quot;, ylab=&quot;Average Graph Density&quot;, main=&quot;Plot of Average  Erdos-Renyi graphs density for each graph size&quot;)</code></pre>
+<p><img src="FinalExam_IS677_files/figure-html/unnamed-chunk-23-1.png" width="672" /></p>
+</div>
+<div id="what-can-you-say-about-the-change-in-graph-density-with-graph-size" class="section level3">
+<h3>4.3.What can you say about the change in graph density with graph size?</h3>
+<ul>
+<li><p>For the Barabasi-Albert graphs, the graph density decreases as the graph size increases.</p></li>
+<li><p>For the Erdos-Renyi graphs, the graph density decreases when the node is even till node=600. Then increases till node =800.</p></li>
+</ul>
+</div>
+</div>
+<div id="use-the-airline-flight-delays-dataset-for-2008.-write-an-r-script-for-the-following" class="section level2">
+<h2>5.Use the Airline Flight Delays dataset for 2008. Write an R script for the following:</h2>
+<div id="a.load-the-2008-data." class="section level3">
+<h3>a.Load the 2008 data.</h3>
+<pre class="r"><code>library(bigmemory)</code></pre>
+<pre><code>## Loading required package: bigmemory.sri</code></pre>
+<pre class="r"><code>library(biganalytics)</code></pre>
+<pre><code>## Loading required package: foreach</code></pre>
+<pre><code>## Loading required package: biglm</code></pre>
+<pre><code>## Loading required package: DBI</code></pre>
+<pre class="r"><code>start.time&lt;-Sys.time()
+x &lt;- read.big.matrix(&quot;2008.csv&quot;, type=&quot;integer&quot;, header=TRUE,
+backingfile=&quot;2008.bin&quot;,descriptorfile=&quot;2008.desc&quot;,
+extraCols=&quot;Age&quot;)
+Sys.time()-start.time</code></pre>
+<pre><code>## Time difference of 3.828052286 mins</code></pre>
+</div>
+<div id="b.how-many-flights-have-their-tail-numbers-listed-as-na" class="section level3">
+<h3>b.How many flights have their tail numbers listed as NA?</h3>
+<pre class="r"><code>options(scipen=999,digits=0)
+na.tail.flights.indices &lt;- mwhich(x, &quot;TailNum&quot;, NA, &quot;eq&quot;)
+na.tail.flights&lt;-nrow(x[na.tail.flights.indices,])
+cat(&quot;The number of flights with tail as NA in 2008 is&quot;, na.tail.flights)</code></pre>
+<pre><code>## The number of flights with tail as NA in 2008 is 6754265</code></pre>
+</div>
+<div id="c.how-many-flights-are-there-for-each-day-of-the-week" class="section level3">
+<h3>c.How many flights are there for each day of the week?</h3>
+<pre class="r"><code>for (day in 1:7) {
+dayofweek.flights.indices &lt;- mwhich(x, &quot;DayOfWeek&quot;, day, &quot;eq&quot;)
+dayofweek.flights&lt;-nrow(x[dayofweek.flights.indices,])
+cat(&quot;The number of flights for day&quot;, day, &quot;in 2008 is&quot;, dayofweek.flights, &quot;\n&quot;)
+}</code></pre>
+<pre><code>## The number of flights for day 1 in 2008 is 1036201 
+## The number of flights for day 2 in 2008 is 1032049 
+## The number of flights for day 3 in 2008 is 1039665 
+## The number of flights for day 4 in 2008 is 1032224 
+## The number of flights for day 5 in 2008 is 1035166 
+## The number of flights for day 6 in 2008 is 857536 
+## The number of flights for day 7 in 2008 is 976887</code></pre>
+</div>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+$(document).ready(function () {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

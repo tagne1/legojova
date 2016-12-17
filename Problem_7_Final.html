@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+<meta name="author" content="Pascal Tagne" />
+
+
+<title>Problem 7: Analyzing Roll Call Data for 113th Senate and House</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cerulean.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<link href="site_libs/font-awesome-4.5.0/css/font-awesome.min.css" rel="stylesheet" />
+
+<style type="text/css">code{white-space: pre;}</style>
+<link rel="stylesheet"
+      href="site_libs/highlight/textmate.css"
+      type="text/css" />
+<script src="site_libs/highlight/highlight.js"></script>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs && document.readyState && document.readyState === "complete") {
+   window.setTimeout(function() {
+      hljs.initHighlighting();
+   }, 0);
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+<link rel="stylesheet" href="styles.css" type="text/css" />
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+
+
+<div class="navbar navbar-inverse  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Pascal Tagne</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">
+    <span class="fa fa-home"></span>
+     
+    Home
+  </a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-info"></span>
+     
+    Works
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li class="dropdown-header">Data Science with R</li>
+    <li>
+      <a href="about.html">Table of contents</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Machine Learning with R</li>
+    <li>
+      <a href="TOC_Final_Project.html">Table of contents</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-gear"></span>
+     
+    Projects
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="Problem_3_Final.html">Python Programming</a>
+    </li>
+    <li>
+      <a href="Problem_4_Final.html">Hadoop Cloudera</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Computer Networks</li>
+    <li class="dropdown-header">Computer Network Security</li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Problem 7: Analyzing Roll Call Data for 113th Senate and House</h1>
+<h4 class="author"><em>Pascal Tagne</em></h4>
+<h4 class="date"><em>December 4, 2016</em></h4>
+
+</div>
+
+
+<div id="introduction" class="section level3">
+<h3>1.Introduction</h3>
+<p>This report describes a case study of the One Hundred Thirteenth United States Congress data using <strong>k-means</strong> algorithms (unsupervised learning). It uses machine learning and <strong>kmeans()</strong> function in the <em>stats</em> package to build the model to predict the house of representative and senate votes during the 113th US Congress. This report also uses a supervises method (randomForest) then will compare both kmeans and randomForest predictive results on 113th US Congress data and will select the model that can best predict the class of vote in the 11th US Congress.</p>
+</div>
+<div id="data-collection" class="section level3">
+<h3>2.Data collection</h3>
+<p>This case study uses the 113th US Congress (House of representive and Senate) data Set. It is the original dataset and can be found at: <a href="http://voteview.com/dwnl.htm" class="uri">http://voteview.com/dwnl.htm</a>.</p>
+<p>The data used in this report has been modified from the original data set in 2 ways. We first used the function <strong>readKH()</strong> in the <strong>pscl</strong> package to get the rollcall object. Secondly, we used <strong>cbind()</strong> to merge legit.data and votes into a data frame. The steps we used are below.</p>
+</div>
+<div id="exploring-and-preparing-the-data" class="section level3">
+<h3>3.Exploring and preparing the data</h3>
+<p>We will use the function readKH() in the pscl package. Let’s install the package.</p>
+<pre class="r"><code>library(pscl)</code></pre>
+<pre><code>## Classes and Methods for R developed in the</code></pre>
+<pre><code>## Political Science Computational Laboratory</code></pre>
+<pre><code>## Department of Political Science</code></pre>
+<pre><code>## Stanford University</code></pre>
+<pre><code>## Simon Jackman</code></pre>
+<pre><code>## hurdle and zeroinfl functions by Achim Zeileis</code></pre>
+<pre class="r"><code># Let&#39;s get the House data in to get the House roll call object
+h113 &lt;- readKH(&quot;h113.txt&quot;,
+       dtl=NULL,
+       yea=c(1,2,3),
+       nay=c(4,5,6),
+       missing=c(7,8,9),
+       notInLegis=0,
+       desc=&quot;113th U.S. House of Representatives&quot;,
+       debug=FALSE)</code></pre>
+<pre><code>## Attempting to read file in Keith Poole/Howard Rosenthal (KH) format.
+## Attempting to create roll call object
+## 113th U.S. House of Representatives 
+## 445 legislators and 1202 roll calls
+## Frequency counts for vote types:
+## rollCallMatrix
+##      0      1      6      7      9   &lt;NA&gt; 
+##  14576 295753 202943    290  21328      0</code></pre>
+<pre class="r"><code># Let&#39;s get the Senate data in to get the Senate roll call object
+s113 &lt;- readKH(&quot;s113.txt&quot;,
+       dtl=NULL,
+       yea=c(1,2,3),
+       nay=c(4,5,6),
+       missing=c(7,8,9),
+       notInLegis=0,
+       desc=&quot;113th U.S. Senate&quot;,
+       debug=FALSE)</code></pre>
+<pre><code>## Attempting to read file in Keith Poole/Howard Rosenthal (KH) format.
+## Attempting to create roll call object
+## 113th U.S. Senate 
+## 106 legislators and 657 roll calls
+## Frequency counts for vote types:
+## rollCallMatrix
+##     0     1     6     7     9  &lt;NA&gt; 
+##  3291 43231 20317    25  2778     0</code></pre>
+<pre class="r"><code># Let&#39;s check the House data
+str(h113)</code></pre>
+<pre><code>## List of 8
+##  $ votes     : num [1:445, 1:1202] 9 1 0 1 1 1 1 1 6 1 ...
+##   ..- attr(*, &quot;dimnames&quot;)=List of 2
+##   .. ..$ : chr [1:445] &quot;OBAMA (D USA)&quot; &quot;BONNER (R AL-1)&quot; &quot;BYRNE (R AL-1)&quot; &quot;ROBY (R AL-2)&quot; ...
+##   .. ..$ : chr [1:1202] &quot;Vote 1&quot; &quot;Vote 2&quot; &quot;Vote 3&quot; &quot;Vote 4&quot; ...
+##  $ codes     :List of 4
+##   ..$ yea       : num [1:3] 1 2 3
+##   ..$ nay       : num [1:3] 4 5 6
+##   ..$ notInLegis: num 0
+##   ..$ missing   : num [1:3] 7 8 9
+##  $ n         : int 445
+##  $ m         : int 1202
+##  $ legis.data:&#39;data.frame&#39;:  445 obs. of  6 variables:
+##   ..$ state     : Factor w/ 51 levels &quot;AK&quot;,&quot;AL&quot;,&quot;AR&quot;,..: 44 2 2 2 2 2 2 2 2 1 ...
+##   ..$ icpsrState: num [1:445] 99 41 41 41 41 41 41 41 41 81 ...
+##   ..$ cd        : num [1:445] 0 1 1 2 3 4 5 6 7 1 ...
+##   ..$ icpsrLegis: num [1:445] 99911 20300 21376 21192 20301 ...
+##   ..$ party     : Factor w/ 2 levels &quot;D&quot;,&quot;R&quot;: 1 2 2 2 2 2 2 2 1 2 ...
+##   ..$ partyCode : num [1:445] 100 200 200 200 200 200 200 200 100 200 ...
+##  $ vote.data : NULL
+##  $ desc      : chr &quot;113th U.S. House of Representatives&quot;
+##  $ source    : chr &quot;h113.txt&quot;
+##  - attr(*, &quot;class&quot;)= chr &quot;rollcall&quot;</code></pre>
+<pre class="r"><code># Let&#39;s check the Senate data
+str(s113)</code></pre>
+<pre><code>## List of 8
+##  $ votes     : num [1:106, 1:657] 9 6 6 1 1 6 1 1 1 1 ...
+##   ..- attr(*, &quot;dimnames&quot;)=List of 2
+##   .. ..$ : chr [1:106] &quot;OBAMA (D USA)&quot; &quot;SESSIONS (R AL)&quot; &quot;SHELBY (R AL)&quot; &quot;MURKOWSKI (R AK)&quot; ...
+##   .. ..$ : chr [1:657] &quot;Vote 1&quot; &quot;Vote 2&quot; &quot;Vote 3&quot; &quot;Vote 4&quot; ...
+##  $ codes     :List of 4
+##   ..$ yea       : num [1:3] 1 2 3
+##   ..$ nay       : num [1:3] 4 5 6
+##   ..$ notInLegis: num 0
+##   ..$ missing   : num [1:3] 7 8 9
+##  $ n         : int 106
+##  $ m         : int 657
+##  $ legis.data:&#39;data.frame&#39;:  106 obs. of  6 variables:
+##   ..$ state     : Factor w/ 51 levels &quot;AK&quot;,&quot;AL&quot;,&quot;AR&quot;,..: 44 2 2 1 1 4 4 3 3 5 ...
+##   ..$ icpsrState: num [1:106] 99 41 41 81 81 61 61 42 42 71 ...
+##   ..$ cd        : num [1:106] 0 0 0 0 0 0 0 0 0 0 ...
+##   ..$ icpsrLegis: num [1:106] 99911 49700 94659 40300 40900 ...
+##   ..$ party     : Factor w/ 3 levels &quot;D&quot;,&quot;Indep&quot;,&quot;R&quot;: 1 3 3 3 1 3 3 1 3 1 ...
+##   ..$ partyCode : num [1:106] 100 200 200 200 100 200 200 100 200 100 ...
+##  $ vote.data : NULL
+##  $ desc      : chr &quot;113th U.S. Senate&quot;
+##  $ source    : chr &quot;s113.txt&quot;
+##  - attr(*, &quot;class&quot;)= chr &quot;rollcall&quot;</code></pre>
+<p>Let’s create data frames (one for the House named h113.df and one for the Senate named s113.df).</p>
+<pre class="r"><code># House data frame
+h113.df &lt;- cbind(h113$legis.data,h113$votes, deparse.level = 1)
+# Senate data frame
+s113.df &lt;- cbind(s113$legis.data,s113$votes, deparse.level = 1)
+# Let&#39;s check the data:
+h113.df[1:5, 1:10]</code></pre>
+<pre><code>##                 state icpsrState cd icpsrLegis party partyCode Vote 1
+## OBAMA (D USA)     USA         99  0      99911     D       100      9
+## BONNER (R AL-1)    AL         41  1      20300     R       200      1
+## BYRNE (R AL-1)     AL         41  1      21376     R       200      0
+## ROBY (R AL-2)      AL         41  2      21192     R       200      1
+## ROGERS (R AL-3)    AL         41  3      20301     R       200      1
+##                 Vote 2 Vote 3 Vote 4
+## OBAMA (D USA)        9      9      9
+## BONNER (R AL-1)      1      1      6
+## BYRNE (R AL-1)       0      0      0
+## ROBY (R AL-2)        1      1      6
+## ROGERS (R AL-3)      1      1      6</code></pre>
+<pre class="r"><code>s113.df[1:5, 1:10]</code></pre>
+<pre><code>##                  state icpsrState cd icpsrLegis party partyCode Vote 1
+## OBAMA (D USA)      USA         99  0      99911     D       100      9
+## SESSIONS (R AL)     AL         41  0      49700     R       200      6
+## SHELBY (R AL)       AL         41  0      94659     R       200      6
+## MURKOWSKI (R AK)    AK         81  0      40300     R       200      1
+## BEGICH (D AK)       AK         81  0      40900     D       100      1
+##                  Vote 2 Vote 3 Vote 4
+## OBAMA (D USA)         9      9      1
+## SESSIONS (R AL)       6      1      6
+## SHELBY (R AL)         6      6      1
+## MURKOWSKI (R AK)      1      6      1
+## BEGICH (D AK)         1      6      1</code></pre>
+<p>Let’s see if there is any missing data in our data frames.</p>
+<pre class="r"><code># House data.
+any(is.na(h113.df))</code></pre>
+<pre><code>## [1] FALSE</code></pre>
+<pre class="r"><code># Senate data
+any(is.na(s113.df))</code></pre>
+<pre><code>## [1] FALSE</code></pre>
+<p>The preceding shows that there is no missing data in our data.</p>
+<div class="figure">
+<img src="/C:/Users/Pasco/1st%20HP%20Laptop/WebsitePT/PascoSite/h113.png" />
+
+</div>
+<div class="figure">
+<img src="/C:/Users/Pasco/1st%20HP%20Laptop/WebsitePT/PascoSite/s113.png" />
+
+</div>
+<p>The preceding shows that h113.df has 445 obs. and 1208 variables whereas s113.df has 106 obs. and 663 variables. Vote 1 to Vote 1202 are numeric features.</p>
+<p><strong>Let’s look at the summary statistics of our data.</strong></p>
+<pre class="r"><code># Quick House summary of 8 features
+summary(h113.df[7:14])</code></pre>
+<pre><code>##      Vote 1             Vote 2             Vote 3       
+##  Min.   :0.000000   Min.   :0.000000   Min.   :0.00000  
+##  1st Qu.:1.000000   1st Qu.:1.000000   1st Qu.:1.00000  
+##  Median :1.000000   Median :1.000000   Median :1.00000  
+##  Mean   :3.460674   Mean   :3.408989   Mean   :3.32809  
+##  3rd Qu.:6.000000   3rd Qu.:6.000000   3rd Qu.:6.00000  
+##  Max.   :9.000000   Max.   :9.000000   Max.   :9.00000  
+##      Vote 4             Vote 5             Vote 6        
+##  Min.   :0.000000   Min.   :0.000000   Min.   :0.000000  
+##  1st Qu.:1.000000   1st Qu.:1.000000   1st Qu.:1.000000  
+##  Median :6.000000   Median :1.000000   Median :1.000000  
+##  Mean   :3.665169   Mean   :3.276404   Mean   :1.880899  
+##  3rd Qu.:6.000000   3rd Qu.:6.000000   3rd Qu.:1.000000  
+##  Max.   :9.000000   Max.   :9.000000   Max.   :9.000000  
+##      Vote 7             Vote 8        
+##  Min.   :0.000000   Min.   :0.000000  
+##  1st Qu.:1.000000   1st Qu.:1.000000  
+##  Median :1.000000   Median :1.000000  
+##  Mean   :1.451685   Mean   :2.653933  
+##  3rd Qu.:1.000000   3rd Qu.:6.000000  
+##  Max.   :9.000000   Max.   :9.000000</code></pre>
+<pre class="r"><code># Quick Senate summary of 8 features
+summary(s113.df[7:14])</code></pre>
+<pre><code>##      Vote 1             Vote 2             Vote 3        
+##  Min.   :0.000000   Min.   :0.000000   Min.   :0.000000  
+##  1st Qu.:1.000000   1st Qu.:1.000000   1st Qu.:1.000000  
+##  Median :1.000000   Median :1.000000   Median :6.000000  
+##  Mean   :2.235849   Mean   :1.830189   Mean   :4.179245  
+##  3rd Qu.:1.000000   3rd Qu.:1.000000   3rd Qu.:6.000000  
+##  Max.   :9.000000   Max.   :9.000000   Max.   :9.000000  
+##      Vote 4             Vote 5             Vote 6        
+##  Min.   :0.000000   Min.   :0.000000   Min.   :0.000000  
+##  1st Qu.:1.000000   1st Qu.:1.000000   1st Qu.:1.000000  
+##  Median :1.000000   Median :1.000000   Median :1.000000  
+##  Mean   :2.801887   Mean   :1.301887   Mean   :3.254717  
+##  3rd Qu.:6.000000   3rd Qu.:1.000000   3rd Qu.:6.000000  
+##  Max.   :9.000000   Max.   :9.000000   Max.   :9.000000  
+##      Vote 7             Vote 8        
+##  Min.   :0.000000   Min.   :0.000000  
+##  1st Qu.:1.000000   1st Qu.:1.000000  
+##  Median :1.000000   Median :1.000000  
+##  Mean   :3.349057   Mean   :3.301887  
+##  3rd Qu.:6.000000   3rd Qu.:6.000000  
+##  Max.   :9.000000   Max.   :9.000000</code></pre>
+<p>The preceding shows that the mean and max of the 8 Votes columns are respectively 0 and 9. Their mean and median varies.</p>
+<p><strong>Let’s visualize our data.</strong></p>
+<pre class="r"><code>pairs(h113.df[ ,7:12],main=&quot;113th House Data&quot;, pch=21)</code></pre>
+<p><img src="Problem_7_Final_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<p>The preceding shows the scattermatrix of the first 6 Votes features. We noticed that points are lining in 3 or 4 sections lines. Will see how many clusters came out. Finally, the data description indicates the following codes represent roll call votes:</p>
+<p>Yea: 1 2 3<br />
+Nay: 4 5 6<br />
+Abstentions: 7 8 9<br />
+Not In Legislature: 0</p>
+</div>
+<div id="unsupervised-method-kmeans-and-hclust" class="section level2">
+<h2>Unsupervised method (kmeans and hclust)</h2>
+<div id="training-a-model-on-the-data." class="section level3">
+<h3>4. Training a model on the data.</h3>
+<p>We will use <strong>kmeans()</strong> function in stats package to build our classifier. But, kmeans requires a data frame containing only numeric features. We will use column Vote 1 to Vote 1202 which is h113.df[ , 7:1208], and Vote 1 to Vote 657 which is s113.df[ , 7:663].</p>
+<p>Since kmeans uses distance calculation to compute distance between cluster, we need to normalize or z-score standardize the features.</p>
+<pre class="r"><code># Let&#39;s scale the House data
+h113.df_z &lt;- as.data.frame(lapply(h113.df[ ,7:1208], scale))
+# Let&#39;s scale the Senate data
+s113.df_z &lt;- as.data.frame(lapply(s113.df[ ,7:663], scale))
+# Let&#39;s check the data.
+head(h113.df_z[1:6])</code></pre>
+<pre><code>##          Vote.1        Vote.2        Vote.3        Vote.4        Vote.5
+## 1  2.0948273873  2.0435243833  2.1307605176  2.0431397783  2.2044837284
+## 2 -0.9305622674 -0.8804896057 -0.8745910841  0.8941963899 -0.8767734656
+## 3 -1.3087359742 -1.2459913543 -1.2502600343 -1.4036903869 -1.2619306148
+## 4 -0.9305622674 -0.8804896057 -0.8745910841  0.8941963899 -0.8767734656
+## 5 -0.9305622674 -0.8804896057 -0.8745910841  0.8941963899 -0.8767734656
+## 6 -0.9305622674 -0.8804896057 -0.8745910841  0.8941963899 -0.8767734656
+##          Vote.6
+## 1  3.4228532213
+## 2  3.4228532213
+## 3 -0.9043333795
+## 4 -0.4235348683
+## 5 -0.4235348683
+## 6 -0.4235348683</code></pre>
+<pre class="r"><code>tail(h113.df_z[1:6])</code></pre>
+<pre><code>##            Vote.1        Vote.2        Vote.3        Vote.4        Vote.5
+## 440  0.9603062668  0.9470191375  1.0037536670 -1.0207092574  1.0490122806
+## 441 -0.9305622674 -0.8804896057 -0.8745910841  0.8941963899 -0.8767734656
+## 442 -0.9305622674 -0.8804896057 -0.8745910841  0.8941963899 -0.8767734656
+## 443 -0.9305622674 -0.8804896057 -0.8745910841  0.8941963899 -0.8767734656
+## 444 -0.9305622674 -0.8804896057 -0.8745910841  0.8941963899  2.2044837284
+## 445 -0.9305622674 -0.8804896057 -0.8745910841  0.8941963899 -0.8767734656
+##            Vote.6
+## 440 -0.4235348683
+## 441  1.9804576877
+## 442  1.9804576877
+## 443  1.9804576877
+## 444  3.4228532213
+## 445 -0.4235348683</code></pre>
+<pre class="r"><code>head(s113.df_z[1:6])</code></pre>
+<pre><code>##          Vote.1        Vote.2        Vote.3        Vote.4        Vote.5
+## 1  2.6365517969  3.1588315343  1.8164058630 -0.7034983634 -0.2020765411
+## 2  1.4672024644  1.8371099186 -1.1979036709  1.2486175141 -0.2020765411
+## 3  1.4672024644  1.8371099186  0.6860397878 -0.7034983634 -0.2020765411
+## 4 -0.4817130898 -0.3657594408  0.6860397878 -0.7034983634 -0.2020765411
+## 5 -0.4817130898 -0.3657594408  0.6860397878 -0.7034983634 -0.2020765411
+## 6  1.4672024644 -0.3657594408 -1.1979036709  1.2486175141 -0.2020765411
+##          Vote.6
+## 1  2.1381410094
+## 2  1.0216732902
+## 3  1.0216732902
+## 4  1.0216732902
+## 5 -0.8391062418
+## 6  1.0216732902</code></pre>
+<pre class="r"><code>tail(s113.df_z[1:6])</code></pre>
+<pre><code>##            Vote.1        Vote.2        Vote.3        Vote.4        Vote.5
+## 101 -0.4817130898 -0.3657594408  0.6860397878 -0.7034983634 -0.2020765411
+## 102 -0.4817130898 -0.3657594408  0.6860397878 -0.7034983634 -0.2020765411
+## 103  1.4672024644  1.8371099186 -1.1979036709  1.2486175141 -0.2020765411
+## 104 -0.4817130898 -0.3657594408  0.6860397878 -0.7034983634 -0.2020765411
+## 105 -0.4817130898 -0.3657594408 -1.1979036709  1.2486175141 -0.2020765411
+## 106 -0.4817130898 -0.3657594408 -1.1979036709  1.2486175141 -0.2020765411
+##            Vote.6
+## 101 -0.8391062418
+## 102 -0.8391062418
+## 103  1.0216732902
+## 104 -0.8391062418
+## 105  1.0216732902
+## 106  1.0216732902</code></pre>
+<pre class="r"><code># It worked.</code></pre>
+<p>Since we have some prior knowledge on the US Congress, we will use k= 2 cluster for the House data and k=3 for the Senate to start with. Let’s build our model. We are anticipating that we only have democrats and republicans in the House. In the Senate we have democrats, republicans, and independents.</p>
+<pre class="r"><code>set.seed(300)
+h113_cluster &lt;- kmeans(h113.df_z, 2) # two classes: Democrats and Republicans in the House
+set.seed(300)
+s113_cluster &lt;- kmeans(s113.df_z, 3) # Three classes: D, R, and Indep in the Senate.</code></pre>
+</div>
+<div id="evaluating-model-performance." class="section level3">
+<h3>5. Evaluating model performance.</h3>
+<pre class="r"><code># Let&#39;s look at the cluster size.
+h113_cluster$size</code></pre>
+<pre><code>## [1] 243 202</code></pre>
+<pre class="r"><code>s113_cluster$size</code></pre>
+<pre><code>## [1] 44  1 61</code></pre>
+<p>The preceding shows that we have 2 clusters for the House and that the smallest size is 202 and 3 clusters for the Senate with the smallest size being 1. The largest size are respectively 243 (for House of representative) and 61 (for Senate). Let’s examine the coordinates of the cluster centroids.</p>
+<pre class="r"><code>h113_cluster$centers[1:6]</code></pre>
+<pre><code>## [1] -0.8060606355  0.9696670021 -0.7917463828  0.9524473812 -0.8251202758
+## [6]  0.9925951833</code></pre>
+<pre class="r"><code>s113_cluster$centers[1:6]</code></pre>
+<pre><code>## [1]  0.5370382226  2.6365517969 -0.4305939933  0.4352839626  3.1588315343
+## [6] -0.3657594408</code></pre>
+<p>The preceding shows the first six centers of h113_cluster and s113_cluster.</p>
+<p>Let’s plot the data to see the clusters:</p>
+<pre class="r"><code>library(ggplot2)
+h113.df_z$cluster &lt;- h113_cluster$cluster
+ggplot(h113.df_z, aes(Vote.100, Vote.101, color = as.factor(h113_cluster$cluster))) + geom_point()</code></pre>
+<p><img src="Problem_7_Final_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+<pre class="r"><code>s113.df_z$cluster &lt;- s113_cluster$cluster
+ggplot(s113.df_z, aes(Vote.100, Vote.101, color = as.factor(s113_cluster$cluster))) + geom_point()</code></pre>
+<p><img src="Problem_7_Final_files/figure-html/unnamed-chunk-10-2.png" width="672" /></p>
+<ul>
+<li>House plot: The above plot shows the two clusters. Cluster 1 has 5 points where 3 are lined up and 2 others are out of line. Cluster 2 has 4 points perfectly lined up.<br />
+</li>
+<li>Senate plot: The Senale plot shows 3 clusters.</li>
+</ul>
+<p>Let’s verify our k value. We can use <strong>kmeansruns()</strong> within the <strong>fpc</strong> package to pick initial k. kmeansruns uses two criteria: the Calinski-Harabasz Index (“ch”), and the average silhouette width (“asw”). Let’s check it out.</p>
+<pre class="r"><code># Let&#39;s load fpc and start with the House data
+library(fpc)
+# CH pick
+clustering.ch &lt;- kmeansruns(h113.df_z, krange=1:10, criterion=&quot;ch&quot;)
+clustering.ch$bestk</code></pre>
+<pre><code>## [1] 2</code></pre>
+<pre class="r"><code># ASW pick
+clustering.asw &lt;- kmeansruns(h113.df_z, krange=1:10, criterion=&quot;asw&quot;)
+clustering.asw$bestk</code></pre>
+<pre><code>## [1] 2</code></pre>
+<p>The preceding shows that both CH and ASW picked 2 clusters for the House data set. Let’s plot the values for the two criteria.</p>
+<pre class="r"><code>library(reshape2)
+clustering.ch$crit</code></pre>
+<pre><code>##  [1]   0.00000000 357.65095596 204.64856081 149.31227026 117.73067425
+##  [6]  98.79957879  86.12287287  75.89598914  67.97058459  61.80444076</code></pre>
+<pre class="r"><code>clustering.asw$crit</code></pre>
+<pre><code>##  [1] 0.00000000000 0.40667277195 0.38769108548 0.39314220051 0.25479423766
+##  [6] 0.25822300860 0.07753238953 0.07703626218 0.07116746150 0.07045027527</code></pre>
+<pre class="r"><code>critframe &lt;- data.frame(k=1:10, ch=scale(clustering.ch$crit), asw=scale(clustering.asw$crit))
+critframe &lt;- melt(critframe, id.vars=c(&quot;k&quot;), variable.name=&quot;measure&quot;, value.name=&quot;score&quot;)
+ggplot(critframe, aes(x=k, y=score, color=measure)) + geom_point(aes(shape=measure)) + geom_line(aes(linetype=measure)) + scale_x_continuous(breaks=1:10, labels=1:10) + labs(title=&quot;The Calinski-Harabasz and average silhouette width indices for 1-10 cluster for the House&quot;)</code></pre>
+<p><img src="Problem_7_Final_files/figure-html/unnamed-chunk-12-1.png" width="768" /> The preceding plot shows that both criteria came close at k=2.</p>
+<p>Let’s perform same for the Senate data.</p>
+<pre class="r"><code># Let&#39;s load fpc and start with the Senate data
+# CH pick
+clustering.ch1 &lt;- kmeansruns(s113.df_z, krange=1:10, criterion=&quot;ch&quot;)
+clustering.ch1$bestk</code></pre>
+<pre><code>## [1] 2</code></pre>
+<pre class="r"><code># ASW pick
+clustering.asw1 &lt;- kmeansruns(s113.df_z, krange=1:10, criterion=&quot;asw&quot;)
+clustering.asw1$bestk</code></pre>
+<pre><code>## [1] 3</code></pre>
+<p>The preceding shows that CH picked 2 cluster whereas ASW picked 3 clusters for Senate data set. Let’s plot the values for the two criteria.</p>
+<pre class="r"><code>clustering.ch1$crit</code></pre>
+<pre><code>##  [1]  0.00000000 87.90097646 51.67000139 38.47458866 31.42021912
+##  [6] 27.16347995 24.03939500 21.82351542 19.92158034 18.62561461</code></pre>
+<pre class="r"><code>clustering.asw1$crit</code></pre>
+<pre><code>##  [1] 0.0000000000 0.4199595320 0.4224143589 0.3101464063 0.1931660844
+##  [6] 0.1986927116 0.2023822639 0.2088489140 0.2084339784 0.2059159460</code></pre>
+<pre class="r"><code>critframe1 &lt;- data.frame(k=1:10, ch=scale(clustering.ch1$crit), asw=scale(clustering.asw1$crit))
+critframe1 &lt;- melt(critframe1, id.vars=c(&quot;k&quot;), variable.name=&quot;measure&quot;, value.name=&quot;score&quot;)
+ggplot(critframe1, aes(x=k, y=score, color=measure)) + geom_point(aes(shape=measure)) + geom_line(aes(linetype=measure)) + scale_x_continuous(breaks=1:10, labels=1:10) + labs(title=&quot;The Calinski-Harabasz and average silhouette width indices for 1-10 cluster for Senate&quot;)</code></pre>
+<p><img src="Problem_7_Final_files/figure-html/unnamed-chunk-14-1.png" width="768" /></p>
+<p>The preceding plot shows that both criteria came close at k=3.</p>
+</div>
+<div id="hierarchical-clustering-with-hclust." class="section level3">
+<h3>6.Hierarchical clustering with hclust().</h3>
+<p>The <strong>hclust()</strong> function takes as input a distance matrix (as an object of class dist), which records the distances between all pairs of points in the data (using any one of a variety of metrics). It returns a <strong>dendrogram</strong>: a tree that representes the nested cluster.<br />
+Let’s cluster the 113th US Congress data.</p>
+<pre class="r"><code># Let&#39;s create distance matrix
+d_h113 &lt;- dist(h113.df_z, method = &quot;euclidean&quot;)
+d_s113 &lt;- dist(s113.df_z, method = &quot;euclidean&quot;)
+# Let&#39;s do the cluster
+h113fit &lt;- hclust(d_h113, method = &quot;ward&quot;)</code></pre>
+<pre><code>## The &quot;ward&quot; method has been renamed to &quot;ward.D&quot;; note new &quot;ward.D2&quot;</code></pre>
+<pre class="r"><code>s113fit &lt;- hclust(d_s113, method = &quot;ward&quot;)</code></pre>
+<pre><code>## The &quot;ward&quot; method has been renamed to &quot;ward.D&quot;; note new &quot;ward.D2&quot;</code></pre>
+<pre class="r"><code># Let&#39;s plot the dendrogram.
+plot(h113fit, hang = -1, labels=h113.df$party, main= &quot;ward - Linkage Clustering - House 113th&quot;)
+rect.hclust(h113fit, k = 2)</code></pre>
+<p><img src="Problem_7_Final_files/figure-html/unnamed-chunk-15-1.png" width="1152" /></p>
+<pre class="r"><code>plot(s113fit, hang = -1, labels=s113.df$party, main= &quot;ward - Linkage Clustering - Senate 113th&quot;)
+rect.hclust(s113fit, k = 3)</code></pre>
+<p><img src="Problem_7_Final_files/figure-html/unnamed-chunk-15-2.png" width="1152" /></p>
+<p>The dendrogram suggests 2 clusters for the House data and 3 for the Senate data. The dendrogram displays how items are combined into cluster and is read from the bottom up.</p>
+<p><strong>Let’s extract the cluster found in hclust().</strong></p>
+<pre class="r"><code>clusters_h113 &lt;- cutree(h113fit, k=2)
+clusters_s113 &lt;- cutree(s113fit, k=3)
+table(clusters_h113)</code></pre>
+<pre><code>## clusters_h113
+##   1   2 
+## 249 196</code></pre>
+<pre class="r"><code>table(clusters_s113)</code></pre>
+<pre><code>## clusters_s113
+##  1  2  3 
+## 44 54  8</code></pre>
+<p>The preceding shows that hclust found 2 clusters for the House and 3 for the Senate.<br />
+For the House, we have: first cluster with 249 observations, second with 196 observations.<br />
+For the Senate, we have: the first cluster with 44 observations, second with 54, and the third with 8 observations.</p>
+</div>
+</div>
+<div id="supervised-method-randomforest" class="section level2">
+<h2>Supervised method (randomForest)</h2>
+<div id="training-randomforest-the-outcome-variable-is-party." class="section level3">
+<h3>7.Training randomForest: The outcome variable is party.</h3>
+<p>Let us get a train data set (to train the model) and test data set (for validation).</p>
+<pre class="r"><code>set.seed(300) # for repeatability
+indices1 &lt;- sample(nrow(h113.df), 0.8 * nrow(h113.df))  
+h113_tr &lt;- h113.df[indices1, ] # to train the House&#39;s classifier
+h113_test &lt;- h113.df[-indices1, ] # to validate the House&#39;s classifier
+indices3 &lt;- sample(nrow(s113.df), 0.8 * nrow(s113.df))  
+s113_tr &lt;- s113.df[indices3, ] # to train the House&#39;s classifier
+s113_test &lt;- s113.df[-indices3, ] # to validate the House&#39;s classifier</code></pre>
+<p>Let’s build the models. We randomForest() function from the <strong>randomForest</strong> package.</p>
+<pre class="r"><code># Load the library
+library(randomForest)
+# Let&#39;s build the House&#39;s model.
+rf.h113 &lt;- randomForest(h113_tr[ ,5:1208], h113_tr[ ,5], ntree = 500, mtry=2)
+# Let&#39;s build the Senate&#39;s model.
+rf.s113 &lt;- randomForest(s113_tr[ ,5:663], s113_tr[ ,5], ntree = 500, mtry=5)
+# Let&#39;s check the outputs.
+rf.h113</code></pre>
+<pre><code>## 
+## Call:
+##  randomForest(x = h113_tr[, 5:1208], y = h113_tr[, 5], ntree = 500,      mtry = 2) 
+##                Type of random forest: classification
+##                      Number of trees: 500
+## No. of variables tried at each split: 2
+## 
+##         OOB estimate of  error rate: 0.56%
+## Confusion matrix:
+##     D   R   class.error
+## D 162   2 0.01219512195
+## R   0 192 0.00000000000</code></pre>
+<pre class="r"><code>rf.s113 </code></pre>
+<pre><code>## 
+## Call:
+##  randomForest(x = s113_tr[, 5:663], y = s113_tr[, 5], ntree = 500,      mtry = 5) 
+##                Type of random forest: classification
+##                      Number of trees: 500
+## No. of variables tried at each split: 5
+## 
+##         OOB estimate of  error rate: 3.57%
+## Confusion matrix:
+##        D Indep  R   class.error
+## D     46     0  1 0.02127659574
+## Indep  1     0  0 1.00000000000
+## R      1     0 35 0.02777777778</code></pre>
+<p>The preceding shows a small OOB (out of bag error) for both the House and the Senate data. However, the confusion matrix doesn’t show the resubstitution error. Instead, it reflects the out of bag error rate. This means that it should be a fairly reasonable estimate of the future performance. Let’s see if we can optimize our model.</p>
+</div>
+<div id="improve-our-model-with-bagging." class="section level3">
+<h3>8.Improve our model with bagging.</h3>
+<p>We will use repeated 10-fold cross validation repeated 3 times.</p>
+<pre class="r"><code>library(caret)
+ctrl = trainControl(method = &quot;repeatedcv&quot;, number=10, repeats=3)
+grid_rf &lt;- expand.grid(.mtry=c(2,3,5))
+set.seed(300)
+h113fit.rf &lt;- train(h113_tr[ ,5] ~ ., data = h113_tr[ ,5:1208], method=&quot;rf&quot;, metric=&quot;Accuracy&quot;, trControl=ctrl, tuneGrid=grid_rf)
+s113fit.rf &lt;- train(s113_tr[ ,5] ~ ., data = s113_tr[ ,5:663], method=&quot;rf&quot;, metric=&quot;Accuracy&quot;, trControl=ctrl, tuneGrid=grid_rf)
+h113fit.rf</code></pre>
+<pre><code>## Random Forest 
+## 
+##  356 samples
+## 1203 predictors
+##    2 classes: &#39;D&#39;, &#39;R&#39; 
+## 
+## No pre-processing
+## Resampling: Cross-Validated (10 fold, repeated 3 times) 
+## 
+## Summary of sample sizes: 320, 321, 321, 321, 321, 320, ... 
+## 
+## Resampling results across tuning parameters:
+## 
+##   mtry  Accuracy  Kappa  Accuracy SD  Kappa SD
+##   2     0.994     0.989  0.0114       0.023   
+##   3     0.994     0.989  0.0114       0.023   
+##   5     0.994     0.989  0.0114       0.023   
+## 
+## Accuracy was used to select the optimal model using  the largest value.
+## The final value used for the model was mtry = 2.</code></pre>
+<pre class="r"><code>s113fit.rf </code></pre>
+<pre><code>## Random Forest 
+## 
+##  84 samples
+## 658 predictors
+##   3 classes: &#39;D&#39;, &#39;Indep&#39;, &#39;R&#39; 
+## 
+## No pre-processing
+## Resampling: Cross-Validated (10 fold, repeated 3 times) 
+## 
+## Summary of sample sizes: 75, 77, 75, 75, 77, 76, ... 
+## 
+## Resampling results across tuning parameters:
+## 
+##   mtry  Accuracy  Kappa  Accuracy SD  Kappa SD
+##   2     0.986     0.972  0.0407       0.0805  
+##   3     0.986     0.972  0.0407       0.0805  
+##   5     0.991     0.983  0.0316       0.0628  
+## 
+## Accuracy was used to select the optimal model using  the largest value.
+## The final value used for the model was mtry = 5.</code></pre>
+<p>The preceding shows that bagging with rf improved the Accuracy of both the House and the Senate data. We will recommend using mtry = 2 for the House and mtry = 5 for the Senate data.</p>
+</div>
+<div id="recapitulation-and-conlusion" class="section level3">
+<h3>9.Recapitulation and conlusion</h3>
+<pre class="r"><code># kmeans results
+table(h113_cluster$cluster, h113.df$party)</code></pre>
+<pre><code>##    
+##       D   R
+##   1   3 240
+##   2 202   0</code></pre>
+<pre class="r"><code>table(s113_cluster$cluster, s113.df$party)</code></pre>
+<pre><code>##    
+##      D Indep  R
+##   1  0     0 44
+##   2  1     0  0
+##   3 57     2  2</code></pre>
+<pre class="r"><code># hclust results
+table(clusters_h113, h113.df$party)</code></pre>
+<pre><code>##              
+## clusters_h113   D   R
+##             1   9 240
+##             2 196   0</code></pre>
+<pre class="r"><code>table(clusters_s113,s113.df$party)</code></pre>
+<pre><code>##              
+## clusters_s113  D Indep  R
+##             1  1     0 43
+##             2 50     2  2
+##             3  7     0  1</code></pre>
+<pre class="r"><code># randomForest model has confusion matrix.</code></pre>
+<ul>
+<li>kmeans and hclust show data in cluster (2 for House data and 3 for the Senate data).<br />
+</li>
+<li>The table function shows a pattern of vote consistent with party lines with few occasion were there is some cross party line vote.<br />
+</li>
+<li>randomForest also shows a confusion matrix results for both the House and the Senate for the 113th US Congress. It is also consistent with party line vote.<br />
+</li>
+<li>kmeans and hclust can be used to discover or draw similarities among subset of data.<br />
+</li>
+<li>Is good practice to scale your data prior to clustering since you want a unit change in each coordinate to represent the same degree of change.<br />
+</li>
+<li>Finally, we noticed Cluster can be used for data exploration or as a precursor to supervised learning method.</li>
+</ul>
+</div>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+$(document).ready(function () {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

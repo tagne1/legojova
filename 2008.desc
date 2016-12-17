@@ -1,0 +1,14 @@
+new("big.matrix.descriptor"
+    , description = structure(list(sharedType = "FileBacked", filename = "2008.bin", 
+    totalRows = 7009728L, totalCols = 30L, rowOffset = c(0, 7009728
+    ), colOffset = c(0, 30), nrow = 7009728, ncol = 30, rowNames = NULL, 
+    colNames = c("Year", "Month", "DayofMonth", "DayOfWeek", 
+    "DepTime", "CRSDepTime", "ArrTime", "CRSArrTime", "UniqueCarrier", 
+    "FlightNum", "TailNum", "ActualElapsedTime", "CRSElapsedTime", 
+    "AirTime", "ArrDelay", "DepDelay", "Origin", "Dest", "Distance", 
+    "TaxiIn", "TaxiOut", "Cancelled", "CancellationCode", "Diverted", 
+    "CarrierDelay", "WeatherDelay", "NASDelay", "SecurityDelay", 
+    "LateAircraftDelay", "Age"), type = "integer", separated = FALSE), .Names = c("sharedType", 
+"filename", "totalRows", "totalCols", "rowOffset", "colOffset", 
+"nrow", "ncol", "rowNames", "colNames", "type", "separated"))
+)

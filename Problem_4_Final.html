@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+<meta name="author" content="Pascal Tagne" />
+
+<meta name="date" content="2016-11-23" />
+
+<title>Problem 4: k-means analysis of protein dataset</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cerulean.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<link href="site_libs/font-awesome-4.5.0/css/font-awesome.min.css" rel="stylesheet" />
+
+<style type="text/css">code{white-space: pre;}</style>
+<link rel="stylesheet"
+      href="site_libs/highlight/textmate.css"
+      type="text/css" />
+<script src="site_libs/highlight/highlight.js"></script>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs && document.readyState && document.readyState === "complete") {
+   window.setTimeout(function() {
+      hljs.initHighlighting();
+   }, 0);
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+<link rel="stylesheet" href="styles.css" type="text/css" />
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+
+
+<div class="navbar navbar-inverse  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Pascal Tagne</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">
+    <span class="fa fa-home"></span>
+     
+    Home
+  </a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-info"></span>
+     
+    Works
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li class="dropdown-header">Data Science with R</li>
+    <li>
+      <a href="about.html">Table of contents</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Machine Learning with R</li>
+    <li>
+      <a href="TOC_Final_Project.html">Table of contents</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-gear"></span>
+     
+    Projects
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="Problem_3_Final.html">Python Programming</a>
+    </li>
+    <li>
+      <a href="Problem_4_Final.html">Hadoop Cloudera</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Computer Networks</li>
+    <li class="dropdown-header">Computer Network Security</li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Problem 4: k-means analysis of protein dataset</h1>
+<h4 class="author"><em>Pascal Tagne</em></h4>
+<h4 class="date"><em>November 23, 2016</em></h4>
+
+</div>
+
+
+<div id="introduction" class="section level3">
+<h3>1.Introduction</h3>
+<p>This report describes a case study of protein intake of 25 European countries. The protein intake is from nine major food sources. It uses <strong>k-means</strong> algorithm and machine learning to find relationship and patterns that can be used to build predictive models.</p>
+</div>
+<div id="data-collection" class="section level3">
+<h3>2.Data collection</h3>
+<p>This case study uses protein data Set. It is the original dataset, in the form provided by Dr. Canfield for the final. It has 25 instances and 10 attributs. The data set has 9 numeric features and 1 character feature.</p>
+</div>
+<div id="exploring-and-preparing-the-data" class="section level3">
+<h3>3.Exploring and preparing the data</h3>
+<pre class="r"><code># Import protein data.
+protein &lt;- read.csv(&quot;protein.csv&quot;, stringsAsFactors = FALSE)
+#Let&#39;s verify if the data is read properly.
+str(protein)</code></pre>
+<pre><code>## &#39;data.frame&#39;:    25 obs. of  10 variables:
+##  $ Country  : chr  &quot;Albania&quot; &quot;Austria&quot; &quot;Belgium&quot; &quot;Bulgaria&quot; ...
+##  $ RedMeat  : num  10.1 8.9 13.5 7.8 9.7 10.6 8.4 9.5 18 10.2 ...
+##  $ WhiteMeat: num  1.4 14 9.3 6 11.4 10.8 11.6 4.9 9.9 3 ...
+##  $ Eggs     : num  0.5 4.3 4.1 1.6 2.8 3.7 3.7 2.7 3.3 2.8 ...
+##  $ Milk     : num  8.9 19.9 17.5 8.3 12.5 25 11.1 33.7 19.5 17.6 ...
+##  $ Fish     : num  0.2 2.1 4.5 1.2 2 9.9 5.4 5.8 5.7 5.9 ...
+##  $ Cereals  : num  42.3 28 26.6 56.7 34.3 21.9 24.6 26.3 28.1 41.7 ...
+##  $ Starch   : num  0.6 3.6 5.7 1.1 5 4.8 6.5 5.1 4.8 2.2 ...
+##  $ Nuts     : num  5.5 1.3 2.1 3.7 1.1 0.7 0.8 1 2.4 7.8 ...
+##  $ Fr.Veg   : num  1.7 4.3 4 4.2 4 2.4 3.6 1.4 6.5 6.5 ...</code></pre>
+<pre class="r"><code>head(protein)</code></pre>
+<pre><code>##          Country RedMeat WhiteMeat Eggs Milk Fish Cereals Starch Nuts
+## 1        Albania    10.1       1.4  0.5  8.9  0.2    42.3    0.6  5.5
+## 2        Austria     8.9      14.0  4.3 19.9  2.1    28.0    3.6  1.3
+## 3        Belgium    13.5       9.3  4.1 17.5  4.5    26.6    5.7  2.1
+## 4       Bulgaria     7.8       6.0  1.6  8.3  1.2    56.7    1.1  3.7
+## 5 Czechoslovakia     9.7      11.4  2.8 12.5  2.0    34.3    5.0  1.1
+## 6        Denmark    10.6      10.8  3.7 25.0  9.9    21.9    4.8  0.7
+##   Fr.Veg
+## 1    1.7
+## 2    4.3
+## 3    4.0
+## 4    4.2
+## 5    4.0
+## 6    2.4</code></pre>
+<pre class="r"><code># It worked.</code></pre>
+<p>The preceding shows that we have 10 features: 1 character and 9 numeric features. All the variables have names for identification.</p>
+<p><strong>Let’s look at the summary statistics of our data.</strong></p>
+<pre class="r"><code>summary(protein)</code></pre>
+<pre><code>##    Country             RedMeat         WhiteMeat           Eggs      
+##  Length:25          Min.   : 4.400   Min.   : 1.400   Min.   :0.500  
+##  Class :character   1st Qu.: 7.800   1st Qu.: 4.900   1st Qu.:2.700  
+##  Mode  :character   Median : 9.500   Median : 7.800   Median :2.900  
+##                     Mean   : 9.828   Mean   : 7.896   Mean   :2.936  
+##                     3rd Qu.:10.600   3rd Qu.:10.800   3rd Qu.:3.700  
+##                     Max.   :18.000   Max.   :14.000   Max.   :4.700  
+##       Milk             Fish           Cereals           Starch     
+##  Min.   : 4.900   Min.   : 0.200   Min.   :18.600   Min.   :0.600  
+##  1st Qu.:11.100   1st Qu.: 2.100   1st Qu.:24.300   1st Qu.:3.100  
+##  Median :17.600   Median : 3.400   Median :28.000   Median :4.700  
+##  Mean   :17.112   Mean   : 4.284   Mean   :32.248   Mean   :4.276  
+##  3rd Qu.:23.300   3rd Qu.: 5.800   3rd Qu.:40.100   3rd Qu.:5.700  
+##  Max.   :33.700   Max.   :14.200   Max.   :56.700   Max.   :6.500  
+##       Nuts           Fr.Veg     
+##  Min.   :0.700   Min.   :1.400  
+##  1st Qu.:1.500   1st Qu.:2.900  
+##  Median :2.400   Median :3.800  
+##  Mean   :3.072   Mean   :4.136  
+##  3rd Qu.:4.700   3rd Qu.:4.900  
+##  Max.   :7.800   Max.   :7.900</code></pre>
+<p>The preceding shows that there is no missing value.</p>
+</div>
+<div id="training-a-model-on-the-data." class="section level3">
+<h3>4. Training a model on the data.</h3>
+<p>Since kmeans uses distance calculation to compute distance between cluster, we need to normalize or z-score standardize the features. We will use <strong>scale()</strong> function.</p>
+<pre class="r"><code># Let&#39;s normalize the data.
+protein_z &lt;- as.data.frame(lapply(protein[-1], scale))
+# Let&#39;s check the data.
+head(protein_z)</code></pre>
+<pre><code>##          RedMeat    WhiteMeat          Eggs          Milk           Fish
+## 1  0.08126490430 -1.758488853 -2.1796385209 -1.1557381384 -1.20028212982
+## 2 -0.27725673231  1.652373147  1.2204544099  0.3923767572 -0.64187467471
+## 3  1.09707620803  0.380067480  1.0415021504  0.0546062345  0.06348211069
+## 4 -0.60590156587 -0.513253520 -1.1954010936 -1.2401807690 -0.90638346923
+## 5 -0.03824230791  0.948544480 -0.1216875365 -0.6490823544 -0.67126454077
+## 6  0.23064891955  0.786122480  0.6835976314  1.1101391178  1.65053487783
+##         Cereals        Starch          Nuts         Fr.Veg
+## 1  0.9159176103 -2.2495771716  1.2227536428 -1.35040507332
+## 2 -0.3870690418 -0.4136872057 -0.8923885729  0.09091397045
+## 3 -0.5146341686  0.8714357705 -0.4895043414 -0.07539207306
+## 4  2.2280160572 -1.9435955106  0.3162641218  0.03547862262
+## 5  0.1869740287  0.4430614451 -0.9931096308 -0.07539207306
+## 6 -0.9428885228  0.3206687807 -1.1945517466 -0.96235763846</code></pre>
+<pre class="r"><code># It worked.</code></pre>
+<p>I do not have prior knowledge on the protein intake in Europe. We can use <strong>kmeansruns()</strong> within the <strong>fpc</strong> package to pick initial k. kmeansruns uses two criteria: the Calinski-Harabasz Index (“ch”), and the average silhouette width (“asw”). Let’s check it out.</p>
+<pre class="r"><code># Let&#39;s load fpc.
+library(fpc)
+# CH pick
+clustering.ch &lt;- kmeansruns(protein_z, krange=1:10, criterion=&quot;ch&quot;)
+clustering.ch$bestk</code></pre>
+<pre><code>## [1] 2</code></pre>
+<pre class="r"><code># ASW pick
+clustering.asw &lt;- kmeansruns(protein_z, krange=1:10, criterion=&quot;asw&quot;)
+clustering.asw$bestk</code></pre>
+<pre><code>## [1] 3</code></pre>
+<p>The preceding shows that CH picked 2 cluster and ASW picked 3 clusters. Let’s plot the values for the two criteria and have a second look.</p>
+<pre class="r"><code>library(ggplot2)
+library(reshape2)
+clustering.ch$crit</code></pre>
+<pre><code>##  [1]  0.000000000 14.094814298 11.417985412 10.418800983 10.011797289
+##  [6]  9.964966881  9.861681798  9.412089035  9.166675747  9.075569310</code></pre>
+<pre class="r"><code>clustering.asw$crit</code></pre>
+<pre><code>##  [1] 0.0000000000 0.3271084145 0.3351693984 0.2617867515 0.2639450098
+##  [6] 0.2734814501 0.2471164933 0.2429984800 0.2412921812 0.2388293493</code></pre>
+<pre class="r"><code>critframe &lt;- data.frame(k=1:10, ch=scale(clustering.ch$crit), asw=scale(clustering.asw$crit))
+critframe &lt;- melt(critframe, id.vars=c(&quot;k&quot;), variable.name=&quot;measure&quot;, value.name=&quot;score&quot;)
+ggplot(critframe, aes(x=k, y=score, color=measure)) + geom_point(aes(shape=measure)) + geom_line(aes(linetype=measure)) + scale_x_continuous(breaks=1:10, labels=1:10) + labs(title=&quot;The Calinski-Harabasz and average silhouette width indices for 1-10 cluster&quot;)</code></pre>
+<p><img src="Problem_4_Final_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<p>The above plot shows that CH criterion and ASW produced two different curves. NEvertheless, they came together at k= 5 and k=8, which might be taken as evidence that either k=5 or k=8 is the optimal choice for k.</p>
+<p>Let’s build the model. We will start with k=5.</p>
+<pre class="r"><code>set.seed(300)
+pclusters &lt;- kmeans(protein_z, 5)</code></pre>
+<p>Let’s check the summary and cluster centers.</p>
+<pre class="r"><code>summary(pclusters)</code></pre>
+<pre><code>##              Length Class  Mode   
+## cluster      25     -none- numeric
+## centers      45     -none- numeric
+## totss         1     -none- numeric
+## withinss      5     -none- numeric
+## tot.withinss  1     -none- numeric
+## betweenss     1     -none- numeric
+## size          5     -none- numeric
+## iter          1     -none- numeric
+## ifault        1     -none- numeric</code></pre>
+<pre class="r"><code>pclusters$centers</code></pre>
+<pre><code>##           RedMeat     WhiteMeat           Eggs          Milk          Fish
+## 1 -0.790141851356 -0.5267886867 -1.16557571700 -0.9047558750 -0.9504682683
+## 2 -0.068119110956 -1.0411250200 -0.07694947159 -0.2057585434  0.1075669098
+## 3  0.613615213208  0.7738177831  0.71613440582  0.3066546927 -0.2598064160
+## 4 -0.949484800961 -1.1764766867 -0.74802044479 -1.4583242316  1.8562639402
+## 5  0.006572896671 -0.2290150200  0.19147891769  1.3458747951  1.1582546214
+##         Cereals        Starch          Nuts        Fr.Veg
+## 1  1.4383271771 -0.7604664214  0.8870167832 -0.5373533050
+## 2  0.6380078698 -1.3010340225  1.4997365520  1.3659269707
+## 3 -0.5146341686  0.4208082334 -0.6131165488  0.1060327017
+## 4 -0.3779572471  0.9326321027  1.1220325849  1.8925627752
+## 5 -0.8722721134  0.1676779502 -0.9553392341 -1.1148048450</code></pre>
+<pre class="r"><code>pclusters$size</code></pre>
+<pre><code>## [1]  6  2 11  2  4</code></pre>
+<p>The preceding shows that cluster 4 has Fish, Starch, Nuts, and Fr.Veg substantially above the mean interest level. Similarly, cluster 3 shows RedMeat, WhiteMeat, Eggs, Milk, and Starch are also above the mean interest.<br />
+We also have the number of point in each cluster. Cluster 3 has 11 points. It shows a balanced cluster around cluster 3.</p>
+<div id="extracting-the-clusters-found-by-kmeans." class="section level4">
+<h4>Extracting the clusters found by kmeans.</h4>
+<pre class="r"><code># Let&#39;s get the vector of clusters.
+groups &lt;- pclusters$cluster
+print_clusters &lt;- function(labels, k) {                 
+  for(i in 1:k) {
+    print(paste(&quot;cluster&quot;, i))
+    print(protein[labels==i,c(&quot;Country&quot;,&quot;RedMeat&quot;,&quot;Fish&quot;,&quot;Fr.Veg&quot;, &quot;Eggs&quot;, &quot;Cereals&quot;)])
+  }
+}
+print_clusters(groups, 5)</code></pre>
+<pre><code>## [1] &quot;cluster 1&quot;
+##       Country RedMeat Fish Fr.Veg Eggs Cereals
+## 1     Albania    10.1  0.2    1.7  0.5    42.3
+## 4    Bulgaria     7.8  1.2    4.2  1.6    56.7
+## 11    Hungary     5.3  0.3    4.2  2.9    40.1
+## 18    Romania     6.2  1.0    2.8  1.5    49.6
+## 23       USSR     9.3  3.0    2.9  2.1    43.6
+## 25 Yugoslavia     4.4  0.6    3.2  1.2    55.9
+## [1] &quot;cluster 2&quot;
+##    Country RedMeat Fish Fr.Veg Eggs Cereals
+## 10  Greece    10.2  5.9    6.5  2.8    41.7
+## 13   Italy     9.0  3.4    6.7  2.9    36.8
+## [1] &quot;cluster 3&quot;
+##           Country RedMeat Fish Fr.Veg Eggs Cereals
+## 2         Austria     8.9  2.1    4.3  4.3    28.0
+## 3         Belgium    13.5  4.5    4.0  4.1    26.6
+## 5  Czechoslovakia     9.7  2.0    4.0  2.8    34.3
+## 7       E Germany     8.4  5.4    3.6  3.7    24.6
+## 9          France    18.0  5.7    6.5  3.3    28.1
+## 12        Ireland    13.9  2.2    2.9  4.7    24.0
+## 14    Netherlands     9.5  2.5    3.7  3.6    22.4
+## 16         Poland     6.9  3.0    6.6  2.7    36.1
+## 21    Switzerland    13.1  2.3    4.9  3.1    25.6
+## 22             UK    17.4  4.3    3.3  4.7    24.3
+## 24      W Germany    11.4  3.4    3.8  4.1    18.6
+## [1] &quot;cluster 4&quot;
+##     Country RedMeat Fish Fr.Veg Eggs Cereals
+## 17 Portugal     6.2 14.2    7.9  1.1    27.0
+## 19    Spain     7.1  7.0    7.2  3.1    29.2
+## [1] &quot;cluster 5&quot;
+##    Country RedMeat Fish Fr.Veg Eggs Cereals
+## 6  Denmark    10.6  9.9    2.4  3.7    21.9
+## 8  Finland     9.5  5.8    1.4  2.7    26.3
+## 15  Norway     9.4  9.7    2.7  2.7    23.0
+## 20  Sweden     9.9  7.5    2.0  3.5    19.5</code></pre>
+<p>The preceding printout shows that cluster 3 has more countries with higher than average red meat consumption. Cluster 4 contains countries with higher than average fish consumption.</p>
+</div>
+</div>
+<div id="cluster-visualization." class="section level3">
+<h3>5. Cluster Visualization.</h3>
+<p>We can try to visualize the cluster by projecting the data onto the first two principal components of the data.</p>
+<pre class="r"><code>library(ggplot2)
+# Let&#39;s calculate the principal components
+princ &lt;- prcomp(protein_z)
+ncomp &lt;- 2
+# Let&#39;s rotate the data into the space described by the principal.
+project &lt;- predict(princ, newdata = protein_z)[, 1:ncomp]
+project.plus &lt;- cbind(as.data.frame(project), cluster=as.factor(groups), country=protein$Country)
+ggplot(project.plus, aes(x=PC1, y=PC2)) +                   
+  geom_point(aes(shape=cluster)) +
+  geom_text(aes(label=country),
+            hjust=0, vjust=1) + labs(title=&quot;Countries clustered by consumption pjted onto 1st 2 ppal components&quot;)</code></pre>
+<p><img src="Problem_4_Final_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+<p>The preceding plot shows that Spain, Portugal, and Greece are separated from the other countries. The same can be said of countries like Yugoslavia, Romania, Bulgaria, and Albania.</p>
+</div>
+<div id="boostrap-evaluation-of-clusters." class="section level3">
+<h3>6. Boostrap evaluation of Clusters.</h3>
+<p>Let find out if the clusters we found with kmeans can hold under variations in the data set. We use <strong>clusterboot()</strong> function within fpc package. It uses bootstrap resampling to evaluate how stable a given cluster is.</p>
+<pre class="r"><code># Let&#39;s run clusterboot() using the kmeans algorithm.
+library(fpc)
+cboot.kmeans &lt;- clusterboot(protein_z, clustermethod=kmeansCBI, runs=100, iter.max=100, krange=5, seed=300)</code></pre>
+<pre class="r"><code>groups &lt;- cboot.kmeans$result$partition
+# Let&#39;s print clusters from clusterboot.
+print_clusters(groups, 5)</code></pre>
+<pre><code>## [1] &quot;cluster 1&quot;
+##       Country RedMeat Fish Fr.Veg Eggs Cereals
+## 1     Albania    10.1  0.2    1.7  0.5    42.3
+## 4    Bulgaria     7.8  1.2    4.2  1.6    56.7
+## 18    Romania     6.2  1.0    2.8  1.5    49.6
+## 25 Yugoslavia     4.4  0.6    3.2  1.2    55.9
+## [1] &quot;cluster 2&quot;
+##     Country RedMeat Fish Fr.Veg Eggs Cereals
+## 10   Greece    10.2  5.9    6.5  2.8    41.7
+## 13    Italy     9.0  3.4    6.7  2.9    36.8
+## 17 Portugal     6.2 14.2    7.9  1.1    27.0
+## 19    Spain     7.1  7.0    7.2  3.1    29.2
+## [1] &quot;cluster 3&quot;
+##    Country RedMeat Fish Fr.Veg Eggs Cereals
+## 6  Denmark    10.6  9.9    2.4  3.7    21.9
+## 8  Finland     9.5  5.8    1.4  2.7    26.3
+## 15  Norway     9.4  9.7    2.7  2.7    23.0
+## 20  Sweden     9.9  7.5    2.0  3.5    19.5
+## [1] &quot;cluster 4&quot;
+##           Country RedMeat Fish Fr.Veg Eggs Cereals
+## 5  Czechoslovakia     9.7  2.0    4.0  2.8    34.3
+## 7       E Germany     8.4  5.4    3.6  3.7    24.6
+## 11        Hungary     5.3  0.3    4.2  2.9    40.1
+## 16         Poland     6.9  3.0    6.6  2.7    36.1
+## 23           USSR     9.3  3.0    2.9  2.1    43.6
+## [1] &quot;cluster 5&quot;
+##        Country RedMeat Fish Fr.Veg Eggs Cereals
+## 2      Austria     8.9  2.1    4.3  4.3    28.0
+## 3      Belgium    13.5  4.5    4.0  4.1    26.6
+## 9       France    18.0  5.7    6.5  3.3    28.1
+## 12     Ireland    13.9  2.2    2.9  4.7    24.0
+## 14 Netherlands     9.5  2.5    3.7  3.6    22.4
+## 21 Switzerland    13.1  2.3    4.9  3.1    25.6
+## 22          UK    17.4  4.3    3.3  4.7    24.3
+## 24   W Germany    11.4  3.4    3.8  4.1    18.6</code></pre>
+<p>The preceding shows that after using clusterboot(), we came out with same number of cluster.</p>
+<pre class="r"><code>cboot.kmeans$bootmean</code></pre>
+<pre><code>## [1] 0.8185000000 0.7588333333 0.8469047619 0.6054206349 0.7198809524</code></pre>
+<pre class="r"><code>cboot.kmeans$bootbrd</code></pre>
+<pre><code>## [1] 19 26 19 47 23</code></pre>
+<p>The preceding shows that the cboot.keamsbootmean and the number of time the clusters were dissolved as given by cboot.kmeans$bootbrd are different from the kmeans numbers. But, the number of cluster are the same. It shows that the stability of a clustering is partly a function of the clustering algorithm, not just the data.</p>
+</div>
+<div id="conclusion" class="section level3">
+<h3>7. Conclusion:</h3>
+<ul>
+<li>kmeans was able to find patterns within the protein dataset.<br />
+</li>
+<li>kmeansruns with the Calinski-Harabasz Index (“ch”) and the average silhouette width (“asw”) was used to find the initial k = 5.<br />
+</li>
+<li>After using clusterboot, we notice that cluster 1 and 2 were highly stable.<br />
+</li>
+<li>We observed that clustering technique can be used for data exploration.<br />
+</li>
+<li>kmeans can handle huge number of observations.<br />
+</li>
+<li>Clustering can allow you to identify what kind of data (or which data attributes) tend to occur together.</li>
+</ul>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+$(document).ready(function () {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

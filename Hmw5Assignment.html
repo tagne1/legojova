@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+<meta name="author" content="Pascal Tagne" />
+
+
+<title>Homework assignment 5</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cerulean.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<link href="site_libs/font-awesome-4.5.0/css/font-awesome.min.css" rel="stylesheet" />
+
+<style type="text/css">code{white-space: pre;}</style>
+<link rel="stylesheet"
+      href="site_libs/highlight/textmate.css"
+      type="text/css" />
+<script src="site_libs/highlight/highlight.js"></script>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs && document.readyState && document.readyState === "complete") {
+   window.setTimeout(function() {
+      hljs.initHighlighting();
+   }, 0);
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+<link rel="stylesheet" href="styles.css" type="text/css" />
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+
+
+<div class="navbar navbar-inverse  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Pascal Tagne</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">
+    <span class="fa fa-home"></span>
+     
+    Home
+  </a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-info"></span>
+     
+    Works
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li class="dropdown-header">Data Science with R</li>
+    <li>
+      <a href="about.html">Table of contents</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Machine Learning with R</li>
+    <li>
+      <a href="TOC_Final_Project.html">Table of contents</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-gear"></span>
+     
+    Projects
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="Problem_3_Final.html">Python Programming</a>
+    </li>
+    <li>
+      <a href="Problem_4_Final.html">Hadoop Cloudera</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Computer Networks</li>
+    <li class="dropdown-header">Computer Network Security</li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Homework assignment 5</h1>
+<h4 class="author"><em>Pascal Tagne</em></h4>
+<h4 class="date"><em>October 5, 2016</em></h4>
+
+</div>
+
+
+<div id="question-1-create-data-frame-pricedf." class="section level2">
+<h2>Question 1: Create data frame PriceDF.</h2>
+<pre class="r"><code>&gt; library(ggplot2)
+&gt; library(plyr)
+&gt; data(diamonds) # getting the diamonds data.
+&gt; head(diamonds) # checking first 6 rows of data.</code></pre>
+<pre><code>## # A tibble: 6 × 10
+##   carat       cut color clarity depth table price     x     y     z
+##   &lt;dbl&gt;     &lt;ord&gt; &lt;ord&gt;   &lt;ord&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+## 1     0     Ideal     E     SI2    62    55   326     4     4     2
+## 2     0   Premium     E     SI1    60    61   326     4     4     2
+## 3     0      Good     E     VS1    57    65   327     4     4     2
+## 4     0   Premium     I     VS2    62    58   334     4     4     3
+## 5     0      Good     J     SI2    63    58   335     4     4     3
+## 6     0 Very Good     J    VVS2    63    57   336     4     4     2</code></pre>
+<pre class="r"><code>&gt; # Creating PriceDF.
+&gt; step1 &lt;- subset(diamonds, select = c(carat, depth, cut, color, clarity, price))
+&gt; # Let us check the first 6 rows.
+&gt; head(step1)</code></pre>
+<pre><code>## # A tibble: 6 × 6
+##   carat depth       cut color clarity price
+##   &lt;dbl&gt; &lt;dbl&gt;     &lt;ord&gt; &lt;ord&gt;   &lt;ord&gt; &lt;int&gt;
+## 1     0    62     Ideal     E     SI2   326
+## 2     0    60   Premium     E     SI1   326
+## 3     0    57      Good     E     VS1   327
+## 4     0    62   Premium     I     VS2   334
+## 5     0    63      Good     J     SI2   335
+## 6     0    63 Very Good     J    VVS2   336</code></pre>
+<pre class="r"><code>&gt; # Let&#39;s create PriceDF.
+&gt; PriceDF &lt;- ddply(step1, .(carat,depth,cut,color,clarity), transform, avgprice = mean(price,na.rm=TRUE), sdprice = sd(price,na.rm=TRUE), maxprice = max(price,na.rm=TRUE), minprice=min(price,na.rm=TRUE), numberOFdiamond=length(cut))
+&gt; # Let&#39;s print the first 6 rows to check our command.
+&gt; head(PriceDF) # It worked.</code></pre>
+<pre><code>##   carat depth     cut color clarity price avgprice sdprice maxprice
+## 1     0    59 Premium     E     VS2   367      367      NA      367
+## 2     0    60 Premium     E     VS2   367      367      NA      367
+## 3     0    60   Ideal     E     VS2   367      367      NA      367
+## 4     0    60 Premium     E     VS2   367      367      NA      367
+## 5     0    60 Premium     E     SI2   345      345      NA      345
+## 6     0    61 Premium     E     VS2   367      367      NA      367
+##   minprice numberOFdiamond
+## 1      367               1
+## 2      367               1
+## 3      367               1
+## 4      367               1
+## 5      345               1
+## 6      367               1</code></pre>
+<pre class="r"><code>&gt; # Let&#39;s see the internal structure of PriceDF
+&gt; str(PriceDF)</code></pre>
+<pre><code>## &#39;data.frame&#39;:    53940 obs. of  11 variables:
+##  $ carat          : num  0.2 0.2 0.2 0.2 0.2 0.2 0.2 0.2 0.2 0.2 ...
+##  $ depth          : num  59 59.7 59.7 59.8 60.2 61.1 61.5 61.7 62.2 62.3 ...
+##  $ cut            : Ord.factor w/ 5 levels &quot;Fair&quot;&lt;&quot;Good&quot;&lt;..: 4 4 5 4 4 4 5 4 5 4 ...
+##  $ color          : Ord.factor w/ 7 levels &quot;D&quot;&lt;&quot;E&quot;&lt;&quot;F&quot;&lt;&quot;G&quot;&lt;..: 2 2 2 2 2 2 1 1 2 1 ...
+##  $ clarity        : Ord.factor w/ 8 levels &quot;I1&quot;&lt;&quot;SI2&quot;&lt;&quot;SI1&quot;&lt;..: 4 4 4 4 2 4 4 4 4 4 ...
+##  $ price          : int  367 367 367 367 345 367 367 367 367 367 ...
+##  $ avgprice       : num  367 367 367 367 345 367 367 367 367 367 ...
+##  $ sdprice        : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ maxprice       : int  367 367 367 367 345 367 367 367 367 367 ...
+##  $ minprice       : int  367 367 367 367 345 367 367 367 367 367 ...
+##  $ numberOFdiamond: int  1 1 1 1 1 1 1 1 1 1 ...</code></pre>
+<pre class="r"><code>&gt; # It shows we have 53940 observations and 11 variables.  
+&gt; # Let&#39;s print 31 rows to check standard deviation
+&gt; print(PriceDF[140:170, ])</code></pre>
+<pre><code>##     carat depth       cut color clarity price avgprice sdprice maxprice
+## 140     0    61 Very Good     D    VVS2   530      530       0      530
+## 141     0    61 Very Good     D    VVS2   530      530       0      530
+## 142     0    61 Very Good     D    VVS1   492      492      NA      492
+## 143     0    61 Very Good     E     VS1   442      442      NA      442
+## 144     0    61 Very Good     E    VVS2   505      505      NA      505
+## 145     0    61 Very Good     E    VVS1   472      511      33      530
+## 146     0    61 Very Good     E    VVS1   530      511      33      530
+## 147     0    61 Very Good     E    VVS1   530      511      33      530
+## 148     0    61 Very Good     F    VVS2   465      465      NA      465
+## 149     0    61 Very Good     G    VVS1   414      414      NA      414
+## 150     0    61   Premium     E    VVS1   680      680      NA      680
+## 151     0    61   Premium     F    VVS2   571      508      89      571
+## 152     0    61   Premium     F    VVS2   445      508      89      571
+## 153     0    61   Premium     G    VVS1   531      531      NA      531
+## 154     0    61      Fair     G    VVS2   369      369      NA      369
+## 155     0    61 Very Good     D    VVS2   530      530      NA      530
+## 156     0    61 Very Good     E    VVS2   458      489      27      505
+## 157     0    61 Very Good     E    VVS2   505      489      27      505
+## 158     0    61 Very Good     E    VVS2   505      489      27      505
+## 159     0    61 Very Good     E    VVS1   472      501      41      530
+## 160     0    61 Very Good     E    VVS1   530      501      41      530
+## 161     0    61 Very Good     F    VVS2   583      583      NA      583
+## 162     0    61 Very Good     F    VVS1   530      530      NA      530
+## 163     0    61     Ideal     F     VS1   548      548      NA      548
+## 164     0    61     Ideal     F    VVS2   538      538      NA      538
+## 165     0    62 Very Good     D     VS1   611      611      NA      611
+## 166     0    62 Very Good     E    VVS2   530      530      NA      530
+## 167     0    62 Very Good     F    VVS2   583      556      37      583
+## 168     0    62 Very Good     F    VVS2   530      556      37      583
+## 169     0    62 Very Good     G    VVS1   484      484      NA      484
+## 170     0    62     Ideal     E     SI2   326      326      NA      326
+##     minprice numberOFdiamond
+## 140      530               2
+## 141      530               2
+## 142      492               1
+## 143      442               1
+## 144      505               1
+## 145      472               3
+## 146      472               3
+## 147      472               3
+## 148      465               1
+## 149      414               1
+## 150      680               1
+## 151      445               2
+## 152      445               2
+## 153      531               1
+## 154      369               1
+## 155      530               1
+## 156      458               3
+## 157      458               3
+## 158      458               3
+## 159      472               2
+## 160      472               2
+## 161      583               1
+## 162      530               1
+## 163      548               1
+## 164      538               1
+## 165      611               1
+## 166      530               1
+## 167      530               2
+## 168      530               2
+## 169      484               1
+## 170      326               1</code></pre>
+<pre class="r"><code>&gt; # The preceding above showed that whenever numberOFdiamond = 1, sd = NA because it uses denominator (n - 1) like var (n being the number of observations).</code></pre>
+</div>
+<div id="question-2" class="section level2">
+<h2>Question 2:</h2>
+<p><strong>List the combination of cut, color, and clarity that has the maximum price.</strong></p>
+<pre class="r"><code>&gt; combmax &lt;- subset(PriceDF, price == maxprice, select = c(cut, color, clarity, price))
+&gt; # Let&#39;s print the first 6 rows to check our command.
+&gt; head(combmax)</code></pre>
+<pre><code>##       cut color clarity price
+## 1 Premium     E     VS2   367
+## 2 Premium     E     VS2   367
+## 3   Ideal     E     VS2   367
+## 4 Premium     E     VS2   367
+## 5 Premium     E     SI2   345
+## 6 Premium     E     VS2   367</code></pre>
+<pre class="r"><code>&gt; # Let&#39;s print 31 rows to check maximum price
+&gt; print(combmax[1:30, ])</code></pre>
+<pre><code>##          cut color clarity price
+## 1    Premium     E     VS2   367
+## 2    Premium     E     VS2   367
+## 3      Ideal     E     VS2   367
+## 4    Premium     E     VS2   367
+## 5    Premium     E     SI2   345
+## 6    Premium     E     VS2   367
+## 7      Ideal     D     VS2   367
+## 8    Premium     D     VS2   367
+## 9      Ideal     E     VS2   367
+## 10   Premium     D     VS2   367
+## 11   Premium     F     VS2   367
+## 12 Very Good     E     VS2   367
+## 13   Premium     D     VS2   386
+## 14   Premium     D     VS2   386
+## 15   Premium     E     VS2   386
+## 16   Premium     E     SI1   326
+## 17   Premium     E     VS2   386
+## 18   Premium     D     VS2   386
+## 19   Premium     D     VS2   386
+## 20   Premium     E     SI2   394
+## 21 Very Good     E     VS2   386
+## 22   Premium     D     VS2   404
+## 23   Premium     F     SI1   342
+## 24   Premium     E     VS2   404
+## 25   Premium     F     SI1   470
+## 26      Fair     E     VS2   337
+## 27      Good     G    VVS1   395
+## 28      Good     E    VVS1   498
+## 29      Good     E     VS1   327
+## 30 Very Good     E    VVS2   465</code></pre>
+<p><strong>List the combination of cut, color, and clarity that has the minimum price.</strong></p>
+<pre class="r"><code>&gt; combmin &lt;- subset(PriceDF, price == minprice, select = c(cut, color, clarity, price))
+&gt; # Let&#39;s print the first 6 rows to check our command.
+&gt; head(combmin)</code></pre>
+<pre><code>##       cut color clarity price
+## 1 Premium     E     VS2   367
+## 2 Premium     E     VS2   367
+## 3   Ideal     E     VS2   367
+## 4 Premium     E     VS2   367
+## 5 Premium     E     SI2   345
+## 6 Premium     E     VS2   367</code></pre>
+<pre class="r"><code>&gt; #Let&#39;s print 31 rows to check minimum price
+&gt; print(combmin[1:30, ])</code></pre>
+<pre><code>##          cut color clarity price
+## 1    Premium     E     VS2   367
+## 2    Premium     E     VS2   367
+## 3      Ideal     E     VS2   367
+## 4    Premium     E     VS2   367
+## 5    Premium     E     SI2   345
+## 6    Premium     E     VS2   367
+## 7      Ideal     D     VS2   367
+## 8    Premium     D     VS2   367
+## 9      Ideal     E     VS2   367
+## 10   Premium     D     VS2   367
+## 11   Premium     F     VS2   367
+## 12 Very Good     E     VS2   367
+## 13   Premium     D     VS2   386
+## 14   Premium     D     VS2   386
+## 15   Premium     E     VS2   386
+## 16   Premium     E     SI1   326
+## 17   Premium     E     VS2   386
+## 18   Premium     D     VS2   386
+## 19   Premium     D     VS2   386
+## 20   Premium     E     SI2   394
+## 21 Very Good     E     VS2   386
+## 22   Premium     D     VS2   404
+## 23   Premium     F     SI1   342
+## 24   Premium     E     VS2   404
+## 25   Premium     F     SI1   470
+## 26      Fair     E     VS2   337
+## 27      Good     G    VVS1   395
+## 28      Good     E    VVS1   498
+## 29      Good     E     VS1   327
+## 30 Very Good     E    VVS2   465</code></pre>
+<p><strong>What combinations have the maximum and minimum mean prices?</strong></p>
+<pre class="r"><code>&gt; # Let&#39;s get the range first.
+&gt; range(PriceDF$avgprice)</code></pre>
+<pre><code>## [1]   326 18818</code></pre>
+<pre class="r"><code>&gt; # Let us use summary() to see combmin and combmax
+&gt; summary(combmax)</code></pre>
+<pre><code>##         cut        color       clarity          price      
+##  Fair     : 1574   D:5140   SI1    :10503   Min.   :  326  
+##  Good     : 4066   E:7374   VS2    : 9303   1st Qu.: 1050  
+##  Very Good:11011   F:7477   SI2    : 7892   Median : 2707  
+##  Premium  :10706   G:8789   VS1    : 6417   Mean   : 4196  
+##  Ideal    :15466   H:6870   VVS2   : 3942   3rd Qu.: 5698  
+##                    I:4642   VVS1   : 2734   Max.   :18823  
+##                    J:2531   (Other): 2032</code></pre>
+<pre class="r"><code>&gt; summary(combmin)</code></pre>
+<pre><code>##         cut        color       clarity          price      
+##  Fair     : 1574   D:5090   SI1    :10481   Min.   :  326  
+##  Good     : 4064   E:7286   VS2    : 9176   1st Qu.: 1007  
+##  Very Good:10996   F:7445   SI2    : 7881   Median : 2697  
+##  Premium  :10597   G:8743   VS1    : 6385   Mean   : 4165  
+##  Ideal    :15367   H:6861   VVS2   : 3927   3rd Qu.: 5665  
+##                    I:4641   VVS1   : 2717   Max.   :18818  
+##                    J:2532   (Other): 2031</code></pre>
+<p>The preceding summary results showed that <em>the combination of cut, color, and clarity that has the maximum price</em> has the <strong>the maximum and minimum mean prices</strong> in that combination.</p>
+<p><strong>What is the most popular (highest counts) combination of cut, color, and clarity?</strong></p>
+<pre class="r"><code>&gt; # Let&#39;s add the number of diamond in a data frame.
+&gt; mostcountPriceDF &lt;- ddply(PriceDF, .(cut,color,clarity), summarize, numberOFdiamond=length(cut))
+&gt; # Let&#39;s print 11 rows to check the data.
+&gt; print(mostcountPriceDF[245:255, ])</code></pre>
+<pre><code>##       cut color clarity numberOFdiamond
+## 245 Ideal     G      I1              16
+## 246 Ideal     G     SI2             486
+## 247 Ideal     G     SI1             660
+## 248 Ideal     G     VS2             910
+## 249 Ideal     G     VS1             953
+## 250 Ideal     G    VVS2             774
+## 251 Ideal     G    VVS1             594
+## 252 Ideal     G      IF             491
+## 253 Ideal     H      I1              38
+## 254 Ideal     H     SI2             450
+## 255 Ideal     H     SI1             763</code></pre>
+<pre class="r"><code>&gt; # Let&#39;s get the subset of data where numberOFdiamond is the highest.
+&gt; m &lt;-subset(mostcountPriceDF, numberOFdiamond == max(numberOFdiamond))
+&gt; print(m)</code></pre>
+<pre><code>##       cut color clarity numberOFdiamond
+## 232 Ideal     E     VS2            1136</code></pre>
+<p>The most popular (highest counts) is: Ideal, E, VS2, 1136.</p>
+</div>
+<div id="question-3create-a-new-data-frame-with-only-cut-color-clarity-and-price" class="section level2">
+<h2>Question 3:Create a new data frame with only cut, color, clarity, and price</h2>
+<pre class="r"><code>&gt; # We will use diamonds data.frame to get a subset of data.
+&gt; newdfPriceDF &lt;- subset(diamonds, select = c(cut, color, clarity, price))
+&gt; # Let&#39;s check 6 rows of our subset data.
+&gt; head(newdfPriceDF)</code></pre>
+<pre><code>## # A tibble: 6 × 4
+##         cut color clarity price
+##       &lt;ord&gt; &lt;ord&gt;   &lt;ord&gt; &lt;int&gt;
+## 1     Ideal     E     SI2   326
+## 2   Premium     E     SI1   326
+## 3      Good     E     VS1   327
+## 4   Premium     I     VS2   334
+## 5      Good     J     SI2   335
+## 6 Very Good     J    VVS2   336</code></pre>
+</div>
+<div id="question-4-melt-the-data-with-the-first-three-columns-as-ids." class="section level2">
+<h2>Question 4: Melt the data with the first three columns as ids.</h2>
+<pre class="r"><code>&gt; # We will first install reshape2 package, then load it.
+&gt; library(reshape2)
+&gt; # Let&#39;s create melted data
+&gt; md &lt;- melt(newdfPriceDF, id=c(&quot;cut&quot;, &quot;color&quot;, &quot;clarity&quot;), na.rm = TRUE)</code></pre>
+</div>
+<div id="question-5-display-the-head-and-the-tail-of-the-melted-data." class="section level2">
+<h2>Question 5: Display the head and the tail of the melted data.</h2>
+<pre class="r"><code>&gt; # Let&#39;s print head and tail of our melted data.
+&gt; head(md)</code></pre>
+<pre><code>##         cut color clarity variable value
+## 1     Ideal     E     SI2    price   326
+## 2   Premium     E     SI1    price   326
+## 3      Good     E     VS1    price   327
+## 4   Premium     I     VS2    price   334
+## 5      Good     J     SI2    price   335
+## 6 Very Good     J    VVS2    price   336</code></pre>
+<pre class="r"><code>&gt; tail(md)</code></pre>
+<pre><code>##             cut color clarity variable value
+## 53935   Premium     D     SI1    price  2757
+## 53936     Ideal     D     SI1    price  2757
+## 53937      Good     D     SI1    price  2757
+## 53938 Very Good     D     SI1    price  2757
+## 53939   Premium     H     SI2    price  2757
+## 53940     Ideal     D     SI2    price  2757</code></pre>
+</div>
+<div id="question-6" class="section level2">
+<h2>Question 6:</h2>
+<p><strong>Display the mean carat, depth, and prices for all cuts.</strong></p>
+<pre class="r"><code>&gt; # Let us use diamonds data frame and get a subset of data containing: carat, depth, prices, cuts, color, and clarity.
+&gt; z1 &lt;- subset(diamonds, select = c(carat, depth, price, cut, color, clarity))
+&gt; # Let us check few rows of our new data set.
+&gt; head(z1)</code></pre>
+<pre><code>## # A tibble: 6 × 6
+##   carat depth price       cut color clarity
+##   &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt;     &lt;ord&gt; &lt;ord&gt;   &lt;ord&gt;
+## 1     0    62   326     Ideal     E     SI2
+## 2     0    60   326   Premium     E     SI1
+## 3     0    57   327      Good     E     VS1
+## 4     0    62   334   Premium     I     VS2
+## 5     0    63   335      Good     J     SI2
+## 6     0    63   336 Very Good     J    VVS2</code></pre>
+<pre class="r"><code>&gt; # Let&#39;s aggregate data.
+&gt; aggdf &lt;- aggregate(cbind(carat, depth, price)~cut, z1, mean)
+&gt; # Let us check the results of our aggregation
+&gt; head(aggdf)</code></pre>
+<pre><code>##         cut carat depth price
+## 1      Fair     1    64  4359
+## 2      Good     1    62  3929
+## 3 Very Good     1    62  3982
+## 4   Premium     1    61  4584
+## 5     Ideal     1    62  3458</code></pre>
+<p><strong>Repeat the above for color and clarity.</strong></p>
+<pre class="r"><code>&gt; # We will use our new z1 data frame.
+&gt; aggdf2 &lt;- aggregate(cbind(carat, depth, price)~color+clarity, z1, mean)
+&gt; # Let us check the results of our aggregation
+&gt; head(aggdf2)</code></pre>
+<pre><code>##   color clarity carat depth price
+## 1     D      I1     1    62  3863
+## 2     E      I1     1    62  3488
+## 3     F      I1     1    63  3342
+## 4     G      I1     1    63  3546
+## 5     H      I1     1    63  4453
+## 6     I      I1     1    63  4302</code></pre>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+$(document).ready(function () {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

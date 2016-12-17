@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+<meta name="author" content="Pascal Tagne" />
+
+<meta name="date" content="2016-11-13" />
+
+<title>Problem 1: Comparison of KNN and Naive Baines on credit data set</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cerulean.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<link href="site_libs/font-awesome-4.5.0/css/font-awesome.min.css" rel="stylesheet" />
+
+<style type="text/css">code{white-space: pre;}</style>
+<link rel="stylesheet"
+      href="site_libs/highlight/textmate.css"
+      type="text/css" />
+<script src="site_libs/highlight/highlight.js"></script>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs && document.readyState && document.readyState === "complete") {
+   window.setTimeout(function() {
+      hljs.initHighlighting();
+   }, 0);
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+<link rel="stylesheet" href="styles.css" type="text/css" />
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+
+
+<div class="navbar navbar-inverse  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Pascal Tagne</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">
+    <span class="fa fa-home"></span>
+     
+    Home
+  </a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-info"></span>
+     
+    Works
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li class="dropdown-header">Data Science with R</li>
+    <li>
+      <a href="about.html">Table of contents</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Machine Learning with R</li>
+    <li>
+      <a href="TOC_Final_Project.html">Table of contents</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-gear"></span>
+     
+    Projects
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="Problem_3_Final.html">Python Programming</a>
+    </li>
+    <li>
+      <a href="Problem_4_Final.html">Hadoop Cloudera</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Computer Networks</li>
+    <li class="dropdown-header">Computer Network Security</li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Problem 1: Comparison of KNN and Naive Baines on credit data set</h1>
+<h4 class="author"><em>Pascal Tagne</em></h4>
+<h4 class="date"><em>November 13, 2016</em></h4>
+
+</div>
+
+
+<div id="introduction" class="section level4">
+<h4>1.Introduction</h4>
+<p>This report describes a case study of risky bank loans using <strong>k-nearest neighbors</strong> and <strong>Naive Bayes</strong> algorithms. It uses machine learning and respectively <strong>kNN()</strong> function in the <em>class</em> package and <strong>naiveBayes()</strong> function in the e1071 package to develop two credits approval models. The report will compare both knn and naive bayes predictive results on the credit data set and will show the model that can best predict minimal financial loss for institutions.</p>
+</div>
+<div id="data-collection" class="section level4">
+<h4>2.Data collection</h4>
+<p>This case study uses Statlog (German Credit Data) Data Set. It is the original dataset, in the form provided by Prof. Hofmann, and contains categorical/symbolic attributes and is in the file “german.data”. The original data set had 1000 instances and 20 features and can be found at: <a href="https://archive.ics.uci.edu/ml/datasets/Statlog+(German+Credit+Data)" class="uri">https://archive.ics.uci.edu/ml/datasets/Statlog+(German+Credit+Data)</a>.</p>
+<p>The data used in this report has been modified from the original data set in three ways. A header with features names was added to assist with identification, the number of feature was reduced to 17 from 20, and they use the data dictionary to look up text in the original dataset and replace them with the description of each feature.</p>
+</div>
+<div id="exploring-and-preparing-the-data" class="section level4">
+<h4>3.Exploring and preparing the data</h4>
+<pre class="r"><code># Import credit data. Since majority of features is nominal, we will use defaut option to import data.
+credit &lt;- read.csv(&quot;credit.csv&quot;)
+#Let&#39;s verify if the data is read properly.
+str(credit)</code></pre>
+<pre><code>## &#39;data.frame&#39;:    1000 obs. of  17 variables:
+##  $ checking_balance    : Factor w/ 4 levels &quot;&lt; 0 DM&quot;,&quot;&gt; 200 DM&quot;,..: 1 3 4 1 1 4 4 3 4 3 ...
+##  $ months_loan_duration: int  6 48 12 42 24 36 24 36 12 30 ...
+##  $ credit_history      : Factor w/ 5 levels &quot;critical&quot;,&quot;good&quot;,..: 1 2 1 2 4 2 2 2 2 1 ...
+##  $ purpose             : Factor w/ 6 levels &quot;business&quot;,&quot;car&quot;,..: 5 5 4 5 2 4 5 2 5 2 ...
+##  $ amount              : int  1169 5951 2096 7882 4870 9055 2835 6948 3059 5234 ...
+##  $ savings_balance     : Factor w/ 5 levels &quot;&lt; 100 DM&quot;,&quot;&gt; 1000 DM&quot;,..: 5 1 1 1 1 5 4 1 2 1 ...
+##  $ employment_duration : Factor w/ 5 levels &quot;&lt; 1 year&quot;,&quot;&gt; 7 years&quot;,..: 2 3 4 4 3 3 2 3 4 5 ...
+##  $ percent_of_income   : int  4 2 2 2 3 2 3 2 2 4 ...
+##  $ years_at_residence  : int  4 2 3 4 4 4 4 2 4 2 ...
+##  $ age                 : int  67 22 49 45 53 35 53 35 61 28 ...
+##  $ other_credit        : Factor w/ 3 levels &quot;bank&quot;,&quot;none&quot;,..: 2 2 2 2 2 2 2 2 2 2 ...
+##  $ housing             : Factor w/ 3 levels &quot;other&quot;,&quot;own&quot;,..: 2 2 2 1 1 1 2 3 2 2 ...
+##  $ existing_loans_count: int  2 1 1 1 2 1 1 1 1 2 ...
+##  $ job                 : Factor w/ 4 levels &quot;management&quot;,&quot;skilled&quot;,..: 2 2 4 2 2 4 2 1 4 1 ...
+##  $ dependents          : int  1 1 2 2 2 2 1 1 1 1 ...
+##  $ phone               : Factor w/ 2 levels &quot;no&quot;,&quot;yes&quot;: 2 1 1 1 1 2 1 2 1 1 ...
+##  $ default             : Factor w/ 2 levels &quot;no&quot;,&quot;yes&quot;: 1 2 1 1 2 1 1 1 1 2 ...</code></pre>
+<p>The preceding shows that we have 10 categorical and 7 numeric features.</p>
+</div>
+<div id="knncat-algorithm." class="section level2">
+<h2>knncat algorithm.</h2>
+<pre class="r"><code>##############################################################################  
+###############** Function to check accuracy measures ** #####################  
+############################################################################## 
+library(caret)
+library(lpSolve)
+library(ipred)
+library(randomForest)</code></pre>
+<pre><code>## randomForest 4.6-12</code></pre>
+<pre><code>## Type rfNews() to see new features/changes/bug fixes.</code></pre>
+<pre><code>## 
+## Attaching package: &#39;randomForest&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:ggplot2&#39;:
+## 
+##     margin</code></pre>
+<pre class="r"><code>library(irr)
+library(kernlab)
+library(e1071)
+library(adabag)
+accuracyMeasures &lt;- function(pred, truth, name=&quot;model&quot;) {   
+  #dev.norm &lt;- -2*loglikelihood(as.numeric(truth), pred)/length(pred)  
+  ctable &lt;- table(truth=truth,
+                 pred = pred)                                       
+  accuracy &lt;- sum(diag(ctable))/sum(ctable)
+  precision &lt;- ctable[2,2]/sum(ctable[,2])
+  recall &lt;- ctable[2,2]/sum(ctable[2,])
+  f_score &lt;- 2*precision*recall/(precision + recall)
+  kappa &lt;- kappa2(data.frame(truth, pred))$value
+  sensitivity &lt;- ctable[2,2]/sum(ctable[2,])
+  specificity &lt;- ctable[1,1]/sum(ctable[1,])
+  data.frame(model=name, accuracy=accuracy, f_score=f_score, kappa=kappa, sensitivity=sensitivity, specificity=specificity)
+# data.frame(model=name, accuracy=accuracy, f_score=f_score, kappa=kappa, sensitivity=sensitivity, specificity=specificity, dev.norm)
+}</code></pre>
+<div id="normalization-of-numeric-features" class="section level4">
+<h4>4.Normalization of numeric features</h4>
+<pre class="r"><code># Let&#39;s save a backup of credit data set, in case the original data is required later
+credit.bckp &lt;- credit
+# Normalize the numeric features using scale() function.
+num.vars &lt;- sapply(credit, is.numeric)
+credit[num.vars] &lt;- lapply(credit[num.vars], scale)
+# Let&#39;s check the data.
+str(credit)</code></pre>
+<pre><code>## &#39;data.frame&#39;:    1000 obs. of  17 variables:
+##  $ checking_balance    : Factor w/ 4 levels &quot;&lt; 0 DM&quot;,&quot;&gt; 200 DM&quot;,..: 1 3 4 1 1 4 4 3 4 3 ...
+##  $ months_loan_duration: num [1:1000, 1] -1.236 2.247 -0.738 1.75 0.257 ...
+##   ..- attr(*, &quot;scaled:center&quot;)= num 20.9
+##   ..- attr(*, &quot;scaled:scale&quot;)= num 12.1
+##  $ credit_history      : Factor w/ 5 levels &quot;critical&quot;,&quot;good&quot;,..: 1 2 1 2 4 2 2 2 2 1 ...
+##  $ purpose             : Factor w/ 6 levels &quot;business&quot;,&quot;car&quot;,..: 5 5 4 5 2 4 5 2 5 2 ...
+##  $ amount              : num [1:1000, 1] -0.745 0.949 -0.416 1.633 0.566 ...
+##   ..- attr(*, &quot;scaled:center&quot;)= num 3271
+##   ..- attr(*, &quot;scaled:scale&quot;)= num 2823
+##  $ savings_balance     : Factor w/ 5 levels &quot;&lt; 100 DM&quot;,&quot;&gt; 1000 DM&quot;,..: 5 1 1 1 1 5 4 1 2 1 ...
+##  $ employment_duration : Factor w/ 5 levels &quot;&lt; 1 year&quot;,&quot;&gt; 7 years&quot;,..: 2 3 4 4 3 3 2 3 4 5 ...
+##  $ percent_of_income   : num [1:1000, 1] 0.918 -0.8697 -0.8697 -0.8697 0.0241 ...
+##   ..- attr(*, &quot;scaled:center&quot;)= num 2.97
+##   ..- attr(*, &quot;scaled:scale&quot;)= num 1.12
+##  $ years_at_residence  : num [1:1000, 1] 1.046 -0.766 0.14 1.046 1.046 ...
+##   ..- attr(*, &quot;scaled:center&quot;)= num 2.85
+##   ..- attr(*, &quot;scaled:scale&quot;)= num 1.1
+##  $ age                 : num [1:1000, 1] 2.765 -1.191 1.183 0.831 1.534 ...
+##   ..- attr(*, &quot;scaled:center&quot;)= num 35.5
+##   ..- attr(*, &quot;scaled:scale&quot;)= num 11.4
+##  $ other_credit        : Factor w/ 3 levels &quot;bank&quot;,&quot;none&quot;,..: 2 2 2 2 2 2 2 2 2 2 ...
+##  $ housing             : Factor w/ 3 levels &quot;other&quot;,&quot;own&quot;,..: 2 2 2 1 1 1 2 3 2 2 ...
+##  $ existing_loans_count: num [1:1000, 1] 1.027 -0.705 -0.705 -0.705 1.027 ...
+##   ..- attr(*, &quot;scaled:center&quot;)= num 1.41
+##   ..- attr(*, &quot;scaled:scale&quot;)= num 0.578
+##  $ job                 : Factor w/ 4 levels &quot;management&quot;,&quot;skilled&quot;,..: 2 2 4 2 2 4 2 1 4 1 ...
+##  $ dependents          : num [1:1000, 1] -0.428 -0.428 2.334 2.334 2.334 ...
+##   ..- attr(*, &quot;scaled:center&quot;)= num 1.16
+##   ..- attr(*, &quot;scaled:scale&quot;)= num 0.362
+##  $ phone               : Factor w/ 2 levels &quot;no&quot;,&quot;yes&quot;: 2 1 1 1 1 2 1 2 1 1 ...
+##  $ default             : Factor w/ 2 levels &quot;no&quot;,&quot;yes&quot;: 1 2 1 1 2 1 1 1 1 2 ...</code></pre>
+<p>The preceding shows that we have rescaled the numeric features.</p>
+<pre class="r"><code>#Let&#39;s look at the default feature.
+table(credit$default)</code></pre>
+<pre><code>## 
+##  no yes 
+## 700 300</code></pre>
+<p>The preceeding shows that a total of 30 percent of the loan in the dataset went into defaut (loan applicant was unable to meet the agreed payment terms).</p>
+</div>
+<div id="creating-random-training-and-test-data-set." class="section level4">
+<h4>5.Creating random training and test data set.</h4>
+<p>Since the credit dataset had not been sorted in a random order, we will create a random training dataset using <strong>runif()</strong> function in R. Before we do that, we will first use the <strong>set.seed()</strong> function to ensure reproducibility of our sampling dataset later if needs be.</p>
+<pre class="r"><code># Let&#39;s set the seed first
+set.seed(123) 
+# Get random vector sample
+random_ids &lt;- order(runif(nrow(credit)))
+# Let&#39;s check the result of our random vector
+head(random_ids)</code></pre>
+<pre><code>## [1] 478  74 740 718 911 831</code></pre>
+<pre class="r"><code># We can use random_ids to split credit data into 90 percent (train) and 10 percent (test dataset).
+credit_train &lt;- credit[random_ids[1:900], ]
+credit_test  &lt;- credit[random_ids[901:1000], ]
+# Let&#39;s check the subset data we created.
+prop.table(table(credit_train$default))</code></pre>
+<pre><code>## 
+##  no yes 
+##   1   0</code></pre>
+<pre class="r"><code>prop.table(table(credit_test$default))</code></pre>
+<pre><code>## 
+##  no yes 
+##   1   0</code></pre>
+<pre class="r"><code>credit_resample &lt;- credit[random_ids[1:1000], ]</code></pre>
+<p>The preceding shows we have about 30% of default loans on each dataset.</p>
+</div>
+<div id="training-a-model-on-the-data." class="section level4">
+<h4>6.Training a model on the data.</h4>
+<p>Since credit data set has 9 categorical features and 7 numerical feature, we will use the <strong>knncat()</strong> function within knncat package to train our classifier. Let’s install the package.</p>
+<pre class="r"><code># Load the library.
+library(knncat)
+set.seed(1234) 
+# Let build knncat model classifier. We will start with k=sqrt of total instances.  
+# Let start with K = 31 which close to sqrt(1000)   
+# We pick an odd value of k to eliminate the chance to ending with a tie vote.
+credit_test_pred &lt;- knncat(train = credit_train, classcol = 17, k = 31)
+credit_test_pred</code></pre>
+<pre><code>## Training set misclass rate: 23%</code></pre>
+</div>
+<div id="model-validation." class="section level4">
+<h4>7. Model validation.</h4>
+<p><strong>knncat()</strong> returns a list of S3 class knncat, containing 16 elements. We will use the <strong>predict()</strong> function to get the predicted labels for each of the examples in the test dataset.</p>
+<pre class="r"><code>set.seed(1234)
+# predict() function takes an object of class Knncat
+credit_pred &lt;- predict (credit_test_pred, credit_train, credit_test, train.classcol = 17, newdata.classcol = 17)
+# Let&#39;s evaluate how well the predicted classes match the known values in credit_test$default. We will use CrossTable() function within gmodels package. Let&#39;s load the gmodels package.
+library(gmodels)
+CrossTable(x = credit_test$default, y = credit_pred, prop.chisq = FALSE)</code></pre>
+<pre><code>## 
+##  
+##    Cell Contents
+## |-------------------------|
+## |                       N |
+## |           N / Row Total |
+## |           N / Col Total |
+## |         N / Table Total |
+## |-------------------------|
+## 
+##  
+## Total Observations in Table:  100 
+## 
+##  
+##                     | credit_pred 
+## credit_test$default |        no |       yes | Row Total | 
+## --------------------|-----------|-----------|-----------|
+##                  no |        56 |        12 |        68 | 
+##                     |     0.824 |     0.176 |     0.680 | 
+##                     |     0.737 |     0.500 |           | 
+##                     |     0.560 |     0.120 |           | 
+## --------------------|-----------|-----------|-----------|
+##                 yes |        20 |        12 |        32 | 
+##                     |     0.625 |     0.375 |     0.320 | 
+##                     |     0.263 |     0.500 |           | 
+##                     |     0.200 |     0.120 |           | 
+## --------------------|-----------|-----------|-----------|
+##        Column Total |        76 |        24 |       100 | 
+##                     |     0.760 |     0.240 |           | 
+## --------------------|-----------|-----------|-----------|
+## 
+## </code></pre>
+<p>Our model correctly predicted that 56 loans did not default and 12 did default. Let’s see if we can improve our model with different k-values.</p>
+</div>
+<div id="model-tunning-various-k-values." class="section level4">
+<h4>8. Model tunning (various k values).</h4>
+<p>Let’s see if we can tune our model by testing alternative values of k. Below is the table of various k values.</p>
+<div class="figure">
+<img src="k-values-Capture.png" />
+
+</div>
+<p>The table above shows that K-value of 5 reduced the false negative from 19 to 17 but increased the false positive to 12 from 10. The percent incorrectly classified remained the same. However, we don’t know if a different set of 100 test data records will produce a somewhat different results. Let’s measure the performance of our model.</p>
+</div>
+<div id="measuring-performance-of-knncat." class="section level4">
+<h4>9. Measuring performance of knncat.</h4>
+<p>Let us install <strong>caret</strong> package to compute other performance measures.</p>
+<pre class="r"><code># Let&#39;s load caret package.
+library(caret)
+# Let&#39;s use confusionMatrix() to get more performance measures.
+confusionMatrix(credit_pred, credit_test$default, positive = &quot;yes&quot; )</code></pre>
+<pre><code>## Confusion Matrix and Statistics
+## 
+##           Reference
+## Prediction no yes
+##        no  56  20
+##        yes 12  12
+##                                        
+##                Accuracy : 0.68         
+##                  95% CI : (0.579, 0.77)
+##     No Information Rate : 0.68         
+##     P-Value [Acc &gt; NIR] : 0.548        
+##                                        
+##                   Kappa : 0.213        
+##  Mcnemar&#39;s Test P-Value : 0.216        
+##                                        
+##             Sensitivity : 0.375        
+##             Specificity : 0.824        
+##          Pos Pred Value : 0.500        
+##          Neg Pred Value : 0.737        
+##              Prevalence : 0.320        
+##          Detection Rate : 0.120        
+##    Detection Prevalence : 0.240        
+##       Balanced Accuracy : 0.599        
+##                                        
+##        &#39;Positive&#39; Class : yes          
+## </code></pre>
+<p>The output above show a table similar to that of CrossTable() function within gmodels, but it is transposed. The <strong>overall accuracy is 68%</strong>. The <strong>kappa statistic value is 0.212<em>. It indicates that there is a fair agreement between the model’s predictions and the true values. Which is an indication that there is a possibility of class imbalence in the dataset.<br />
+The <strong>sensitivity (true positive rate) is 0.375</strong> which indicates that about 38% of positives examples were correctly classified.<br />
+The <strong>specificity (true negative rate) is 0.82</strong> which indicates that about 82% of negative examples were correctly classified.<br />
+The <strong>recall or posPredValue() is 0.50 </strong>. We see in this value that when the model predict a default (a customer will defaut on his loan), it is <strong>correct about 50% of the time</strong>.<br />
+The recall uses sensitivity. The value is <strong>0.375</strong> which is low. The model might not capture a large portion of the positive examples.<br />
+The F-measure (F-score) = 2 </em> precision * recall/(recall + precision) = </strong>0.428**.<br />
+F-score assumes that equal weight should be assigned to precision and recall. Which is not always true.</p>
+<p><strong>Summary of accuracy measures:</strong></p>
+<pre class="r"><code>accuracyMeasures(credit_pred,credit_test$default,name=&quot;knncat, test&quot;)</code></pre>
+<pre><code>##          model accuracy f_score kappa sensitivity specificity
+## 1 knncat, test        1       0     0           0           1</code></pre>
+<p>Let’s see how the model will perform in the future.</p>
+</div>
+<div id="estimating-future-performance." class="section level4">
+<h4>10. Estimating future performance.</h4>
+<pre class="r"><code># Let&#39;s use technique known as k-fold cross validation. We will use the function createFolds() within caret package.
+library(irr)
+library(lpSolve)
+set.seed(123)
+folds &lt;- createFolds(credit$default, k = 10)
+cv_results &lt;- lapply(folds, function(x) {
+  credit_train1  &lt;- credit[-x, ]
+  credit_test1   &lt;- credit[x, ]
+  credit_model1  &lt;- knncat(train = credit_train1, classcol = 17, k = 31)
+  credit_pred1   &lt;- predict (credit_model1, credit_train1, credit_test1,   train.classcol = 17, newdata.classcol = 17)
+  credit_actual1 &lt;- credit_test1$default
+  kappa &lt;- kappa2(data.frame(credit_actual1, credit_pred1))$value
+  return(kappa)
+})
+# Let&#39;s examine the results.
+str(cv_results)</code></pre>
+<pre><code>## List of 10
+##  $ Fold01: num 0.349
+##  $ Fold02: num 0.257
+##  $ Fold03: num 0.157
+##  $ Fold04: num 0.212
+##  $ Fold05: num 0.455
+##  $ Fold06: num 0.526
+##  $ Fold07: num 0.263
+##  $ Fold08: num 0.141
+##  $ Fold09: num 0.46
+##  $ Fold10: num 0.321</code></pre>
+<p>Let’s compute the average of the <strong>10-fold CV</strong>. We will first apply unlist() functon on cv_results.</p>
+<pre class="r"><code># Let&#39;s use unlist() function.
+mean(unlist(cv_results))</code></pre>
+<pre><code>## [1] 0</code></pre>
+<p>The new kappa is 0.314 which is still fairly low. Though it is a bit higher than 0.212 we previously got. Let’s see if we can improve our model further.</p>
+</div>
+<div id="improving-model-performance." class="section level4">
+<h4>11. Improving model performance.</h4>
+<p>We will use bagging. It generates a number of training datasets by bootstrap sampling the original training data. We will draw a boostrap samples (random samples with replacement) from credit train data.</p>
+<pre class="r"><code>credit &lt;- credit.bckp
+credit_train &lt;- credit[random_ids[1:900], ]
+credit_test  &lt;- credit[random_ids[901:1000], ]</code></pre>
+<p><strong>Bagging with knn</strong>.</p>
+<pre class="r"><code>control &lt;- trainControl(method=&quot;repeatedcv&quot;, number=10, repeats=3)
+metric &lt;- &quot;Accuracy&quot;
+grid_knn &lt;- expand.grid(.k = c(27, 29, 31))
+set.seed(123)
+# Bagged knn
+fit.knn &lt;- train(default ~., data=credit_train, method=&quot;knn&quot;, metric=metric, trControl=control, tuneGrid = grid_knn)
+# summarize results
+bagging_results &lt;- resamples(list(knn=fit.knn, knn=fit.knn))
+summary(bagging_results)</code></pre>
+<pre><code>## 
+## Call:
+## summary.resamples(object = bagging_results)
+## 
+## Models: knn, knn 
+## Number of resamples: 30 
+## 
+## Accuracy 
+##     Min. 1st Qu. Median Mean 3rd Qu. Max. NA&#39;s
+## knn    1       1      1    1       1    1    0
+## 
+## Kappa 
+##     Min. 1st Qu. Median Mean 3rd Qu. Max. NA&#39;s
+## knn   -0       0      0    0       0    0    0</code></pre>
+<pre class="r"><code>dotplot(bagging_results)</code></pre>
+<p><img src="index_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
+<p>The preceding shows that bagging did not improve our model. Accuracy decreased a bit to about (67%) and kappa statistic decreased as well to 0.095. knn has a tendency to overfitting the training data.</p>
+</div>
+</div>
+<div id="naive-bayes-algorithm" class="section level2">
+<h2>Naive Bayes algorithm</h2>
+<p>Naive Bayes uses frequency tables to learn the data. Therefore, each feature must be categorical in order to create the combinations of class and feature values comprising of the matrix.<br />
+You might recall in paragraph 3 that credit data has 7 numerical features. Let’s discretize them.<br />
+We will use <strong>discretize()</strong> function within arules package.</p>
+<div id="discretization-of-numeric-features" class="section level4">
+<h4>12. Discretization of numeric features</h4>
+<pre class="r"><code>library(arules)
+credit &lt;- credit.bckp
+# Discretization of numeric features using discretize() function.
+num.vars &lt;- sapply(credit, is.numeric)
+credit[num.vars] &lt;- lapply(credit[num.vars], discretize)
+# Let&#39;s check the data.
+str(credit)</code></pre>
+<pre><code>## &#39;data.frame&#39;:    1000 obs. of  17 variables:
+##  $ checking_balance    : Factor w/ 4 levels &quot;&lt; 0 DM&quot;,&quot;&gt; 200 DM&quot;,..: 1 3 4 1 1 4 4 3 4 3 ...
+##  $ months_loan_duration: Factor w/ 3 levels &quot;[ 4.0,26.7)&quot;,..: 1 2 1 2 1 2 1 2 1 2 ...
+##  $ credit_history      : Factor w/ 5 levels &quot;critical&quot;,&quot;good&quot;,..: 1 2 1 2 4 2 2 2 2 1 ...
+##  $ purpose             : Factor w/ 6 levels &quot;business&quot;,&quot;car&quot;,..: 5 5 4 5 2 4 5 2 5 2 ...
+##  $ amount              : Factor w/ 3 levels &quot;[  250, 6308)&quot;,..: 1 1 1 2 1 2 1 2 1 1 ...
+##  $ savings_balance     : Factor w/ 5 levels &quot;&lt; 100 DM&quot;,&quot;&gt; 1000 DM&quot;,..: 5 1 1 1 1 5 4 1 2 1 ...
+##  $ employment_duration : Factor w/ 5 levels &quot;&lt; 1 year&quot;,&quot;&gt; 7 years&quot;,..: 2 3 4 4 3 3 2 3 4 5 ...
+##  $ percent_of_income   : Factor w/ 3 levels &quot;[1,2)&quot;,&quot;[2,3)&quot;,..: 3 2 2 2 3 2 3 2 2 3 ...
+##  $ years_at_residence  : Factor w/ 3 levels &quot;[1,2)&quot;,&quot;[2,3)&quot;,..: 3 2 3 3 3 3 3 2 3 2 ...
+##  $ age                 : Factor w/ 3 levels &quot;[19.0,37.7)&quot;,..: 3 1 2 2 2 1 2 1 3 1 ...
+##  $ other_credit        : Factor w/ 3 levels &quot;bank&quot;,&quot;none&quot;,..: 2 2 2 2 2 2 2 2 2 2 ...
+##  $ housing             : Factor w/ 3 levels &quot;other&quot;,&quot;own&quot;,..: 2 2 2 1 1 1 2 3 2 2 ...
+##  $ existing_loans_count: Factor w/ 3 levels &quot;[1,2)&quot;,&quot;[2,3)&quot;,..: 2 1 1 1 2 1 1 1 1 2 ...
+##  $ job                 : Factor w/ 4 levels &quot;management&quot;,&quot;skilled&quot;,..: 2 2 4 2 2 4 2 1 4 1 ...
+##  $ dependents          : Factor w/ 3 levels &quot;[1.00,1.33)&quot;,..: 1 1 3 3 3 3 1 1 1 1 ...
+##  $ phone               : Factor w/ 2 levels &quot;no&quot;,&quot;yes&quot;: 2 1 1 1 1 2 1 2 1 1 ...
+##  $ default             : Factor w/ 2 levels &quot;no&quot;,&quot;yes&quot;: 1 2 1 1 2 1 1 1 1 2 ...</code></pre>
+<p>The preceding shows that we discretized numeric features.</p>
+<pre class="r"><code>#Let&#39;s look at the default feature.
+table(credit$default)</code></pre>
+<pre><code>## 
+##  no yes 
+## 700 300</code></pre>
+<p>The preceeding shows that a total of 30 percent of the loan in the dataset went into defaut (loan applicant was unable to meet the agreed payment terms).</p>
+</div>
+<div id="creating-random-training-and-test-data-set.-1" class="section level4">
+<h4>13.Creating random training and test data set.</h4>
+<pre class="r"><code># Let&#39;s backup the sdiscretization credit data.
+credit_NB &lt;- credit
+# Let&#39;s remove the target feature (default)
+credit_NB &lt;- credit_NB[-17]
+# Let&#39;s set the seed first
+set.seed(123) 
+# Get random vector sample
+random_ids &lt;- order(runif(nrow(credit_NB)))
+# Let&#39;s check the result of our random vector
+head(random_ids)</code></pre>
+<pre><code>## [1] 478  74 740 718 911 831</code></pre>
+<pre class="r"><code># We can use random_ids to split credit data into 90 percent (train) and 10 percent (test dataset).
+credit_train &lt;- credit_NB[random_ids[1:900], ]
+credit_test  &lt;- credit_NB[random_ids[901:1000], ]
+# let&#39;s create train and test labels.
+credit_train_labels &lt;- credit[random_ids[1:900], ]$default
+credit_test_labels &lt;- credit[random_ids[901:1000], ]$default
+# Let&#39;s check the subset data we created.
+round(prop.table(table(credit_train_labels))*100, digits = 2)</code></pre>
+<pre><code>## credit_train_labels
+##  no yes 
+##  70  30</code></pre>
+<pre class="r"><code>prop.table(table(credit_test_labels))*100</code></pre>
+<pre><code>## credit_test_labels
+##  no yes 
+##  68  32</code></pre>
+<p>The preceding shows that both the training and the test data contain about 30 percent of default loans.</p>
+</div>
+<div id="training-a-model-on-the-data.-1" class="section level4">
+<h4>14.Training a model on the data.</h4>
+<p>We will use <strong>naiveBayes()</strong> function within e1071 package. Let’s install it.</p>
+<pre class="r"><code># Let&#39;s load e1071 package.
+library(e1071)
+set.seed(1234)
+# Let&#39;s build the model with laplace = 0.
+credit_model_nb &lt;- naiveBayes(credit_train, credit_train_labels)</code></pre>
+</div>
+<div id="model-validation-on-unseen-data." class="section level4">
+<h4>15.Model validation on unseen data.</h4>
+<p>We will test our predictions on unseen data in the test data set. Let’s use the <strong>predict()</strong> function.</p>
+<pre class="r"><code>set.seed(1234)
+credit_test_pred_nb &lt;- predict(credit_model_nb, credit_test)
+# We will use CrossTable() function to compare the predictions to true values.
+CrossTable(credit_test_pred_nb, credit_test_labels, prop.chisq = FALSE, prop.t = FALSE, dnn = c(&quot;predicted&quot;, &quot;actual&quot;))</code></pre>
+<pre><code>## 
+##  
+##    Cell Contents
+## |-------------------------|
+## |                       N |
+## |           N / Row Total |
+## |           N / Col Total |
+## |-------------------------|
+## 
+##  
+## Total Observations in Table:  100 
+## 
+##  
+##              | actual 
+##    predicted |        no |       yes | Row Total | 
+## -------------|-----------|-----------|-----------|
+##           no |        55 |        15 |        70 | 
+##              |     0.786 |     0.214 |     0.700 | 
+##              |     0.809 |     0.469 |           | 
+## -------------|-----------|-----------|-----------|
+##          yes |        13 |        17 |        30 | 
+##              |     0.433 |     0.567 |     0.300 | 
+##              |     0.191 |     0.531 |           | 
+## -------------|-----------|-----------|-----------|
+## Column Total |        68 |        32 |       100 | 
+##              |     0.680 |     0.320 |           | 
+## -------------|-----------|-----------|-----------|
+## 
+## </code></pre>
+<p>The preceding shows that a total of (12 + 17) = 29 loans were incorrectly classified (29 percent). We also had 12 out of 68 loans that were misclassified as default, and 17 out of 32 loans were incorrectly labeled as not defaulting.</p>
+<p><strong>Summary of results:</strong></p>
+<pre class="r"><code>accuracyMeasures(credit_test_pred_nb,credit_test_labels,name=&quot;Naive Bayes, test&quot;)</code></pre>
+<pre><code>##               model accuracy f_score kappa sensitivity specificity
+## 1 Naive Bayes, test        1       1     0           1           1</code></pre>
+</div>
+<div id="model-tunning-using-laplace-1." class="section level4">
+<h4>16.Model tunning (using Laplace = 1).</h4>
+<p>Let’s build another naive Bayes model with <strong>laplace = 1</strong>.</p>
+<pre class="r"><code>set.seed(1234)
+credit_model_nb2 &lt;- naiveBayes(credit_train, credit_train_labels, laplace = 1)
+# Let&#39;s make another prediction.
+set.seed(1234)
+credit_test_pred_nb2 &lt;- predict(credit_model_nb2, credit_test)
+# Let&#39;s compare the predictions using CrossTable() function.
+CrossTable(credit_test_pred_nb2, credit_test_labels, prop.chisq = FALSE, prop.t = FALSE, dnn = c(&quot;predicted&quot;, &quot;actual&quot;))</code></pre>
+<pre><code>## 
+##  
+##    Cell Contents
+## |-------------------------|
+## |                       N |
+## |           N / Row Total |
+## |           N / Col Total |
+## |-------------------------|
+## 
+##  
+## Total Observations in Table:  100 
+## 
+##  
+##              | actual 
+##    predicted |        no |       yes | Row Total | 
+## -------------|-----------|-----------|-----------|
+##           no |        55 |        16 |        71 | 
+##              |     0.775 |     0.225 |     0.710 | 
+##              |     0.809 |     0.500 |           | 
+## -------------|-----------|-----------|-----------|
+##          yes |        13 |        16 |        29 | 
+##              |     0.448 |     0.552 |     0.290 | 
+##              |     0.191 |     0.500 |           | 
+## -------------|-----------|-----------|-----------|
+## Column Total |        68 |        32 |       100 | 
+##              |     0.680 |     0.320 |           | 
+## -------------|-----------|-----------|-----------|
+## 
+## </code></pre>
+<p>The preceding shows that by adding the Laplace estimator, we did increase the number of false positives from 17 to 18. We will look at other performance measures.</p>
+<p>** Summary of results:**</p>
+<pre class="r"><code>accuracyMeasures(credit_test_pred_nb2,credit_test_labels,name=&quot;Naive Bayes, test&quot;)</code></pre>
+<pre><code>##               model accuracy f_score kappa sensitivity specificity
+## 1 Naive Bayes, test        1       1     0           0           1</code></pre>
+<p>The preceding shows that the model obtained with Laplace = 1 did not improve the performance of our model. Accuracy reamins the same, f_score and kappa statistic decreased.</p>
+</div>
+<div id="measuring-performance-of-naive-bayes." class="section level4">
+<h4>17. Measuring performance of Naive Bayes.</h4>
+<p>Let’s compute other performance measures.</p>
+<pre class="r"><code># Let&#39;s create the predicted probabilities from naive Bayes classifier with laplace = 1.
+credit_test_prob_nb2 &lt;- predict(credit_model_nb2, credit_test, type = &quot;raw&quot;)
+# Let&#39;s check the probability data
+head(credit_test_prob_nb2)</code></pre>
+<pre><code>##      no yes
+## [1,]  0   1
+## [2,]  0   1
+## [3,]  0   1
+## [4,]  1   0
+## [5,]  1   0
+## [6,]  1   0</code></pre>
+<pre class="r"><code># Let&#39;s use confusionMatrix() to get more performance measures.
+confusionMatrix(credit_test_pred_nb2, credit_test_labels, positive = &quot;yes&quot; )</code></pre>
+<pre><code>## Confusion Matrix and Statistics
+## 
+##           Reference
+## Prediction no yes
+##        no  55  16
+##        yes 13  16
+##                                         
+##                Accuracy : 0.71          
+##                  95% CI : (0.611, 0.796)
+##     No Information Rate : 0.68          
+##     P-Value [Acc &gt; NIR] : 0.299         
+##                                         
+##                   Kappa : 0.317         
+##  Mcnemar&#39;s Test P-Value : 0.710         
+##                                         
+##             Sensitivity : 0.500         
+##             Specificity : 0.809         
+##          Pos Pred Value : 0.552         
+##          Neg Pred Value : 0.775         
+##              Prevalence : 0.320         
+##          Detection Rate : 0.160         
+##    Detection Prevalence : 0.290         
+##       Balanced Accuracy : 0.654         
+##                                         
+##        &#39;Positive&#39; Class : yes           
+## </code></pre>
+<p>The output above show a table similar to that of CrossTable() function within gmodels, but it is transposed. The <strong>overall accuracy is 71%</strong>. The <strong>kappa statistic value is 0.292</strong>. It indicates that there is a fair agreement between the model’s predictions and the true values. Which is an indication that there is a possibility of class imbalence in the dataset.<br />
+The <strong>sensitivity (true positive rate) is 0.437</strong> which indicates that about 44% of positives examples were correctly classified.<br />
+The <strong>specificity (true negative rate) is 0.838</strong> which indicates that about 84% of negative examples were correctly classified.<br />
+The <strong>precision or posPredValue() is 0.56</strong>. We see in this value that when the model predict a default (a customer will defaut on his loan), it is <strong>correct about 56% of the time</strong>.<br />
+The recall uses sensitivity. The value is <strong>0.437</strong> which is low. The model might not capture a large portion of the positive examples.<br />
+The F-measure (F-score) = 2 * precision * recall/(recall + precision) = <strong>0.49</strong>.<br />
+F-score assumes that equal weight should be assigned to precision and recall. Which is not always true.<br />
+Let’s estimate future performance.</p>
+</div>
+<div id="estimating-future-performance.-1" class="section level4">
+<h4>18. Estimating future performance.</h4>
+<p>Let’s use technique known as k-fold cross validation. We will use the function createFolds() within caret package.</p>
+<pre class="r"><code>library(irr)
+library(lpSolve)
+set.seed(1000)
+folds &lt;- createFolds(credit$default, k = 10)
+cv_results &lt;- lapply(folds, function(x) {
+  credit_train2  &lt;- credit_NB[-x, ]
+  credit_test2   &lt;- credit_NB[x, ]
+  credit_model2  &lt;- naiveBayes(credit_train2, credit_train_labels, laplace = 1)  
+  credit_pred2    &lt;- predict(credit_model2, credit_test2)
+  credit_actual2 &lt;- credit_test_labels
+  kappa &lt;- kappa2(data.frame(credit_actual2, credit_pred2))$value
+  return(kappa)
+})
+# Let&#39;s examine the results.
+str(cv_results)</code></pre>
+<pre><code>## List of 10
+##  $ Fold01: num 0.103
+##  $ Fold02: num 0.0431
+##  $ Fold03: num -0.0391
+##  $ Fold04: num -0.0198
+##  $ Fold05: num -0.0198
+##  $ Fold06: num -0.0167
+##  $ Fold07: num -0.0167
+##  $ Fold08: num 0.00242
+##  $ Fold09: num 0.103
+##  $ Fold10: num 0.0629</code></pre>
+<p>Let’s compute the average of the <strong>10-fold CV</strong>. We will first apply unlist() functon on cv_results.</p>
+<pre class="r"><code># Let&#39;s use unlist() function.
+mean(unlist(cv_results))</code></pre>
+<pre><code>## [1] 0</code></pre>
+<p>The preceding shows that the 10-fold CV did not improve the model. Kappa statistic decreased to <em>0.020</em> which is less than <em>0.29</em>.</p>
+</div>
+<div id="improving-model-performance.-1" class="section level4">
+<h4>19. Improving model performance.</h4>
+<p>We will use bagging technique. It generates a number of training datasets by bootstrap sampling the original training data. We will draw a boostrap samples (random samples with replacement) from credit train data.</p>
+<pre class="r"><code>library(caret)
+library(ipred)
+library(randomForest)
+library(irr)
+library(kernlab)
+library(e1071)
+library(adabag)
+
+credit &lt;- credit.bckp
+credit_train &lt;- credit[random_ids[1:900], ]
+credit_test  &lt;- credit[random_ids[901:1000], ]</code></pre>
+<p><strong>Bagging with knn</strong>.</p>
+<pre class="r"><code>control &lt;- trainControl(method=&quot;repeatedcv&quot;, number=10, repeats=3)
+metric &lt;- &quot;Accuracy&quot;
+set.seed(123)
+# Bagged naive Bayes
+fit.nb &lt;- train(default ~., data=credit_train, method=&quot;nb&quot;, metric=metric, trControl=control) 
+# summarize results
+bagging_results &lt;- resamples(list(nb=fit.nb, nb=fit.nb))
+summary(bagging_results)</code></pre>
+<pre><code>## 
+## Call:
+## summary.resamples(object = bagging_results)
+## 
+## Models: nb, nb 
+## Number of resamples: 30 
+## 
+## Accuracy 
+##    Min. 1st Qu. Median Mean 3rd Qu. Max. NA&#39;s
+## nb    1       1      1    1       1    1    0
+## 
+## Kappa 
+##    Min. 1st Qu. Median Mean 3rd Qu. Max. NA&#39;s
+## nb    0       0      0    0       0    1    0</code></pre>
+<pre class="r"><code>dotplot(bagging_results)</code></pre>
+<p><img src="index_files/figure-html/unnamed-chunk-26-1.png" width="672" /></p>
+<p>The preceding shows that bagging performed better (kappa ststistic = 0.3) than k-fold cross validation.</p>
+</div>
+</div>
+<div id="final-machine-learning-selection-based-on-kappa." class="section level2">
+<h2>Final machine learning selection based on kappa.</h2>
+<pre class="r"><code>control &lt;- trainControl(method=&quot;repeatedcv&quot;, number=10, repeats=3)
+metric &lt;- &quot;Accuracy&quot;
+set.seed(123)
+# Bagged knn
+fit.knn &lt;- train(default ~., data=credit_train, method=&quot;knn&quot;, metric=metric, trControl=control)
+# Bagged nb
+fit.nb &lt;- train(default ~., data=credit_train, method=&quot;nb&quot;, metric=metric, trControl=control)
+# summarize results
+bagging_results &lt;- resamples(list(knn=fit.knn, nb=fit.nb))
+summary(bagging_results)</code></pre>
+<pre><code>## 
+## Call:
+## summary.resamples(object = bagging_results)
+## 
+## Models: knn, nb 
+## Number of resamples: 30 
+## 
+## Accuracy 
+##     Min. 1st Qu. Median Mean 3rd Qu. Max. NA&#39;s
+## knn    1       1      1    1       1    1    0
+## nb     1       1      1    1       1    1    0
+## 
+## Kappa 
+##     Min. 1st Qu. Median Mean 3rd Qu. Max. NA&#39;s
+## knn   -0       0      0    0       0    0    0
+## nb     0       0      0    0       0    0    0</code></pre>
+<pre class="r"><code>dotplot(bagging_results)</code></pre>
+<p><img src="index_files/figure-html/unnamed-chunk-27-1.png" width="672" /></p>
+<p>The preceding plot shows that kappa statistic and accuracy of naive bayes algorithm are higher than that of knn. Based on these performance measures, we will select Naive Bayes algorithm to be used on the credit data.</p>
+</div>
+<div id="conclusion" class="section level2">
+<h2>20.Conclusion</h2>
+<ul>
+<li>knn accuracy was comparable to that of naive Bayes.<br />
+</li>
+<li>k-fold cross validation of knn and naive Bayes performed poorly.<br />
+</li>
+<li>Bagging with Naive Bayes performed better than bagging with knn.</li>
+</ul>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+$(document).ready(function () {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

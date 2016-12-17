@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+<meta name="author" content="Pascal Tagne" />
+
+<meta name="date" content="2016-11-23" />
+
+<title>Problem 8: k-means versus hierarchical clustering on iris data set</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cerulean.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<link href="site_libs/font-awesome-4.5.0/css/font-awesome.min.css" rel="stylesheet" />
+
+<style type="text/css">code{white-space: pre;}</style>
+<link rel="stylesheet"
+      href="site_libs/highlight/textmate.css"
+      type="text/css" />
+<script src="site_libs/highlight/highlight.js"></script>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs && document.readyState && document.readyState === "complete") {
+   window.setTimeout(function() {
+      hljs.initHighlighting();
+   }, 0);
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+<link rel="stylesheet" href="styles.css" type="text/css" />
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+
+
+<div class="navbar navbar-inverse  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Pascal Tagne</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">
+    <span class="fa fa-home"></span>
+     
+    Home
+  </a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-info"></span>
+     
+    Works
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li class="dropdown-header">Data Science with R</li>
+    <li>
+      <a href="about.html">Table of contents</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Machine Learning with R</li>
+    <li>
+      <a href="TOC_Final_Project.html">Table of contents</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-gear"></span>
+     
+    Projects
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="Problem_3_Final.html">Python Programming</a>
+    </li>
+    <li>
+      <a href="Problem_4_Final.html">Hadoop Cloudera</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Computer Networks</li>
+    <li class="dropdown-header">Computer Network Security</li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Problem 8: k-means versus hierarchical clustering on iris data set</h1>
+<h4 class="author"><em>Pascal Tagne</em></h4>
+<h4 class="date"><em>November 23, 2016</em></h4>
+
+</div>
+
+
+<div id="introduction" class="section level4">
+<h4>1.Introduction</h4>
+<p>This report describes a case study of Iris plants using <strong>k-means</strong> and <strong>hclust</strong> algorithms. It uses machine learning and respectively <strong>kmeans()</strong> function in the <em>stats</em> package and <strong>hclust()</strong> function in the <em>stats</em> package to build two iris’s cluster models. This report will compare both kmeans and hclust predictive results on the iris data set and will select the model that can best predict the class of iris plant.</p>
+</div>
+<div id="data-collection" class="section level4">
+<h4>2.Data collection</h4>
+<p>This case study uses Iris data Set. It is the original dataset, in the form provided by Mr. R.A. Fisher and contains 5 attributs. The original data set had 150 instances (50 in each of three classes) and 5 features (1 categorical and 4 numeric features) and can be found at: <a href="http://archive.ics.uci.edu/ml/datasets/Iris" class="uri">http://archive.ics.uci.edu/ml/datasets/Iris</a>.</p>
+<p>The data used in this report has been modified from the original data set in one way. A header with features names was added to assist with identification using data definition provided in <a href="http://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.names" class="uri">http://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.names</a>.</p>
+</div>
+<div id="exploring-and-preparing-the-data" class="section level4">
+<h4>3.Exploring and preparing the data</h4>
+<pre class="r"><code># Import credit data. Since majority of features is nominal, we will use defaut option to import data.
+iris1 &lt;- read.csv(&quot;iris1.csv&quot;, header = FALSE)
+# iris &lt;- read.csv(&quot;iris1.csv&quot;, header = FALSE)
+#Let&#39;s verify if the data is read properly.
+str(iris1)</code></pre>
+<pre><code>## &#39;data.frame&#39;:    150 obs. of  5 variables:
+##  $ V1: num  5.1 4.9 4.7 4.6 5 5.4 4.6 5 4.4 4.9 ...
+##  $ V2: num  3.5 3 3.2 3.1 3.6 3.9 3.4 3.4 2.9 3.1 ...
+##  $ V3: num  1.4 1.4 1.3 1.5 1.4 1.7 1.4 1.5 1.4 1.5 ...
+##  $ V4: num  0.2 0.2 0.2 0.2 0.2 0.4 0.3 0.2 0.2 0.1 ...
+##  $ V5: Factor w/ 3 levels &quot;Iris-setosa&quot;,..: 1 1 1 1 1 1 1 1 1 1 ...</code></pre>
+<pre class="r"><code># Let set the column names of our data frame.
+colnames(iris1) &lt;- c(&quot;sepal.length&quot;, &quot;sepal.width&quot;, &quot;petal.length&quot;, &quot;petal.width&quot;, &quot;class&quot;)
+# Let&#39;s check the data.
+head(iris1)</code></pre>
+<pre><code>##   sepal.length sepal.width petal.length petal.width       class
+## 1          5.1         3.5          1.4         0.2 Iris-setosa
+## 2          4.9         3.0          1.4         0.2 Iris-setosa
+## 3          4.7         3.2          1.3         0.2 Iris-setosa
+## 4          4.6         3.1          1.5         0.2 Iris-setosa
+## 5          5.0         3.6          1.4         0.2 Iris-setosa
+## 6          5.4         3.9          1.7         0.4 Iris-setosa</code></pre>
+<pre class="r"><code># It worked.</code></pre>
+<p>The preceding shows that we have 5 features: 1 categorical and 4 numeric features. All the variables have names for identification.</p>
+<p><strong>Let’s look at the summary statistics of our data.</strong></p>
+<pre class="r"><code>summary(iris1)</code></pre>
+<pre><code>##   sepal.length       sepal.width     petal.length       petal.width      
+##  Min.   :4.300000   Min.   :2.000   Min.   :1.000000   Min.   :0.100000  
+##  1st Qu.:5.100000   1st Qu.:2.800   1st Qu.:1.600000   1st Qu.:0.300000  
+##  Median :5.800000   Median :3.000   Median :4.350000   Median :1.300000  
+##  Mean   :5.843333   Mean   :3.054   Mean   :3.758667   Mean   :1.198667  
+##  3rd Qu.:6.400000   3rd Qu.:3.300   3rd Qu.:5.100000   3rd Qu.:1.800000  
+##  Max.   :7.900000   Max.   :4.400   Max.   :6.900000   Max.   :2.500000  
+##              class   
+##  Iris-setosa    :50  
+##  Iris-versicolor:50  
+##  Iris-virginica :50  
+##                      
+##                      
+## </code></pre>
+<pre class="r"><code>range(iris1$sepal.length)</code></pre>
+<pre><code>## [1] 4.3 7.9</code></pre>
+<pre class="r"><code>range(iris1$petal.length)</code></pre>
+<pre><code>## [1] 1.0 6.9</code></pre>
+<p>The preceding shows that there is no missing value. We also noticed that sepal.length has a narrow range compared to petal.length.</p>
+<p><strong>Let’s visualize our data.</strong></p>
+<pre class="r"><code>pairs(iris1[1:4],main=&quot;Iris Data (red=setosa,green=versicolor,blue=virginica)&quot;, pch=21,  bg=c(&quot;red&quot;,&quot;green3&quot;,&quot;blue&quot;)[unclass(iris1$class)])</code></pre>
+<p><img src="Problem_8_Final_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<p>The preceding shows that Setosa irises have shorter petals than the other two species. Let’s plot the scatter plot of our data.</p>
+<pre class="r"><code>library(ggplot2)
+ggplot(iris1, aes(petal.length, petal.width, color = class)) + geom_point()</code></pre>
+<p><img src="Problem_8_Final_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<p>The above plot shows similarity amount pedal.length and pedal.width among same spacies.</p>
+</div>
+<div id="training-a-model-on-the-data." class="section level3">
+<h3>4. Training a model on the data.</h3>
+<p>We will use <strong>kmeans()</strong> function in stats package to build our classifier. But, kmeans requires a data frame containing only numeric features. Let’s not use the categorical feature to build our classifier.</p>
+<p>Since kmeans uses distance calculation to compute distance between cluster, we need to normalize or z-score standardize the features.</p>
+<pre class="r"><code>iris_z &lt;- as.data.frame(lapply(iris1[-5], scale))
+# Let&#39;s check the data.
+head(iris_z)</code></pre>
+<pre><code>##    sepal.length   sepal.width petal.length  petal.width
+## 1 -0.8976738792  1.0286112809 -1.336794020 -1.308592819
+## 2 -1.1392004835 -0.1245403793 -1.336794020 -1.308592819
+## 3 -1.3807270877  0.3367202848 -1.393469855 -1.308592819
+## 4 -1.5014903899  0.1060899527 -1.280118186 -1.308592819
+## 5 -1.0184371813  1.2592416129 -1.336794020 -1.308592819
+## 6 -0.5353839728  1.9511326091 -1.166766516 -1.046524832</code></pre>
+<pre class="r"><code># It worked.</code></pre>
+<p>Since we have prior knowledge on the iris data, we will use 3 cluster to start with. Let’s build our model.</p>
+<pre class="r"><code>set.seed(300)
+iris_cluster &lt;- kmeans(iris_z, 3)</code></pre>
+</div>
+<div id="evaluating-model-performance." class="section level3">
+<h3>5. Evaluating model performance.</h3>
+<pre class="r"><code># Let&#39;s look at the cluster size.
+iris_cluster$size</code></pre>
+<pre><code>## [1] 47 50 53</code></pre>
+<p>The preceding shows that we have 3 clusters and that the smallest size is 47 (31.33 percent). The largest size is 53 (35.33 percent). The smallest and the largest cluster are similar in size. Let’s examine the coordinates of the cluster centroids.</p>
+<pre class="r"><code>iris_cluster$centers</code></pre>
+<pre><code>##     sepal.length    sepal.width  petal.length   petal.width
+## 1  1.13217736944  0.09627589606  0.9929445451  1.0137756263
+## 2 -1.01119138320  0.83949440862 -1.3005214861 -1.2509378621
+## 3 -0.05005221139 -0.87735259520  0.3463713337  0.2811214843</code></pre>
+<p>The preceding shows 3 rows referring to the three clusters.</p>
+<p>Let us compare the clusters with the species.</p>
+<pre class="r"><code>table(iris_cluster$cluster, iris1$class)</code></pre>
+<pre><code>##    
+##     Iris-setosa Iris-versicolor Iris-virginica
+##   1           0              11             36
+##   2          50               0              0
+##   3           0              39             14</code></pre>
+<p>From the table above, it appears that setosa got group into cluster 2, versicolor in cluster 3, and virginica in cluster 1.</p>
+<p>We can also plot the data to see the clusters:</p>
+<pre class="r"><code>iris_z$cluster &lt;- iris_cluster$cluster
+ggplot(iris_z, aes(petal.length, petal.width, color = as.factor(iris_cluster$cluster))) + geom_point()</code></pre>
+<p><img src="Problem_8_Final_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+<p>The above plot shows the 3 clusters: 1 = setosa, 2 = versicolor, 3 = virginica.</p>
+<p>If we didn’t have prior knowledge, we could have used kmeansruns() within the <strong>fpc</strong> package to pick initial k. kmeansruns uses two criteria: the Calinski-Harabasz Index (“ch”), and the average silhouette width (“asw”). Let’s check it out.</p>
+<pre class="r"><code># Let&#39;s load fpc.
+library(fpc)
+# CH pick
+clustering.ch &lt;- kmeansruns(iris_z, krange=1:10, criterion=&quot;ch&quot;)
+clustering.ch$bestk</code></pre>
+<pre><code>## [1] 3</code></pre>
+<pre class="r"><code># ASW pick
+clustering.asw &lt;- kmeansruns(iris_z, krange=1:10, criterion=&quot;asw&quot;)
+clustering.asw$bestk</code></pre>
+<pre><code>## [1] 3</code></pre>
+<p>The preceding shows that both ASW and CH picked 3 clusters. Let’s plot the values for the two criteria.</p>
+<pre class="r"><code>library(ggplot2)
+library(reshape2)
+clustering.ch$crit</code></pre>
+<pre><code>##  [1]   0.0000000 171.9090753 291.7060599 249.3984903 227.4609058
+##  [6] 219.0376373 207.6595129 203.5891985 195.2147149 201.1170439</code></pre>
+<pre class="r"><code>clustering.asw$crit</code></pre>
+<pre><code>##  [1] 0.0000000000 0.5184736527 0.5962332646 0.5161220826 0.4297832213
+##  [6] 0.3772330947 0.3777171029 0.3819795355 0.3726286534 0.3490334477</code></pre>
+<pre class="r"><code>critframe &lt;- data.frame(k=1:10, ch=scale(clustering.ch$crit), asw=scale(clustering.asw$crit))
+critframe &lt;- melt(critframe, id.vars=c(&quot;k&quot;), variable.name=&quot;measure&quot;, value.name=&quot;score&quot;)
+ggplot(critframe, aes(x=k, y=score, color=measure)) + geom_point(aes(shape=measure)) + geom_line(aes(linetype=measure)) + scale_x_continuous(breaks=1:10, labels=1:10) + labs(title=&quot;The Calinski-Harabasz and average silhouette width indices for 1-10 cluster&quot;)</code></pre>
+<p><img src="Problem_8_Final_files/figure-html/unnamed-chunk-12-1.png" width="768" /></p>
+<p>The above plot suggests that k=3 cluster was the best choice for both CH and ASW method.</p>
+</div>
+<div id="hierarchical-clustering-with-hclust." class="section level3">
+<h3>6.Hierarchical clustering with hclust().</h3>
+<p>The hclust() function takes as input a distance matrix (as an object of class dist), which records the distances between all pairs of points in the data (using any one of a variety of metrics). It returns a <strong>dendrogram</strong>: a tree that representes the nested cluster.<br />
+Let’s cluster the iris data.</p>
+<pre class="r"><code># Let&#39;s create distance matrix
+d &lt;- dist(iris_z, method = &quot;euclidean&quot;)
+# Let&#39;s do the cluster
+irisfit &lt;- hclust(d, method = &quot;ward&quot;)</code></pre>
+<pre><code>## The &quot;ward&quot; method has been renamed to &quot;ward.D&quot;; note new &quot;ward.D2&quot;</code></pre>
+<pre class="r"><code># Let&#39;s plot the dendrogram.
+plot(irisfit, main= &quot;ward - Linkage Clustering&quot;)
+rect.hclust(irisfit, k=3)</code></pre>
+<p><img src="Problem_8_Final_files/figure-html/unnamed-chunk-13-1.png" width="768" /></p>
+<p>The dendrogram suggests 3 clusters. The dendrogram displays how items are combined into cluster and is read from the bottom up.</p>
+<p><strong>Let’s extract the cluster found in hclust().</strong></p>
+<pre class="r"><code>library(fpc)
+clusters &lt;- cutree(irisfit, k=3)
+table(clusters)</code></pre>
+<pre><code>## clusters
+##  1  2  3 
+## 49 54 47</code></pre>
+<pre class="r"><code>table(clusters,iris1$class)</code></pre>
+<pre><code>##         
+## clusters Iris-setosa Iris-versicolor Iris-virginica
+##        1          49               0              0
+##        2           1              39             14
+##        3           0              11             36</code></pre>
+<p>The preceding shows that we have 3 clusters. The first has 49 observations, the second has 54, and the third has 47 observations.</p>
+</div>
+<div id="conclusion" class="section level3">
+<h3>7. Conclusion:</h3>
+<ul>
+<li>Both Kmeans and hclust picked the same number of cluster k=3.<br />
+</li>
+<li>K means clustering (Partitioning clustering) can handle larger datasets than hierarchical cluster.<br />
+</li>
+<li>Additionally. observations aren’t permanently committed to a cluster. They moved, when doing so, improves the overall solution.<br />
+</li>
+<li>Unlike hierarchical clustering, kmeans clustering requires that you specify in advance the number of clusters to extract.<br />
+</li>
+<li>Finally, <strong>kmeansruns()</strong> within the fpc package can be used as a guide to find the best number of cluster to start with. Provided the number of observation is small.<br />
+</li>
+<li>Hierarchical clustering can be useful when you expect nested clustering and a meaningful hierarchy.</li>
+</ul>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+$(document).ready(function () {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

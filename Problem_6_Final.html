@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+<meta name="author" content="Pascal Tagne" />
+
+<meta name="date" content="2016-11-20" />
+
+<title>Problem 6: Predict the sale price of used automobile.</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cerulean.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<link href="site_libs/font-awesome-4.5.0/css/font-awesome.min.css" rel="stylesheet" />
+
+<style type="text/css">code{white-space: pre;}</style>
+<link rel="stylesheet"
+      href="site_libs/highlight/textmate.css"
+      type="text/css" />
+<script src="site_libs/highlight/highlight.js"></script>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs && document.readyState && document.readyState === "complete") {
+   window.setTimeout(function() {
+      hljs.initHighlighting();
+   }, 0);
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+<link rel="stylesheet" href="styles.css" type="text/css" />
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+
+
+<div class="navbar navbar-inverse  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Pascal Tagne</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">
+    <span class="fa fa-home"></span>
+     
+    Home
+  </a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-info"></span>
+     
+    Works
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li class="dropdown-header">Data Science with R</li>
+    <li>
+      <a href="about.html">Table of contents</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Machine Learning with R</li>
+    <li>
+      <a href="TOC_Final_Project.html">Table of contents</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-gear"></span>
+     
+    Projects
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="Problem_3_Final.html">Python Programming</a>
+    </li>
+    <li>
+      <a href="Problem_4_Final.html">Hadoop Cloudera</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Computer Networks</li>
+    <li class="dropdown-header">Computer Network Security</li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Problem 6: Predict the sale price of used automobile.</h1>
+<h4 class="author"><em>Pascal Tagne</em></h4>
+<h4 class="date"><em>November 20, 2016</em></h4>
+
+</div>
+
+
+<div id="introduction" class="section level3">
+<h3>1.Introduction</h3>
+<p>This report describes a case study of used automobile prices. It uses machine learning and regression methods to predict the sale price of a used automobile.</p>
+</div>
+<div id="data-collection" class="section level3">
+<h3>2.Data collection</h3>
+<p>This case study uses ToyotaCorolla data Set. The original data set had 1436 instances and 10 features (2 categorical, 1 character, and 7 numeric features).</p>
+<pre class="r"><code>##############################################################################  
+###############** Function to check accuracy measures ** #####################  
+############################################################################## 
+library(lpSolve)
+library(ipred)
+library(irr)
+accuracyMeasures &lt;- function(pred, truth, name=&quot;model&quot;) {   
+  ctable &lt;- table(truth=truth, pred = pred)
+  accuracy &lt;- sum(diag(ctable))/sum(ctable)
+  kappa &lt;- kappa2(data.frame(truth, pred))$value
+  data.frame(model=name, accuracy=accuracy, kappa=kappa)
+}</code></pre>
+</div>
+<div id="exploring-and-preparing-the-data" class="section level3">
+<h3>3.Exploring and preparing the data</h3>
+<pre class="r"><code># Import ToyotaCorolla data. 
+carDf &lt;- read.csv(&quot;ToyotaCorolla.csv&quot;, stringsAsFactors = FALSE)
+#Let&#39;s verify if the data is read properly.
+str(carDf)</code></pre>
+<pre><code>## &#39;data.frame&#39;:    1436 obs. of  10 variables:
+##  $ Price    : int  13500 13750 13950 14950 13750 12950 16900 18600 21500 12950 ...
+##  $ Age      : int  23 23 24 26 30 32 27 30 27 23 ...
+##  $ KM       : int  46986 72937 41711 48000 38500 61000 94612 75889 19700 71138 ...
+##  $ FuelType : chr  &quot;Diesel&quot; &quot;Diesel&quot; &quot;Diesel&quot; &quot;Diesel&quot; ...
+##  $ HP       : int  90 90 90 90 90 90 90 90 192 69 ...
+##  $ MetColor : int  1 1 1 0 0 0 1 1 0 0 ...
+##  $ Automatic: int  0 0 0 0 0 0 0 0 0 0 ...
+##  $ CC       : int  2000 2000 2000 2000 2000 2000 2000 2000 1800 1900 ...
+##  $ Doors    : int  3 3 3 3 3 3 3 3 3 3 ...
+##  $ Weight   : int  1165 1165 1165 1165 1170 1170 1245 1245 1185 1105 ...</code></pre>
+<pre class="r"><code># Let&#39;s check the data.
+head(carDf)</code></pre>
+<pre><code>##   Price Age    KM FuelType HP MetColor Automatic   CC Doors Weight
+## 1 13500  23 46986   Diesel 90        1         0 2000     3   1165
+## 2 13750  23 72937   Diesel 90        1         0 2000     3   1165
+## 3 13950  24 41711   Diesel 90        1         0 2000     3   1165
+## 4 14950  26 48000   Diesel 90        0         0 2000     3   1165
+## 5 13750  30 38500   Diesel 90        0         0 2000     3   1170
+## 6 12950  32 61000   Diesel 90        0         0 2000     3   1170</code></pre>
+<pre class="r"><code># Let&#39;s save a backup of the original data set.
+carDf.bkup &lt;- carDf</code></pre>
+<p><strong>Let’s look at the summary statistics of our data.</strong></p>
+<pre class="r"><code>summary(carDf)</code></pre>
+<pre><code>##      Price               Age                 KM           
+##  Min.   : 4350.00   Min.   : 1.00000   Min.   :     1.00  
+##  1st Qu.: 8450.00   1st Qu.:44.00000   1st Qu.: 43000.00  
+##  Median : 9900.00   Median :61.00000   Median : 63389.50  
+##  Mean   :10730.82   Mean   :55.94708   Mean   : 68533.26  
+##  3rd Qu.:11950.00   3rd Qu.:70.00000   3rd Qu.: 87020.75  
+##  Max.   :32500.00   Max.   :80.00000   Max.   :243000.00  
+##    FuelType               HP              MetColor        
+##  Length:1436        Min.   : 69.0000   Min.   :0.0000000  
+##  Class :character   1st Qu.: 90.0000   1st Qu.:0.0000000  
+##  Mode  :character   Median :110.0000   Median :1.0000000  
+##                     Mean   :101.5021   Mean   :0.6747911  
+##                     3rd Qu.:110.0000   3rd Qu.:1.0000000  
+##                     Max.   :192.0000   Max.   :1.0000000  
+##    Automatic                CC               Doors         
+##  Min.   :0.00000000   Min.   :1300.000   Min.   :2.000000  
+##  1st Qu.:0.00000000   1st Qu.:1400.000   1st Qu.:3.000000  
+##  Median :0.00000000   Median :1600.000   Median :4.000000  
+##  Mean   :0.05571031   Mean   :1566.828   Mean   :4.033426  
+##  3rd Qu.:0.00000000   3rd Qu.:1600.000   3rd Qu.:5.000000  
+##  Max.   :1.00000000   Max.   :2000.000   Max.   :5.000000  
+##      Weight       
+##  Min.   :1000.00  
+##  1st Qu.:1040.00  
+##  Median :1070.00  
+##  Mean   :1072.46  
+##  3rd Qu.:1085.00  
+##  Max.   :1615.00</code></pre>
+<p>The preceding shows that there is no missing value. There is no obvious outlier.</p>
+<p><strong>Let’s transform the features to match the data dictionary.</strong></p>
+<pre class="r"><code>carDf$FuelType &lt;- factor(carDf$FuelType)
+carDf$MetColor &lt;- as.character(carDf$MetColor)
+carDf$MetColor &lt;- factor(carDf$MetColor, levels = c(1,0), labels = c(&quot;Yes&quot;,&quot;No&quot;))
+carDf$Automatic  &lt;- as.character(carDf$Automatic)
+carDf$Automatic &lt;- factor(carDf$Automatic, levels = c(1,0), labels = c(&quot;Yes&quot;,&quot;No&quot;))
+# Let&#39;s check the data.
+str(carDf)</code></pre>
+<pre><code>## &#39;data.frame&#39;:    1436 obs. of  10 variables:
+##  $ Price    : int  13500 13750 13950 14950 13750 12950 16900 18600 21500 12950 ...
+##  $ Age      : int  23 23 24 26 30 32 27 30 27 23 ...
+##  $ KM       : int  46986 72937 41711 48000 38500 61000 94612 75889 19700 71138 ...
+##  $ FuelType : Factor w/ 3 levels &quot;CNG&quot;,&quot;Diesel&quot;,..: 2 2 2 2 2 2 2 2 3 2 ...
+##  $ HP       : int  90 90 90 90 90 90 90 90 192 69 ...
+##  $ MetColor : Factor w/ 2 levels &quot;Yes&quot;,&quot;No&quot;: 1 1 1 2 2 2 1 1 2 2 ...
+##  $ Automatic: Factor w/ 2 levels &quot;Yes&quot;,&quot;No&quot;: 2 2 2 2 2 2 2 2 2 2 ...
+##  $ CC       : int  2000 2000 2000 2000 2000 2000 2000 2000 1800 1900 ...
+##  $ Doors    : int  3 3 3 3 3 3 3 3 3 3 ...
+##  $ Weight   : int  1165 1165 1165 1165 1170 1170 1245 1245 1185 1105 ...</code></pre>
+<pre class="r"><code>head(carDf)</code></pre>
+<pre><code>##   Price Age    KM FuelType HP MetColor Automatic   CC Doors Weight
+## 1 13500  23 46986   Diesel 90      Yes        No 2000     3   1165
+## 2 13750  23 72937   Diesel 90      Yes        No 2000     3   1165
+## 3 13950  24 41711   Diesel 90      Yes        No 2000     3   1165
+## 4 14950  26 48000   Diesel 90       No        No 2000     3   1165
+## 5 13750  30 38500   Diesel 90       No        No 2000     3   1170
+## 6 12950  32 61000   Diesel 90       No        No 2000     3   1170</code></pre>
+<pre class="r"><code># It worked.</code></pre>
+<p>The preceding shows that we transformed FuelType, MetColor, and Automatic features in factors.</p>
+<p><strong>Let’s plot histogram of price.</strong></p>
+<pre class="r"><code>hist(carDf$Price)</code></pre>
+<p><img src="Problem_6_Final_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<p>The preceding shows a right skewed distribution. It also shows that the majority of car was sold between 7,500 EUROs and 12,500 EUROs.</p>
+<pre class="r"><code># Let&#39;s display FuelType table
+table(carDf$FuelType)</code></pre>
+<pre><code>## 
+##    CNG Diesel Petrol 
+##     17    155   1264</code></pre>
+<pre class="r"><code># Let&#39;s display MetColor table
+table(carDf$MetColor)</code></pre>
+<pre><code>## 
+## Yes  No 
+## 969 467</code></pre>
+<pre class="r"><code># Let&#39;s display Automatic table.
+table(carDf$Automatic)</code></pre>
+<pre><code>## 
+##  Yes   No 
+##   80 1356</code></pre>
+<p>The preceding shows the data set has more cars using petrol than diesel and CNG. In addition, the data set has more manual shift than automatic. Not surprising since the prices are in EUROs and they use more manual cars in Europe.</p>
+<p><strong>Exploring relationships among features - Correlation matrix.</strong></p>
+<pre class="r"><code># Let&#39;s create cor matrix.
+cor(carDf[c(&quot;Price&quot;, &quot;Age&quot;, &quot;KM&quot;, &quot;HP&quot;, &quot;CC&quot;, &quot;Doors&quot;)])</code></pre>
+<pre><code>##               Price           Age             KM             HP
+## Price  1.0000000000 -0.8765904971 -0.56996016453  0.31498982964
+## Age   -0.8765904971  1.0000000000  0.50567218038 -0.15662201983
+## KM    -0.5699601645  0.5056721804  1.00000000000 -0.33353794783
+## HP     0.3149898296 -0.1566220198 -0.33353794783  1.00000000000
+## CC     0.1650669711 -0.1331815415  0.30215036421  0.05088369975
+## Doors  0.1853255499 -0.1483592146 -0.03619661407  0.09242449628
+##                   CC          Doors
+## Price  0.16506697110  0.18532554986
+## Age   -0.13318154153 -0.14835921456
+## KM     0.30215036421 -0.03619661407
+## HP     0.05088369975  0.09242449628
+## CC     1.00000000000  0.12676763605
+## Doors  0.12676763605  1.00000000000</code></pre>
+<p>The preceding shows that none of the correlation is considered strong.</p>
+<p><strong>Visualizing relationships among features - The scatterplot matrix.</strong></p>
+<pre class="r"><code>pairs(carDf[c(&quot;Price&quot;, &quot;Age&quot;, &quot;KM&quot;, &quot;HP&quot;, &quot;CC&quot;, &quot;Doors&quot;)])</code></pre>
+<p><img src="Problem_6_Final_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+<p>The preceding shows that as someone age, he tends to spend less in a used car. In addition, as you age, you put more mileage on the car. Furthermore, price decreses with mileage.</p>
+<p>Let’s plot an enhanced scatterplot matrix.</p>
+<pre class="r"><code># Let&#39;s load psych package.
+library(psych)
+pairs.panels(carDf[c(&quot;Price&quot;, &quot;Age&quot;, &quot;KM&quot;, &quot;HP&quot;, &quot;CC&quot;, &quot;Doors&quot;)])</code></pre>
+<p><img src="Problem_6_Final_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+<p>The scatterplot matrix above shows that prices decreases with age and that mileage increases with age. But price decreases as you age.</p>
+</div>
+<div id="best-model-selection" class="section level3">
+<h3>4. Best model selection:</h3>
+<p>What is the best method to analyze the data and predict the price of a used car? Let’s use ensemble method to find the best method.</p>
+<pre class="r"><code>library(caret)
+library(rpart)
+library(gbm)
+library(randomForest)
+library(ipred)
+library(plyr)
+library(ranger)
+
+control &lt;- trainControl(method=&quot;repeatedcv&quot;, number=10, repeats=3)
+set.seed(123)
+metric = &quot;RMSE&quot;
+# Bagged glm
+fit.glm &lt;- train(Price ~., data=carDf, method=&quot;glm&quot;, trControl=control, metric=metric)
+# Bagged treebag
+fit.treebag &lt;-  train(Price ~., data=carDf, method=&quot;treebag&quot;,  trControl=control, metric = metric)
+# Bagged lm
+fit.lm &lt;- train(Price ~., data=carDf, method=&quot;lm&quot;,  trControl=control, metric = metric)
+# Bagged rf
+fit.rf &lt;- train(Price ~., data=carDf, method=&quot;rf&quot;,  trControl=control, metric = metric)
+# summarize results
+bagging_results &lt;- resamples(list(glm=fit.glm, treebag=fit.treebag, lm=fit.lm, rf=fit.rf))
+summary(bagging_results)</code></pre>
+<pre><code>## 
+## Call:
+## summary.resamples(object = bagging_results)
+## 
+## Models: glm, treebag, lm, rf 
+## Number of resamples: 30 
+## 
+## RMSE 
+##             Min.   1st Qu.   Median     Mean  3rd Qu.     Max. NA&#39;s
+## glm     1063.069 1224.6420 1267.107 1350.088 1492.779 2279.772    0
+## treebag 1076.724 1226.6980 1353.557 1365.486 1463.623 1988.988    0
+## lm      1113.202 1201.8330 1320.791 1341.356 1458.930 1707.812    0
+## rf       905.451  992.2306 1070.630 1076.150 1146.925 1290.564    0
+## 
+## Rsquared 
+##              Min.   1st Qu.    Median      Mean   3rd Qu.      Max. NA&#39;s
+## glm     0.6076621 0.8414862 0.8722211 0.8593612 0.8885024 0.9278156    0
+## treebag 0.7952726 0.8485735 0.8620281 0.8605748 0.8786629 0.9107448    0
+## lm      0.7716286 0.8331840 0.8758867 0.8621747 0.8836302 0.9234670    0
+## rf      0.8656861 0.9024086 0.9124423 0.9115023 0.9236057 0.9429983    0</code></pre>
+<pre class="r"><code>dotplot(bagging_results)</code></pre>
+<p><img src="Problem_6_Final_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+<p>The preceding results shows that randomForest is the best model to predict used automobile sale prices because it has the higest R-squred (0.91) and the lowest RMSE (1076). RSME is the square root of the average square of the difference between our price prediction and actual values. It means that our model prediction is 1076 EUROS off compared to actual price. We will run the analysis with random Forest. Which was the smallest amount all the models we tested.</p>
+</div>
+<div id="training-random-forest-model." class="section level3">
+<h3>5. Training random Forest model.</h3>
+<p><strong>Let’s create training and test data.</strong></p>
+<pre class="r"><code>library(arules)
+set.seed(300)
+carDf_rf &lt;- carDf
+# We discretized Price feature to allow random forest to run.
+carDf_rf$Price  &lt;- discretize(carDf_rf$Price)
+random_ids &lt;- sample(nrow(carDf_rf), 0.8*nrow(carDf_rf))
+# We can use random_ids to split carDf data into 80 percent (train) and 20 percent (test dataset).
+carDf_rf_train &lt;- carDf_rf[random_ids, ]
+carDf_rf_test  &lt;- carDf_rf[-random_ids, ]
+# let&#39;s create train and test labels.
+carDf_rf_train_labels &lt;- carDf_rf[random_ids, 1]
+carDf_rf_test_labels &lt;- carDf_rf[-random_ids, 1]
+# Let&#39;s check the subset data we created.
+round(prop.table(table(carDf_rf_train_labels))*100, digits = 2)</code></pre>
+<pre><code>## carDf_rf_train_labels
+## [ 4350,13733) [13733,23117) [23117,32500] 
+##         85.63         13.59          0.78</code></pre>
+<pre class="r"><code>table(carDf_rf[random_ids, 1])</code></pre>
+<pre><code>## 
+## [ 4350,13733) [13733,23117) [23117,32500] 
+##           983           156             9</code></pre>
+<pre class="r"><code>prop.table(table(carDf_rf_test_labels))*100</code></pre>
+<pre><code>## carDf_rf_test_labels
+## [ 4350,13733) [13733,23117) [23117,32500] 
+##   83.68055556   16.31944444    0.00000000</code></pre>
+<pre class="r"><code>table(carDf_rf[-random_ids, 1])</code></pre>
+<pre><code>## 
+## [ 4350,13733) [13733,23117) [23117,32500] 
+##           241            47             0</code></pre>
+<p>Let’s build rf model.</p>
+<pre class="r"><code>rfm &lt;- randomForest(Price ~., data = carDf_rf_train)
+# Let&#39;s make prediction on train and test data.
+p.rfm_train &lt;- predict(rfm, carDf_rf[random_ids,])
+p.rfm_test &lt;- predict(rfm, carDf_rf[-random_ids,])
+rfm</code></pre>
+<pre><code>## 
+## Call:
+##  randomForest(formula = Price ~ ., data = carDf_rf_train) 
+##                Type of random forest: classification
+##                      Number of trees: 500
+## No. of variables tried at each split: 3
+## 
+##         OOB estimate of  error rate: 2.87%
+## Confusion matrix:
+##               [ 4350,13733) [13733,23117) [23117,32500]   class.error
+## [ 4350,13733)           978             5             0 0.00508646999
+## [13733,23117)            23           132             1 0.15384615385
+## [23117,32500]             0             4             5 0.44444444444</code></pre>
+<pre class="r"><code>accuracyMeasures(p.rfm_train,carDf_rf[random_ids, 1],name=&quot;random Forest, train&quot;)</code></pre>
+<pre><code>##                  model     accuracy        kappa
+## 1 random Forest, train 0.9904181185 0.9603865977</code></pre>
+<pre class="r"><code>accuracyMeasures(p.rfm_test,carDf_rf[-random_ids, 1],name=&quot;random Forest, test&quot;)</code></pre>
+<pre><code>##                 model     accuracy       kappa
+## 1 random Forest, test 0.9722222222 0.892787343</code></pre>
+<p>The preceding results shows that the accuracy and kappa statistic of our classifier decreased on the test data. Which is to be expected.</p>
+<p>Let’s see if we can improve our model.</p>
+</div>
+<div id="evaluating-random-forest-performance." class="section level3">
+<h3>6.Evaluating random forest performance.</h3>
+<p>** bagging with random Forest.**</p>
+<pre class="r"><code># Recall we had 9 features and sqrt(9) =3
+ctrl &lt;- trainControl(method = &quot;repeatedcv&quot;, number = 10, repeats = 10)
+grid_rf &lt;- expand.grid(.mtry = c(1,2,3))
+set.seed(300)
+m_rf &lt;- train(Price ~., data=carDf_rf, method = &quot;rf&quot;, metric=&quot;kappa&quot;, trControl=ctrl, tuneGrid=grid_rf)</code></pre>
+<pre><code>## Warning in train.default(x, y, weights = w, ...): The metric &quot;kappa&quot; was
+## not in the result set. Accuracy will be used instead.</code></pre>
+<pre class="r"><code>bagging_results &lt;- resamples(list(rf=m_rf, rf=m_rf))
+summary(bagging_results)</code></pre>
+<pre><code>## 
+## Call:
+## summary.resamples(object = bagging_results)
+## 
+## Models: rf, rf 
+## Number of resamples: 100 
+## 
+## Accuracy 
+##      Min.   1st Qu.    Median      Mean   3rd Qu.      Max. NA&#39;s
+## rf 0.9375 0.9652778 0.9722222 0.9725655 0.9792026 0.9930556    0
+## 
+## Kappa 
+##         Min.   1st Qu.    Median      Mean   3rd Qu.      Max. NA&#39;s
+## rf 0.7237263 0.8555594 0.8849978 0.8851337 0.9186287 0.9728762    0</code></pre>
+<pre class="r"><code>dotplot(bagging_results)</code></pre>
+<p><img src="Problem_6_Final_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
+<pre class="r"><code>m_rf</code></pre>
+<pre><code>## Random Forest 
+## 
+## 1436 samples
+##    9 predictor
+##    3 classes: &#39;[ 4350,13733)&#39;, &#39;[13733,23117)&#39;, &#39;[23117,32500]&#39; 
+## 
+## No pre-processing
+## Resampling: Cross-Validated (10 fold, repeated 10 times) 
+## 
+## Summary of sample sizes: 1293, 1293, 1293, 1292, 1294, 1291, ... 
+## 
+## Resampling results across tuning parameters:
+## 
+##   mtry  Accuracy  Kappa  Accuracy SD  Kappa SD
+##   1     0.967     0.856  0.0130       0.0605  
+##   2     0.971     0.878  0.0121       0.0533  
+##   3     0.973     0.885  0.0119       0.0520  
+## 
+## Accuracy was used to select the optimal model using  the largest value.
+## The final value used for the model was mtry = 3.</code></pre>
+<p>The preceding shows that the random forest model with mtry = 3 improved the model and resulted with a kappa statistic = 0.885, and accuracy of 0.973 which both are higher than the performance obtained on the test data previously.</p>
+</div>
+<div id="another-method-to-predict-car-sale-price-lm-multiple-regression" class="section level3">
+<h3>7. Another method to predict car sale price: lm (multiple regression)</h3>
+<p>Let’s build the model with <strong>lm()</strong>. It is included in the stats package.</p>
+<pre class="r"><code>carlm &lt;- lm(Price ~ Age+KM+FuelType+HP+MetColor+Automatic+CC+Doors+Weight, data = carDf)
+summary(carlm)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = Price ~ Age + KM + FuelType + HP + MetColor + Automatic + 
+##     CC + Doors + Weight, data = carDf)
+## 
+## Residuals:
+##         Min          1Q      Median          3Q         Max 
+## -10642.3290   -737.7233      3.1210    731.3043   6451.5283 
+## 
+## Coefficients:
+##                       Estimate      Std. Error   t value
+## (Intercept)    -3413.950714164  1343.629739404  -2.54084
+## Age             -122.014486151     2.602185127 -46.88924
+## KM                -0.016208320     0.001312771 -12.34665
+## FuelTypeDiesel  3390.076553269   518.795366138   6.53452
+## FuelTypePetrol  1120.676374830   332.365335271   3.37182
+## HP                60.813281300     5.755864330  10.56545
+## MetColorNo       -57.159772212    74.939016083  -0.76275
+## AutomaticNo     -330.250940081   157.095624140  -2.10223
+## CC                -4.174372130     0.545259886  -7.65575
+## Doors             -7.776268351    40.064262709  -0.19409
+## Weight            20.009356633     1.203308888  16.62861
+##                              Pr(&gt;|t|)    
+## (Intercept)                0.01116390 *  
+## Age            &lt; 0.000000000000000222 ***
+## KM             &lt; 0.000000000000000222 ***
+## FuelTypeDiesel   0.000000000088609315 ***
+## FuelTypePetrol             0.00076673 ***
+## HP             &lt; 0.000000000000000222 ***
+## MetColorNo                 0.44573845    
+## AutomaticNo                0.03570833 *  
+## CC               0.000000000000035252 ***
+## Doors                      0.84612925    
+## Weight         &lt; 0.000000000000000222 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 1315.714 on 1425 degrees of freedom
+## Multiple R-squared:  0.8693229,  Adjusted R-squared:  0.8684059 
+## F-statistic: 947.9742 on 10 and 1425 DF,  p-value: &lt; 0.00000000000000022204</code></pre>
+<p>The preceding shows in the residuals section that the maximum residual error is 6451.5 EUROs. That means the model under-predicted the prices by nearly 6452 EUROs. On the other hand, 50% of errors fall within the 1Q and 3Q values (the first and third quantile). Therefore, the majority of predictions were between 737.7 EUROS over the true value and 731.3 EUROs under the true value.<br />
+The preceding also shows that our model has several highly significant variables (variable with ***). In addition, those variables seem to be related to the outcome in logical ways.<br />
+Finally, the multiple R-squared value is 0.869, which is close to 1.<br />
+Given the stated performances, our model performs fairly well. Let’s see if we can improve it.</p>
+</div>
+<div id="improving-model-performance." class="section level3">
+<h3>8.Improving model performance.</h3>
+<p>** bagging with lm.**</p>
+<pre class="r"><code>control &lt;- trainControl(method=&quot;repeatedcv&quot;, number=10, repeats=10)
+set.seed(300)
+fit.lm &lt;- train(Price ~., data=carDf, method=&quot;lm&quot;, trControl=control, verbose=FALSE)
+boosting_results1 &lt;- resamples(list(lm=fit.lm, lm=fit.lm))
+summary(boosting_results1)</code></pre>
+<pre><code>## 
+## Call:
+## summary.resamples(object = boosting_results1)
+## 
+## Models: lm, lm 
+## Number of resamples: 100 
+## 
+## RMSE 
+##        Min.  1st Qu.   Median     Mean  3rd Qu.     Max. NA&#39;s
+## lm 1006.636 1227.736 1305.455 1342.386 1447.114 1751.419    0
+## 
+## Rsquared 
+##        Min.  1st Qu.    Median     Mean   3rd Qu.      Max. NA&#39;s
+## lm 0.765574 0.841563 0.8716119 0.862465 0.8896222 0.9184541    0</code></pre>
+<pre class="r"><code>dotplot(boosting_results1)</code></pre>
+<p><img src="Problem_6_Final_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
+<p>The preceding outputs shows that bagging our classifier with <strong>lm</strong> did not improve the performance of our classifier. Rather, the performance was similar with R-squared bagging = 0.862 whereas R-squared lm classifier was 0.869.</p>
+</div>
+<div id="conclusion" class="section level3">
+<h3>9.Conclusion</h3>
+<ul>
+<li>random Forest performance are: Accuracy = 0.97 and kappa statistic = 0.88.<br />
+</li>
+<li>lm performance are : R-squared = 0.862 which is quite high.</li>
+<li>R-squared obtained when bagging with lm method is similar to that of the classifier. That is a sign the model is not overfit.<br />
+</li>
+<li>I would recommend <strong>lm</strong> for the auto sale price prediction because it is easier to explain the predictions.</li>
+</ul>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+$(document).ready(function () {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

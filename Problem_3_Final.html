@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+<meta name="author" content="Pascal Tagne" />
+
+
+<title>Problem 3: Compare Tree and Regression analysis for predicting both lpsa and lcavol</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cerulean.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<link href="site_libs/font-awesome-4.5.0/css/font-awesome.min.css" rel="stylesheet" />
+
+<style type="text/css">code{white-space: pre;}</style>
+<link rel="stylesheet"
+      href="site_libs/highlight/textmate.css"
+      type="text/css" />
+<script src="site_libs/highlight/highlight.js"></script>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs && document.readyState && document.readyState === "complete") {
+   window.setTimeout(function() {
+      hljs.initHighlighting();
+   }, 0);
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+<link rel="stylesheet" href="styles.css" type="text/css" />
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+
+
+<div class="navbar navbar-inverse  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Pascal Tagne</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">
+    <span class="fa fa-home"></span>
+     
+    Home
+  </a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-info"></span>
+     
+    Works
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li class="dropdown-header">Data Science with R</li>
+    <li>
+      <a href="about.html">Table of contents</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Machine Learning with R</li>
+    <li>
+      <a href="TOC_Final_Project.html">Table of contents</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-gear"></span>
+     
+    Projects
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="Problem_3_Final.html">Python Programming</a>
+    </li>
+    <li>
+      <a href="Problem_4_Final.html">Hadoop Cloudera</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Computer Networks</li>
+    <li class="dropdown-header">Computer Network Security</li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Problem 3: Compare Tree and Regression analysis for predicting both lpsa and lcavol</h1>
+<h4 class="author"><em>Pascal Tagne</em></h4>
+<h4 class="date"><em>December 3, 2016</em></h4>
+
+</div>
+
+
+<div id="introduction" class="section level3">
+<h3>1.Introduction</h3>
+<p>This report describes a case study of prostate cancer. The data come from a study by Stamey et al. (1989) that examined the correlation between the level of prostate specific antigen (PSA) and the number of clinical measures, in 97 men who were about to receive a radiation prostatectomy.</p>
+</div>
+<div id="data-collection" class="section level3">
+<h3>2.Data collection</h3>
+<p>This case study uses prostate cancer data Set. It is the original dataset, in the form provided by Stamey et al. (1989). It has 6 numeric features and 97 instances.</p>
+</div>
+<div id="regression-analysis-method" class="section level2">
+<h2>Regression Analysis Method</h2>
+<div id="exploring-and-preparing-the-data" class="section level3">
+<h3>3.Exploring and preparing the data</h3>
+<pre class="r"><code># Let&#39;s import prostate data.
+prostatedf &lt;- read.csv(&quot;prostate.csv&quot;, stringsAsFactors = TRUE)
+#Let&#39;s verify if the data is read properly.
+str(prostatedf)</code></pre>
+<pre><code>## &#39;data.frame&#39;:    97 obs. of  6 variables:
+##  $ lcavol : num  -0.58 -0.994 -0.511 -1.204 0.751 ...
+##  $ age    : int  50 58 74 58 62 50 64 58 47 63 ...
+##  $ lbph   : num  -1.39 -1.39 -1.39 -1.39 -1.39 ...
+##  $ lcp    : num  -1.39 -1.39 -1.39 -1.39 -1.39 ...
+##  $ gleason: int  6 6 7 6 6 6 6 6 6 6 ...
+##  $ lpsa   : num  -0.431 -0.163 -0.163 -0.163 0.372 ...</code></pre>
+<p>The preceding shows that our data set has 6 numeric features and 97 observations.</p>
+<pre class="r"><code>#############################    First analysis is to predict **lpsa** ########################################</code></pre>
+<p>The dependent variable of our first model is <strong>lpsa</strong>. Let’s take a look at the <strong>summary()</strong> function.</p>
+<pre class="r"><code>summary(prostatedf)</code></pre>
+<pre><code>##      lcavol                age                lbph           
+##  Min.   :-1.3470736   Min.   :41.00000   Min.   :-1.3862944  
+##  1st Qu.: 0.5128236   1st Qu.:60.00000   1st Qu.:-1.3862944  
+##  Median : 1.4469190   Median :65.00000   Median : 0.3001046  
+##  Mean   : 1.3500096   Mean   :63.86598   Mean   : 0.1003556  
+##  3rd Qu.: 2.1270405   3rd Qu.:68.00000   3rd Qu.: 1.5581446  
+##  Max.   : 3.8210036   Max.   :79.00000   Max.   : 2.3263016  
+##       lcp                gleason              lpsa           
+##  Min.   :-1.3862944   Min.   :6.000000   Min.   :-0.4307829  
+##  1st Qu.:-1.3862944   1st Qu.:6.000000   1st Qu.: 1.7316555  
+##  Median :-0.7985077   Median :7.000000   Median : 2.5915164  
+##  Mean   :-0.1793656   Mean   :6.752577   Mean   : 2.4783869  
+##  3rd Qu.: 1.1786550   3rd Qu.:7.000000   3rd Qu.: 3.0563569  
+##  Max.   : 2.9041651   Max.   :9.000000   Max.   : 5.5829322</code></pre>
+<p>The preceding shows that we have no missing value. It also shows that the values of age feature are acceptable (No outlier). The range of <strong>lcavol</strong> and <strong>lpsa</strong> are different. We observed that the median of lpsa is almost equal to its mean. It might suggest that the distribution of <strong>lpsa</strong> is normal. The same is true for <strong>lcavol</strong>.</p>
+<p>Let us have a close look at the distribution of <strong>lpsa</strong>.</p>
+<pre class="r"><code>hist(prostatedf$lpsa)</code></pre>
+<p><img src="Problem_3_Final_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<p>The preceding shows that <strong>lpsa</strong> has a normal distribution. Let’s take a look at the age feature.</p>
+<pre class="r"><code>table(prostatedf$age)</code></pre>
+<pre><code>## 
+## 41 43 44 47 49 50 52 54 56 57 58 59 60 61 62 63 64 65 66 67 68 69 70 71 72 
+##  1  1  1  2  1  2  1  1  1  2  4  3  5  5  3  7  7  7  6  3 12  5  4  1  4 
+## 73 74 76 77 78 79 
+##  2  1  1  2  1  1</code></pre>
+<p>The preceding results shows that the data contains 12 observations of 68 years old men.</p>
+</div>
+<div id="exploring-relationship-among-features---correlation-matrix" class="section level3">
+<h3>4.Exploring relationship among features - correlation matrix</h3>
+<p>Let us determine how independent variables are related to the dependent variable (lpsa). We will take a quick look at the <strong>correlation matrix</strong>.</p>
+<pre class="r"><code>#Let&#39;s use the cor() function.
+cor(prostatedf[c(&quot;age&quot;, &quot;lcavol&quot;, &quot;lbph&quot;,&quot;lcp&quot;, &quot;gleason&quot;, &quot;lpsa&quot;)])</code></pre>
+<pre><code>##                  age        lcavol            lbph             lcp
+## age     1.0000000000 0.22499987915  0.350185896125  0.127667752339
+## lcavol  0.2249998791 1.00000000000  0.027349703212  0.675310483978
+## lbph    0.3501858961 0.02734970321  1.000000000000 -0.006999430938
+## lcp     0.1276677523 0.67531048398 -0.006999430938  1.000000000000
+## gleason 0.2688915985 0.43241705583  0.077820447264  0.514830062837
+## lpsa    0.1695928423 0.73446032299  0.179809409572  0.548813169155
+##               gleason         lpsa
+## age     0.26889159850 0.1695928423
+## lcavol  0.43241705583 0.7344603230
+## lbph    0.07782044726 0.1798094096
+## lcp     0.51483006284 0.5488131692
+## gleason 1.00000000000 0.3689868034
+## lpsa    0.36898680340 1.0000000000</code></pre>
+<p>The preceding shows that <em>age</em> and <em>lpsa</em> appear to have a weak positive correlation. That is to say as someone ages, their lpsa tends to increase. There is a strong correlation between <em>lcavol, lcp</em> and <em>lpsa</em>. Also, there is a moderate positive correlation between <em>gleason</em> and <em>lpsa</em>.</p>
+</div>
+<div id="scatterplot-matrix-to-visualize-relationships-among-features." class="section level3">
+<h3>5.Scatterplot matrix to visualize relationships among features.</h3>
+<pre class="r"><code># Let&#39;s use the function pairs().
+pairs(prostatedf[c(&quot;age&quot;, &quot;lcavol&quot;, &quot;lbph&quot;,&quot;lcp&quot;, &quot;gleason&quot;, &quot;lpsa&quot;)])</code></pre>
+<p><img src="Problem_3_Final_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<p>The preceding shows straight lines pattern in the relationship between gleason and lpsa.<br />
+Let us have a look at the enhanced scatteplot matrix. We will use the function pairs.panels() within the <em>psych</em> package. We will fist install psych package.</p>
+<pre class="r"><code># Let&#39;s load psych package.
+library(psych)</code></pre>
+<pre><code>## 
+## Attaching package: &#39;psych&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:randomForest&#39;:
+## 
+##     outlier</code></pre>
+<pre><code>## The following object is masked from &#39;package:bigmemory&#39;:
+## 
+##     describe</code></pre>
+<pre><code>## The following object is masked from &#39;package:bigmemory.sri&#39;:
+## 
+##     describe</code></pre>
+<pre><code>## The following object is masked from &#39;package:kernlab&#39;:
+## 
+##     alpha</code></pre>
+<pre><code>## The following objects are masked from &#39;package:ggplot2&#39;:
+## 
+##     %+%, alpha</code></pre>
+<pre class="r"><code>pairs.panels(prostatedf[c(&quot;age&quot;, &quot;lcavol&quot;, &quot;lbph&quot;,&quot;lcp&quot;, &quot;gleason&quot;, &quot;lpsa&quot;)])</code></pre>
+<p><img src="Problem_3_Final_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+<p>The preceding shows the correlation matrix above the diagonal, histogram on the diagonal showing distribution of each variable, and below the diagonal are the scatterplot matrix.<br />
+The oval-shape object on each scatterplot is a <strong>correlation ellipse</strong>. The dot at the center of the ellipse indicates the point at the mean values for x and y axis variables; and the more it stretched, the stronger the correlation.<br />
+The curve drawn on the scatterplot is called a *loess curve**. It indicates the general relationship between the x and y axis variables. Given the explanation above, we can say that there is strong correlation between lcavol, lbph, lcp, gleason and lpsa.</p>
+</div>
+<div id="training-a-model-on-the-data." class="section level3">
+<h3>6.Training a model on the data.</h3>
+<p>Let us get a train data set (to train the model) and test data set (for validation).</p>
+<pre class="r"><code>set.seed(123) # for repeatability
+indices &lt;- sample(nrow(prostatedf), 0.8 * nrow(prostatedf))  
+prostate_train &lt;- prostatedf[indices, ] # to train the classifier
+prostate_test &lt;- prostatedf[-indices, ] # to validate the classifier</code></pre>
+<p>Let’s build the model. We will use the <strong>lm()</strong> function from the <strong>stats</strong> package which comes with R installation.</p>
+<pre class="r"><code># Let&#39;s build the multiple regression model.
+prostate_model &lt;- lm(lpsa ~ ., data = prostate_train)
+# Let&#39;s build a lm() for log(lpsa, base = 10)
+logprostate_model &lt;- lm(log(lpsa, base = 10) ~ ., data = prostate_train)</code></pre>
+<pre><code>## Warning: NaNs produced</code></pre>
+<p>Let’s predict the values of lpsa and the log(lpsa, base=10) separately using the appropriate models and the test dataset.<br />
+Let us start with lpsa variable.</p>
+<pre class="r"><code># Predict on test dataset.
+prostate_test$predlpsa &lt;- predict(prostate_model, newdata = prostate_test)
+# Predict on train dataset.
+prostate_train$predlpsa &lt;- predict(prostate_model, newdata = prostate_train)</code></pre>
+<p>Let us build log(lpsa, base=10) predict data.</p>
+<pre class="r"><code># Predict on test dataset.
+prostate_test$logpredlpsa &lt;- predict(logprostate_model, newdata = prostate_test)
+# Predict on train dataset.
+prostate_train$logpredlpsa &lt;- predict(logprostate_model, newdata = prostate_train)</code></pre>
+<p>Let us plot log lpsa as a function of predicted log lpsa. <strong>Let’s start by plotting lpsa data.</strong></p>
+<pre class="r"><code>library(ggplot2)
+                                                                        ggplot(data=prostate_test,aes(x=logpredlpsa,y=log(lpsa,base=10))) +
+   geom_point(alpha=0.2,color=&quot;black&quot;) +
+   geom_smooth(aes(x=logpredlpsa,
+      y=log(lpsa,base=10)),color=&quot;black&quot;) +
+   geom_line(aes(x=log(lpsa,base=10),
+      y=log(lpsa,base=10)),color=&quot;blue&quot;,linetype=2) +
+   scale_x_continuous(limits=c(0.125,0.75)) +
+   scale_y_continuous(limits=c(0,1))                                                                                                       </code></pre>
+<pre><code>## `geom_smooth()` using method = &#39;loess&#39;</code></pre>
+<pre><code>## Warning: Removed 1 rows containing non-finite values (stat_smooth).</code></pre>
+<pre><code>## Warning: Removed 1 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 1 rows containing missing values (geom_path).</code></pre>
+<p><img src="Problem_3_Final_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
+<p>The preceding plot shows that the dot line is not too far from 45 degree (line y = x). Which is the line of perfect prediction. NAs values were removed.</p>
+<p>Let us plot residuals lpsa as a function of predicted log lpsa.</p>
+<pre class="r"><code>ggplot(data=prostate_test,aes(x=logpredlpsa,
+                     y=logpredlpsa-log(lpsa,base=10))) +
+  geom_point(alpha=0.2,color=&quot;black&quot;) +
+  geom_smooth(aes(x=logpredlpsa,
+                  y=logpredlpsa-log(lpsa,base=10)),
+                  color=&quot;black&quot;)</code></pre>
+<pre><code>## `geom_smooth()` using method = &#39;loess&#39;</code></pre>
+<p><img src="Problem_3_Final_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
+<p>The preceding plot shows that the points are not too far from the line of perfect prediction (y = 0). The smoothing curve lie more or less along the line of perfect prediction.</p>
+<p>We will now take a look at the diagnostic plots for quadratic fit.</p>
+<pre class="r"><code>par(mfrow=c(2,2))
+plot(prostate_model)</code></pre>
+<p><img src="Problem_3_Final_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
+<p>From the preceding, we can say:<br />
+* Normality: the dependent variable is normally distributed since the residual values are normally distributed with a mean around 0. In addition, the normal Q-Q plot on the upper right shows that the points on the graph are falling on the straight 45 degree line.<br />
+* Linearity: On the upper left plot, you can see that the red line is almost straight. That suggests we do not need a quadratic term.<br />
+* Homoscedasticity: In the scale location grapth(bottom left), the points are randomly falling around a red horizontal line. That indicates we have met this assumption.</p>
+<p>Let’s now look at the model summary.</p>
+<pre class="r"><code>summary(prostate_model)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = lpsa ~ ., data = prostate_train)
+## 
+## Residuals:
+##         Min          1Q      Median          3Q         Max 
+## -1.47183112 -0.34463825  0.03021993  0.46896016  2.19829960 
+## 
+## Coefficients:
+##                Estimate  Std. Error  t value        Pr(&gt;|t|)    
+## (Intercept)  2.11612572  1.11431200  1.89904       0.0616222 .  
+## lcavol       0.68798300  0.09846067  6.98739 0.0000000012385 ***
+## age         -0.01788862  0.01235070 -1.44839       0.1519102    
+## lbph         0.18597818  0.06478041  2.87090       0.0053905 ** 
+## lcp          0.05150731  0.09269486  0.55567       0.5801865    
+## gleason      0.08647407  0.14195946  0.60915       0.5443718    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.7572737 on 71 degrees of freedom
+## Multiple R-squared:  0.6200716,  Adjusted R-squared:  0.5933161 
+## F-statistic: 23.17546 on 5 and 71 DF,  p-value: 0.0000000000001007363</code></pre>
+<p>The residuals The residuals are our errors in prediction :(actual-predicted) divided by DF (degree of freedom). The preceding shows that summary in the median is near 0. Therefore, we have a good model. In addition, the 1st. Quantile and the 3rd Quantile are almost symmetry. Finally, F-statistic p-value is less than 0.05. That means our model is doing better than just a constant model.</p>
+<p>We have two significant variables (<em>lcavol</em> and <em>lbph</em>). Their p-values are less than 0.05.<br />
+The last part of the summary of our model report is the overall model quality. The <strong>adjusted R-squared is 0.59</strong>. Which is be high but the model is good enough to predict lpsa.</p>
+<pre class="r"><code>#############################    Second analysis is to predict **lcavol** ########################################</code></pre>
+<p>The dependent variable of our second model is <strong>lcavol</strong>. Let us have a close look at the distribution of <strong>lcavol</strong>.</p>
+<pre class="r"><code>hist(prostatedf$lcavol)</code></pre>
+<p><img src="Problem_3_Final_files/figure-html/unnamed-chunk-18-1.png" width="672" /></p>
+<pre class="r"><code>summary(prostatedf$lcavol)</code></pre>
+<pre><code>##       Min.    1st Qu.     Median       Mean    3rd Qu.       Max. 
+## -1.3470740  0.5128236  1.4469190  1.3500100  2.1270410  3.8210040</code></pre>
+<p>The preceding shows that the median is slightly higher than the mean. Which indicates that lcavol is slightly skewed to the left. But, close to be a normal distribution.</p>
+</div>
+<div id="training-model-on-the-data" class="section level3">
+<h3>7. Training model on the data</h3>
+<pre class="r"><code>set.seed(123) # for repeatability
+indices &lt;- sample(nrow(prostatedf), 0.8 * nrow(prostatedf))  
+prostate_train2 &lt;- prostatedf[indices, ] # to train the classifier
+prostate_test2 &lt;- prostatedf[-indices, ] # to validate the classifier
+# Let&#39;s build the multiple regression model.
+prostate_model2 &lt;- lm(lcavol ~ ., data = prostate_train2)
+summary(prostate_model2 )</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = lcavol ~ ., data = prostate_train2)
+## 
+## Residuals:
+##         Min          1Q      Median          3Q         Max 
+## -1.94560675 -0.47544570 -0.03928043  0.60131761  1.18674362 
+## 
+## Coefficients:
+##                 Estimate   Std. Error  t value        Pr(&gt;|t|)    
+## (Intercept) -1.425049879  1.046237729 -1.36207      0.17748139    
+## age          0.021540165  0.011342849  1.89901      0.06162679 .  
+## lbph        -0.086498674  0.062662476 -1.38039      0.17179718    
+## lcp          0.305789753  0.078178979  3.91141      0.00020779 ***
+## gleason     -0.002095564  0.132057020 -0.01587      0.98738370    
+## lpsa         0.592256401  0.084760758  6.98739 0.0000000012385 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.7026174 on 71 degrees of freedom
+## Multiple R-squared:  0.6894874,  Adjusted R-squared:  0.6676203 
+## F-statistic: 31.53084 on 5 and 71 DF,  p-value: &lt; 0.00000000000000022204</code></pre>
+<p>The preceding shows that We have two significant variables (<em>lpsa</em> and <em>lcp</em>). Their p-values are less than 0.05.<br />
+The last part of the summary of the new model report is the overall model quality. The <strong>adjusted R-squared is 0.66</strong>. Which is higher compared to that of <strong>lpsa model</strong>. Finally, F-statistic p-value is less than 0.05. That means our model is doing better than just a constant model</p>
+<p>We will now take a look at the diagnostic plots for quadratic fit for lcavol.</p>
+<pre class="r"><code>par(mfrow=c(2,2))
+plot(prostate_model2)</code></pre>
+<p><img src="Problem_3_Final_files/figure-html/unnamed-chunk-20-1.png" width="672" /></p>
+<p>From the preceding, we can say:<br />
+* Normality: the dependent variable is normally distributed since the residual values are normally distributed with a mean around 0. In addition, the normal Q-Q plot on the upper right shows that the points on the graph are falling mostly on the straight 45 degree line.<br />
+* Linearity: On the upper left plot, you can see that the red line is almost straight. That suggests we do not need a quadratic term.<br />
+* Homoscedasticity: In the scale location grapth(bottom left), the points are randomly falling around a red horizontal line. That indicates we have met this assumption.</p>
+</div>
+<div id="improving-model-performance-with-bagging." class="section level3">
+<h3>8. Improving model performance with bagging.</h3>
+<pre class="r"><code>library(caret)
+library(randomForest)
+library(ranger)
+library(ipred)
+control &lt;- trainControl(method=&quot;repeatedcv&quot;, number=10, repeats=3)
+metric &lt;- &quot;RMSE&quot;
+set.seed(123)
+# Bagged lm - Outcome variable is lpsa
+fit.lm_lpsa &lt;- train(lpsa ~., data=prostatedf, method=&quot;lm&quot;, metric=metric, trControl=control, na.rm = TRUE) 
+# Bagged lm - Outcome variable is lcavol
+fit.lm_lcavol &lt;- train(lcavol ~., data=prostatedf, method=&quot;lm&quot;, metric=metric, trControl=control, na.rm = TRUE)
+# summarize results
+print(&quot;Results for Bagged lm - Outcome variable is lpsa&quot;)</code></pre>
+<pre><code>## [1] &quot;Results for Bagged lm - Outcome variable is lpsa&quot;</code></pre>
+<pre class="r"><code>fit.lm_lpsa</code></pre>
+<pre><code>## Linear Regression 
+## 
+## 97 samples
+##  5 predictor
+## 
+## No pre-processing
+## Resampling: Cross-Validated (10 fold, repeated 3 times) 
+## 
+## Summary of sample sizes: 89, 87, 87, 87, 89, 86, ... 
+## 
+## Resampling results
+## 
+##   RMSE   Rsquared  RMSE SD  Rsquared SD
+##   0.782  0.556     0.167    0.177      
+## 
+## </code></pre>
+<pre class="r"><code>print(&quot;Results for Bagged lm - Outcome variable is lcavol&quot;)</code></pre>
+<pre><code>## [1] &quot;Results for Bagged lm - Outcome variable is lcavol&quot;</code></pre>
+<pre class="r"><code>fit.lm_lcavol</code></pre>
+<pre><code>## Linear Regression 
+## 
+## 97 samples
+##  5 predictor
+## 
+## No pre-processing
+## Resampling: Cross-Validated (10 fold, repeated 3 times) 
+## 
+## Summary of sample sizes: 88, 88, 86, 88, 87, 87, ... 
+## 
+## Resampling results
+## 
+##   RMSE   Rsquared  RMSE SD  Rsquared SD
+##   0.714  0.666     0.151    0.16       
+## 
+## </code></pre>
+<p>The preceding results shows that bagging with lm did not improve the performance of the model obtained with outcome variable <strong>lpsa (R-squared = 0.556, RMSE= 0.782)</strong>. It did keep the same the performance obtained with <strong>lcavol</strong> as outcome variable <strong>(R-squared=0.666, RMSE=0.714)</strong>.<br />
+We will recommend using <strong>lcavol</strong> to predicting prostate cancer because R-square is higher than that of <strong>lpsa</strong> model.</p>
+</div>
+</div>
+<div id="regression-tree-analysis-method" class="section level2">
+<h2>Regression Tree Analysis Method</h2>
+<p>We will use regression tree function <strong>rpart()</strong> in the rpart package.</p>
+<pre class="r"><code>#############################    First analysis is to predict **lpsa** ########################################</code></pre>
+<div id="training-the-model-on-the-data." class="section level3">
+<h3>9. Training the model on the data.</h3>
+<p>Let’s install rpart package.</p>
+<pre class="r"><code>library(rpart)
+set.seed(123) # for repeatability
+indices &lt;- sample(nrow(prostatedf), 0.8 * nrow(prostatedf))  
+prostate_train3 &lt;- prostatedf[indices, ] # to train the classifier
+prostate_test3 &lt;- prostatedf[-indices, ] # to validate the classifier
+# Let&#39;s build our model
+m.rpart_lpsa &lt;- rpart(lpsa ~ ., data = prostate_train3)</code></pre>
+<p>Let’s have a look at the basic information on our model.</p>
+<pre class="r"><code>m.rpart_lpsa</code></pre>
+<pre><code>## n= 77 
+## 
+## node), split, n, deviance, yval
+##       * denotes terminal node
+## 
+##  1) root 77 107.167325500 2.4386714390  
+##    2) lcavol&lt; 0.8629878645 26  22.339484350 1.4078052190  
+##      4) lcavol&lt; -0.4785563635 9   5.597500918 0.6016838848 *
+##      5) lcavol&gt;=-0.4785563635 17   7.797242503 1.8345753370 *
+##    3) lcavol&gt;=0.8629878645 51  43.112239240 2.9642110810  
+##      6) lcavol&lt; 2.461650114 34  17.245312900 2.5772390350  
+##       12) lbph&lt; 0.4989353595 17   7.833903962 2.1803682100 *
+##       13) lbph&gt;=0.4989353595 17   4.056189573 2.9741098610 *
+##      7) lcavol&gt;=2.461650114 17  10.592695190 3.7381551720 *</code></pre>
+<p>The preceding shows that all 77 instances begin at the root node, of which 26 have lcavol &lt; 0.862 and 51 have lcavol &gt;= 0.862.</p>
+<p>Let’s visualize our decision trees. We will use the function rpart.plot in rpart.plot package. let’s install the package.</p>
+<pre class="r"><code>library(rpart.plot)
+rpart.plot(m.rpart_lpsa, digits = 3)</code></pre>
+<p><img src="Problem_3_Final_files/figure-html/unnamed-chunk-25-1.png" width="672" /></p>
+<p>The preceding shows that the fallen parameter forces the leaf nodes to be aligned at the bottom of the plot.<br />
+Let’s plot another view:</p>
+<pre class="r"><code>rpart.plot(m.rpart_lpsa, digits=4, fallen.leaves = TRUE, type = 3, extra = 101)</code></pre>
+<p><img src="Problem_3_Final_files/figure-html/unnamed-chunk-26-1.png" width="672" /></p>
+<p>The preceding shows the number in the leaf nodes are the predicted values for the examples reaching that node.</p>
+</div>
+<div id="evaluation-of-the-model-performance." class="section level3">
+<h3>10. Evaluation of the model performance.</h3>
+<p>We will use the function predict().</p>
+<pre class="r"><code>p.rpart_lpsa &lt;- predict(m.rpart_lpsa, prostate_test3)</code></pre>
+<p>Let’s look at the summary of our predictions.</p>
+<pre class="r"><code># Summary of predictions
+summary(p.rpart_lpsa)</code></pre>
+<pre><code>##     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
+## 1.834575 1.834575 2.577239 2.626310 2.974110 3.738155</code></pre>
+<pre class="r"><code># Summary of the outcome lpsa.
+summary(prostate_test3$lpsa)</code></pre>
+<pre><code>##      Min.   1st Qu.    Median      Mean   3rd Qu.      Max. 
+## 0.7654678 2.0082140 2.7555490 2.6312910 2.8916200 5.5829320</code></pre>
+<p>The preceding shows that the summary of the predictions fall on a much narrow range than the true values.<br />
+Let’s look at the correlation.</p>
+<pre class="r"><code>cor(p.rpart_lpsa, prostate_test3$lpsa)</code></pre>
+<pre><code>## [1] 0.5736307843</code></pre>
+<p>The preceding shows a correlation of 0.57, which is acceptable. But, it doesn’t tell us how far off the predictions were from the true values. Let’s check the MAE (mean absolute error).</p>
+<p><strong>Measuring performance with the mean absolute error.</strong><br />
+We will write a function to compute MAE.</p>
+<pre class="r"><code>MAE &lt;- function(actual, predicted) {
+  mean(abs(actual - predicted))
+}</code></pre>
+<p>Let’s compute the MAE of our predictions.</p>
+<pre class="r"><code>MAE(p.rpart_lpsa, prostate_test3$lpsa)</code></pre>
+<pre><code>## [1] 0.693319567</code></pre>
+<p>The preceding MAE value of 0.69 suggests that the difference between our model’s predictions and the true lpsa was about 0.69 on a scale of 0 to 6. It seems to indicates our model is doing well.</p>
+<pre class="r"><code>#############################    Second analysis is to predict **lcavol** ########################################</code></pre>
+<p>We will use regression tree function <strong>rpart()</strong> in the rpart package.</p>
+</div>
+<div id="training-the-model-on-the-data.-1" class="section level3">
+<h3>11. Training the model on the data.</h3>
+<pre class="r"><code># Let&#39;s build our model
+m.rpart_lcavol &lt;- rpart(lcavol ~ ., data = prostate_train3)</code></pre>
+<p>Let’s have a look at the basic information on our model.</p>
+<pre class="r"><code>m.rpart_lcavol</code></pre>
+<pre><code>## n= 77 
+## 
+## node), split, n, deviance, yval
+##       * denotes terminal node
+## 
+##  1) root 77 112.879996600  1.2833199760  
+##    2) lpsa&lt; 3.056179701 55  56.726751140  0.7855728563  
+##      4) lpsa&lt; 1.307510376 12   9.604114876 -0.2438762320 *
+##      5) lpsa&gt;=1.307510376 43  30.856469270  1.0728609740  
+##       10) lcp&lt; 0.21017686 35  19.619795570  0.8598613217  
+##         20) lpsa&lt; 2.066682467 13   6.811473765  0.3623106195 *
+##         21) lpsa&gt;=2.066682467 22   7.688399119  1.1538685550 *
+##       11) lcp&gt;=0.21017686 8   2.701658435  2.0047344530 *
+##    3) lpsa&gt;=3.056179701 22   8.460947892  2.5276877760  
+##      6) lcp&lt; 1.368399807 12   3.571691488  2.1589807950 *
+##      7) lcp&gt;=1.368399807 10   1.300312695  2.9701361520 *</code></pre>
+<p>The preceding shows that all 77 instances begin at the root node, of which 56 have lpsa &lt; 3.056 and 22 have lcavol &gt;= 3.056.</p>
+<p>Let’s visualize our decision trees. We will use the function rpart.plot in rpart.plot package.</p>
+<pre class="r"><code>rpart.plot(m.rpart_lcavol, digits=4, fallen.leaves = TRUE, type = 3, extra = 101)</code></pre>
+<p><img src="Problem_3_Final_files/figure-html/unnamed-chunk-36-1.png" width="672" /></p>
+<p>The preceding tree plot shows the number in the leaf nodes are the predicted values for the examples reaching that node.</p>
+</div>
+<div id="evaluation-of-the-model-performance.-1" class="section level3">
+<h3>12. Evaluation of the model performance.</h3>
+<p>We will use the function predict().</p>
+<pre class="r"><code>p.rpart_lcavol &lt;- predict(m.rpart_lcavol, prostate_test3)</code></pre>
+<p>Let’s look at the summary of our predictions.</p>
+<pre class="r"><code># Summary of predictions
+summary(p.rpart_lcavol)</code></pre>
+<pre><code>##       Min.    1st Qu.     Median       Mean    3rd Qu.       Max. 
+## -0.2438762  0.3623106  1.5793020  1.3752190  2.0047340  2.9701360</code></pre>
+<pre class="r"><code># Summary of the outcome lpsa.
+summary(prostate_test3$lcavol)</code></pre>
+<pre><code>##        Min.     1st Qu.      Median        Mean     3rd Qu.        Max. 
+## 0.009950331 0.782421400 1.702620000 1.606765000 2.076189000 3.471966000</code></pre>
+<p>The preceding shows that the summary of the predictions fall on a slightly narrow range than the true values of lcavol.<br />
+Let’s look at the correlation.</p>
+<pre class="r"><code>cor(p.rpart_lcavol, prostate_test3$lcavol)</code></pre>
+<pre><code>## [1] 0.7075425291</code></pre>
+<p>The preceding shows a correlation of <strong>0.70</strong> (better than 0.57 that we obtained with lpsa as outcome variable), which is acceptable. But, it doesn’t tell us how far off the predictions were from the true values. Let’s check the MAE (mean absolute error).</p>
+<p><strong>Measuring performance with the mean absolute error.</strong><br />
+We will use the MAE() function we previously created.</p>
+<p>Let’s compute the MAE of our predictions.</p>
+<pre class="r"><code>MAE(p.rpart_lcavol, prostate_test3$lcavol)</code></pre>
+<pre><code>## [1] 0.5604188372</code></pre>
+<p>The preceding MAE value of <strong>0.56</strong> improved compared to <strong>0.69</strong> obtained with outcome variable lpsa. It suggests that the difference between our model’s predictions and the true lcavol was about 0.56 on a scale of 0 to 4. It seems to indicates our model is doing very well.</p>
+<p>Can we improve both models even further? Let’s use bagging techniques.</p>
+</div>
+<div id="improving-model-performance-with-bagging.-1" class="section level3">
+<h3>13. Improving model performance with bagging.</h3>
+<pre class="r"><code>library(caret)
+library(randomForest)
+library(ipred)
+control &lt;- trainControl(method=&quot;repeatedcv&quot;, number=10, repeats=3)
+metric &lt;- &quot;RMSE&quot;
+set.seed(123)
+# Bagged rpart - Outcome variable is lpsa
+fit.rpart_lpsa &lt;- train(lpsa ~., data=prostatedf, method=&quot;rpart&quot;, metric=metric, trControl=control, cp = 0.05) 
+# Bagged rpart - Outcome variable is lcavol
+fit.rpart_lcavol &lt;- train(lcavol ~., data=prostatedf, method=&quot;rpart&quot;, metric=metric, trControl=control, cp = 0.05)
+# summarize results
+print(&quot;Results for Bagged rpart - Outcome variable is lpsa&quot;)</code></pre>
+<pre><code>## [1] &quot;Results for Bagged rpart - Outcome variable is lpsa&quot;</code></pre>
+<pre class="r"><code>fit.rpart_lpsa</code></pre>
+<pre><code>## CART 
+## 
+## 97 samples
+##  5 predictor
+## 
+## No pre-processing
+## Resampling: Cross-Validated (10 fold, repeated 3 times) 
+## 
+## Summary of sample sizes: 89, 87, 87, 87, 89, 86, ... 
+## 
+## Resampling results across tuning parameters:
+## 
+##   cp      RMSE   Rsquared  RMSE SD  Rsquared SD
+##   0.0484  0.884  0.451     0.167    0.223      
+##   0.1846  1.030  0.274     0.212    0.183      
+##   0.3471  1.110  0.183     0.234    0.147      
+## 
+## RMSE was used to select the optimal model using  the smallest value.
+## The final value used for the model was cp = 0.04839398268.</code></pre>
+<pre class="r"><code>print(&quot;Results for Bagged rpart - Outcome variable is lcavol&quot;)</code></pre>
+<pre><code>## [1] &quot;Results for Bagged rpart - Outcome variable is lcavol&quot;</code></pre>
+<pre class="r"><code>fit.rpart_lcavol</code></pre>
+<pre><code>## CART 
+## 
+## 97 samples
+##  5 predictor
+## 
+## No pre-processing
+## Resampling: Cross-Validated (10 fold, repeated 3 times) 
+## 
+## Summary of sample sizes: 87, 87, 88, 87, 88, 88, ... 
+## 
+## Resampling results across tuning parameters:
+## 
+##   cp      RMSE   Rsquared  RMSE SD  Rsquared SD
+##   0.0394  0.845  0.547     0.166    0.164      
+##   0.1559  0.906  0.477     0.210    0.208      
+##   0.4189  1.143  0.249     0.185    0.156      
+## 
+## RMSE was used to select the optimal model using  the smallest value.
+## The final value used for the model was cp = 0.03937711475.</code></pre>
+<p>The preceding shows that bagging techniques on model obtained with <strong>lcavol</strong> performed better <strong>(cp = 0.039, R-squared = 0.547, RMSE = 0.845)</strong> than that obtained with <strong>lpsa (cp = 0.048, R-squared = 0.451, RMSE = 0.884)</strong>.</p>
+</div>
+<div id="conclusion." class="section level3">
+<h3>14. Conclusion.</h3>
+<ul>
+<li>We will recommend using lcavol features to predict prostate cancer.<br />
+</li>
+<li>Both linear regression (we use lm function) and regression tree (we used rpart function) showed that <strong>lcavol</strong> predictions were higher than that of <strong>lpsa</strong>.</li>
+<li>Bagging techniques did also confirm that analysis.</li>
+</ul>
+</div>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+$(document).ready(function () {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
